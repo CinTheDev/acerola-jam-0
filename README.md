@@ -63,6 +63,16 @@ The first creates a rewarding muscle-memory-based challenge similar to Celeste o
 
 I'll go with the latter approach, as with a higher time limit (5 minutes) the player isn't likely to replay the game in this game jam setting. An average player should be able to beat the game first try if they invest some effort.
 
+#### Tasks summary
+
+The player needs to do specific tasks in an defined order:
+
+- Clean out the Q.T.de
+- Start the quantum computer
+- Start the particle accelerator
+- Create the exotic alloy
+- Initiate the experiment
+
 #### Tasks
 
 Here is an idea collection of possible tasks to be done by the player, sorted by puzzles and challenges. There should be at least 5 total tasks, if the tasks take about 30 seconds on average.
