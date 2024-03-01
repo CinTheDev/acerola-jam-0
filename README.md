@@ -20,6 +20,18 @@ The core game will be developed here. There will always be a list of ideas below
 - A story on how the world has been destroyed by some kind of astronomical event, altering the world as we know it in some horrible way
 - You are a person with a magic blessing / curse and have to continue life somehow (inspired from the tale of Midas)
 
+#### Modified physics law
+
+- Specific formula in dynamics (or it's bases like mechanics or kinematics) modified
+- Laws of thermodynamics don't hold anymore, allowing impossible constructions to exploit infinite energy, or similar
+- Chemistry becomes very constrained; elements become very unreactive
+- Every object is locked in rotation, rotation is impossible without dissasembling and rearranging the object itself
+
+#### Magic blessing / curse
+
+- Everything you touch becomes gold (kinda familiar idea)
+- A specific law of physics doesn't apply to you anymore (e.g. gravity, collision, ...)
+
 ### Something parasitic
 
 - You are a parasite inside a host
