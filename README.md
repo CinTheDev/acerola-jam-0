@@ -27,6 +27,16 @@ The core game will be developed here. There will always be a list of ideas below
 - Chemistry becomes very constrained; elements become very unreactive
 - Every object is locked in rotation, rotation is impossible without dissasembling and rearranging the object itself
 
+##### Changed formula / equation
+
+- Changing the way force behaves (F = m * a)
+- Making gravity not decrease with distance
+
+##### Broken thermodynamics
+
+- First law no longer holds; energy can now be destroyed or created from nothing
+- Second law no longer holds; energy can collect (e.g. cold flows into hot) instead of spreading out
+
 #### Magic blessing / curse
 
 - Everything you touch becomes gold (kinda familiar idea)
