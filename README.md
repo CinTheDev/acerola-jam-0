@@ -32,6 +32,16 @@ The core game will be developed here. There will always be a list of ideas below
 - Changing the way force behaves (F = m * a)
 - Making gravity not decrease with distance
 
+###### Force
+
+*a = F / m* This is acceleration when a force is applied. What happens, when we choose to make acceleration exponential instead of linear? *a = e^F / m*
+
+After some experimentation on paper I've decided to not do this. It's kind too complicated for this time window.
+
+###### Gravity
+
+*F = G \* (m1 \* m2) / r^2* into *F = G \* m1 \* m2* Your science experiment failed, and there's now a gravitaional wave spreading where the new equation holds instead of the old one. This wave travels at light speed, but it needs a few minutes before it reaches other planets and can cause mayhem. The goal is to stop this ASAP.
+
 ##### Broken thermodynamics
 
 - First law no longer holds; energy can now be destroyed or created from nothing
