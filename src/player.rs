@@ -26,10 +26,10 @@ pub fn instance_player(mut commands: Commands) {
 
     // TODO: automate this (and move to other place)
     commands.spawn((
-        Transform::from_xyz(2.0, 1.0, 2.0),
+        Transform::from_xyz(2.0, 1.0, -3.0),
         PlaneCollider {
-            normal: Vec2::new(-1.0, 0.0),
-            size: 1.0
+            normal: Vec2::new(1.0, 0.0),
+            size: 2.0
         }
     ));
 }
@@ -132,10 +132,10 @@ pub fn check_player_collisions(
 
         let collision_result = collision::check_collision_dynamic(
             p_sphere_col,
-            &p_pos,
+            p_pos,
             wall_properties,
-            &wall_pos,
-            &p_velocity
+            wall_pos,
+            p_velocity
         );
 
         if collision_result.0 {

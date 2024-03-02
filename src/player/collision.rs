@@ -13,18 +13,18 @@ pub struct SphereCollider {
 
 pub fn check_collision_dynamic(
     sphere: &SphereCollider,
-    sphere_pos: &Vec2,
+    sphere_pos: Vec2,
     plane: &PlaneCollider,
-    plane_pos: &Vec2,
-    velocity: &Vec2
+    plane_pos: Vec2,
+    velocity: Vec2
 ) -> (bool, Vec2) {
     // Use "Collide and Slide" algorithm
     // TODO
 
     // Project
     let plane_vector = Vec2::new(-plane.normal.y, plane.normal.x) * plane.size;
-    let plane_pos_vector = plane_pos.to_owned() - plane_vector * 0.5;
-    let sphere_pos_vector = (sphere_pos.to_owned() + velocity.to_owned()) - plane_pos_vector;
+    let plane_pos_vector = plane_pos - plane_vector * 0.5;
+    let sphere_pos_vector = (sphere_pos + velocity) - plane_pos_vector;
 
     let plane_vector_length = plane_vector.length();
     let plane_vector_normalized = plane_vector / plane_vector_length;
@@ -38,15 +38,16 @@ pub fn check_collision_dynamic(
         return (false, velocity.clone());
     }
 
+    info!("The thing is colliding");
+
     // Displace backwards
-    let sphere_pos_vector_normalized = sphere_pos_vector.normalize();
-    let reverse_displacement = (sphere.radius - project_vector_sphere.length()) / plane.normal.dot(sphere_pos_vector_normalized * -1.0);
-    let reverse_displacement_vector = sphere_pos_vector_normalized * reverse_displacement * -1.0;
+    let reverse_displacement = (sphere.radius - project_vector_sphere.length()) / plane.normal.dot(sphere_pos_vector.normalize() * -1.0);
+    let reverse_displacement_vector = velocity.normalize_or_zero() * reverse_displacement * -1.0;
 
     let mut new_velocity = velocity.clone();
     new_velocity += reverse_displacement_vector;
 
     // Second projection to determine slide
 
-    return (false, new_velocity);
+    return (true, new_velocity);
 }
