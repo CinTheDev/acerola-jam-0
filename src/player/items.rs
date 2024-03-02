@@ -47,3 +47,20 @@ pub fn hold_item(
         *trans = *player_transform * *ITEM_HOLD_TRANSFORM;
     }
 }
+
+pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn(ItemBundle {
+        scene: SceneBundle {
+            scene: asset_server.load("test_item.glb#Scene0"),
+            transform: Transform::from_xyz(3.0, 1.0, 3.0),
+            ..default()
+        },
+        collider: collision::SphereCollider {
+            radius: 0.1
+        },
+        item: Item {
+            id: ITEM_ID::SOMETHING,
+            pickup: true
+        }
+    });
+}

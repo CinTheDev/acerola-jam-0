@@ -10,11 +10,12 @@ fn main() {
         .add_systems(Startup, (
             setup,
             cursor_grab,
-            generate_colliders::generate_colliders
+            generate_colliders::generate_colliders,
+            player::items::test_instance_item,
         ))
         .add_systems(Update, (
             player::move_player,
-            player::items::hold_item
+            player::items::hold_item,
         ))
         .run();
 }
