@@ -3,8 +3,8 @@ use super::collision;
 use once_cell::sync::Lazy;
 
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
-    Transform::from_xyz(0.0, 0.0, 0.0)
-        .with_rotation(Quat::from_euler(EulerRot::YXZ, 1.0, 1.0, 0.0))
+    Transform::from_xyz(0.15, -0.15, -0.3)
+        .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))
 });
 
 #[derive(PartialEq)]

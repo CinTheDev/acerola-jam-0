@@ -17,7 +17,7 @@ pub fn instance_player(mut commands: Commands) {
             speed: 3.0,
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
-            item_id: ITEM_ID::NONE,
+            item_id: ITEM_ID::SOMETHING,
         },
         collider: SphereCollider {
             radius: 1.0
