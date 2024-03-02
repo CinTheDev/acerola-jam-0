@@ -5,7 +5,7 @@ use std::f32::consts::PI;
 const PLAYER_MAX_ROTATION: f32 =  PI / 2.0 - 0.05;
 const PLAYER_MIN_ROTATION: f32 = -PI / 2.0 + 0.05;
 
-mod collision;
+pub mod collision;
 use collision::{PlaneCollider, SphereCollider};
 
 pub fn instance_player(mut commands: Commands) {
@@ -23,15 +23,6 @@ pub fn instance_player(mut commands: Commands) {
             ..default()
         }
     });
-
-    // TODO: automate this (and move to other place)
-    commands.spawn((
-        Transform::from_xyz(2.0, 1.0, -3.0),
-        PlaneCollider {
-            normal: Vec2::new(-1.0, 0.0),
-            size: 2.0
-        }
-    ));
 }
 
 #[derive(Bundle)]

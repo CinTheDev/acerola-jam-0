@@ -1,5 +1,11 @@
 use bevy::prelude::*;
 
+#[derive(Bundle)]
+pub struct PlaneColliderBundle {
+    pub transform: Transform,
+    pub collider: PlaneCollider,
+}
+
 #[derive(Component)]
 pub struct PlaneCollider {
     pub normal: Vec2,
