@@ -16,7 +16,6 @@ pub fn instance_player(mut commands: Commands) {
             rotation: Vec2::ZERO,
         },
         collider: SphereCollider {
-            position: Vec3::ZERO,
             radius: 1.0
         },
         camera: Camera3dBundle {
@@ -29,8 +28,8 @@ pub fn instance_player(mut commands: Commands) {
     commands.spawn((
         Transform::from_xyz(2.0, 1.0, 2.0),
         PlaneCollider {
-            normal: Vec3::new(-1.0, 0.0, 0.0),
-            size: Vec2::new(1.0, 1.0)
+            normal: Vec2::new(-1.0, 0.0),
+            size: 1.0
         }
     ));
 }
@@ -124,22 +123,23 @@ pub fn check_player_collisions(
     player_velocity: Vec3,
 ) -> Vec3 {
     let p_sphere_col = player.0;
-    let p_trans = player.1;
+    let p_pos = player.1.translation.xz();
+    let p_velocity = player_velocity.xz();
 
     for wall in q_walls.iter() {
         let wall_properties = wall.0;
-        let wall_trans = wall.1;
+        let wall_pos = wall.1.translation.xz();
 
         let collision_result = collision::check_collision_dynamic(
             p_sphere_col,
-            p_trans,
+            &p_pos,
             wall_properties,
-            wall_trans,
-            &player_velocity
+            &wall_pos,
+            &p_velocity
         );
 
         if collision_result.0 {
-            return collision_result.1;
+            return Vec3::new(collision_result.1.x, 0.0, collision_result.1.y);
         }
     }
 
