@@ -55,7 +55,7 @@ pub fn move_player(
     keyboard_input: Res<Input<KeyCode>>,
     mut mouse_input: EventReader<MouseMotion>,
     mut q_player: Query<(&mut Player, &mut Transform, &SphereCollider)>,
-    q_walls_collider: Query<(&PlaneCollider, &Transform)>
+    q_walls_collider: Query<(&PlaneCollider, &Transform), Without<Player>>,
 ) {
     // Variables setup
     let mut p = q_player.single_mut();
@@ -120,7 +120,7 @@ fn get_mouse_input(motion_evr: &mut EventReader<MouseMotion>) -> Vec2 {
 
 pub fn check_player_collisions(
     player: (&SphereCollider, &Transform),
-    q_walls: Query<(&PlaneCollider, &Transform)>,
+    q_walls: Query<(&PlaneCollider, &Transform), Without<Player>>,
     player_velocity: Vec3,
 ) -> Vec3 {
     let p_sphere_col = player.0;
