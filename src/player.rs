@@ -35,16 +35,16 @@ pub fn move_player(
     let mut dir = Vec3::ZERO;
 
     if input.pressed(KeyCode::W) {
-        dir += Vec3::new(0.0, 0.0, -1.0);
+        dir += transform.forward();
     }
     if input.pressed(KeyCode::A) {
-        dir += Vec3::new(-1.0, 0.0, 0.0);
+        dir += transform.left();
     }
     if input.pressed(KeyCode::S) {
-        dir += Vec3::new(0.0, 0.0, 1.0);
+        dir += transform.back();
     }
     if input.pressed(KeyCode::D) {
-        dir += Vec3::new(1.0, 0.0, 0.0);
+        dir += transform.right();
     }
 
     dir = dir.normalize_or_zero();
