@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{input::mouse::MouseMotion, prelude::*};
 
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
@@ -25,18 +25,24 @@ pub struct Player {
 
 pub fn move_player(
     time: Res<Time>,
-    input: Res<Input<KeyCode>>,
+    keyboard_input: Res<Input<KeyCode>>,
+    mut mouse_input: EventReader<MouseMotion>,
     mut query: Query<(&Player, &mut Transform)>
 ) {
     let mut p = query.single_mut();
     let properties = p.0;
     let transform = p.1.as_mut();
 
-    let dir = get_keyboard_input(&input, &transform);
+    let dir = get_keyboard_input(&keyboard_input, &transform);
+    let mouse_delta = get_mouse_input(&mut mouse_input);
 
     let vec_move = dir * properties.speed * time.delta_seconds();
+    let mouse_rotation = mouse_delta * 1.0 * time.delta_seconds(); // TODO: speed
 
     transform.translation += vec_move;
+
+    transform.rotate_y(mouse_rotation.x);
+    transform.rotate_local_x(mouse_rotation.y * -1.0);
 }
 
 fn get_keyboard_input(input: &Res<Input<KeyCode>>, player_trans: &Transform) -> Vec3 {
@@ -56,4 +62,14 @@ fn get_keyboard_input(input: &Res<Input<KeyCode>>, player_trans: &Transform) -> 
     }
 
     return dir.normalize_or_zero();
+}
+
+fn get_mouse_input(motion_evr: &mut EventReader<MouseMotion>) -> Vec2 {
+    let mut mouse_delta = Vec2::ZERO;
+
+    for ev in motion_evr.read() {
+        mouse_delta += ev.delta;
+    }
+
+    return mouse_delta;
 }
