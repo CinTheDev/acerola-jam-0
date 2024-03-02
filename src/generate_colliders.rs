@@ -19,9 +19,9 @@ fn generate_cube(commands: &mut Commands, position: Vec2, rotation: f32, size: V
     // Calculate directions from middle
     let rotation_rad = rotation.to_radians();
     let mut dir1 = Vec2::new(rotation_rad.cos(), rotation_rad.sin());
-    let mut dir2 = Vec2::new(-dir1.x, dir1.y);
-    let mut dir3 = Vec2::new(-dir2.x, dir2.y);
-    let mut dir4 = Vec2::new(-dir3.x, dir3.y);
+    let mut dir2 = Vec2::new(-dir1.y, dir1.x);
+    let mut dir3 = Vec2::new(-dir2.y, dir2.x);
+    let mut dir4 = Vec2::new(-dir3.y, dir3.x);
 
     // Positions
     let p1 = position + dir1 * size.x * 0.5;
@@ -76,6 +76,6 @@ fn generate_cube(commands: &mut Commands, position: Vec2, rotation: f32, size: V
 
 const MANUAL_INFORMATION: [(Vec2, f32, Vec2, bool); 3] = [
     (Vec2::new(0.0, 0.0), 0.0, Vec2::new(10.0, 10.0), true), // Environment
-    (Vec2::new(3.0, 3.0), 0.0, Vec2::new(2.0, 2.0), false), // Green cube
-    (Vec2::new(-2.41, -2.296), 25.274, Vec2::new(1.0, 1.0), false),
+    (Vec2::new(3.0, -3.0), 0.0, Vec2::new(2.0, 2.0), false), // Green cube
+    (Vec2::new(-2.41, 2.296), 25.274, Vec2::new(1.0, 1.0), false),
 ];
