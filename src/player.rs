@@ -28,7 +28,7 @@ pub fn instance_player(mut commands: Commands) {
     commands.spawn((
         Transform::from_xyz(2.0, 1.0, -3.0),
         PlaneCollider {
-            normal: Vec2::new(1.0, 0.0),
+            normal: Vec2::new(-1.0, 0.0),
             size: 2.0
         }
     ));

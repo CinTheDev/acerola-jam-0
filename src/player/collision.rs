@@ -35,18 +35,19 @@ pub fn check_collision_dynamic(
 
     // If the distance between plane and sphere is smaller than radius, there's collision
     if project_vector_sphere.length_squared() > sphere.radius * sphere.radius {
-        return (false, velocity.clone());
+        return (false, velocity);
     }
 
-    info!("The thing is colliding");
-
     // Displace backwards
-    let reverse_displacement = (sphere.radius - project_vector_sphere.length()) / plane.normal.dot(sphere_pos_vector.normalize() * -1.0);
+    let mut reverse_displacement = (sphere.radius - project_vector_sphere.length()) / plane.normal.dot(velocity.normalize() * -1.0);
+    if reverse_displacement.is_nan() {
+        reverse_displacement = 0.0;
+    }
     let reverse_displacement_vector = velocity.normalize_or_zero() * reverse_displacement * -1.0;
-
-    let mut new_velocity = velocity.clone();
+    
+    let mut new_velocity = velocity;
     new_velocity += reverse_displacement_vector;
-
+    
     // Second projection to determine slide
 
     return (true, new_velocity);
