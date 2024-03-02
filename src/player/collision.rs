@@ -18,8 +18,7 @@ pub fn check_collision_dynamic(
     plane_pos: Vec2,
     velocity: Vec2
 ) -> (bool, Vec2) {
-    // Use "Collide and Slide" algorithm
-    // TODO
+    // Uses "Collide and Slide" algorithm
 
     // Project
     let plane_vector_normalized = Vec2::new(-plane.normal.y, plane.normal.x);
@@ -43,10 +42,14 @@ pub fn check_collision_dynamic(
     let reverse_displacement_vector = velocity.normalize_or_zero() * reverse_displacement;
     
     let mut new_velocity = velocity;
+
     new_velocity -= reverse_displacement_vector;
     
     // Second projection to determine slide
+    let slide_project_t = plane_vector_normalized.dot(reverse_displacement_vector);
+    let slide_project_vector = plane_vector_normalized * slide_project_t;
 
+    new_velocity += slide_project_vector;
 
     return (true, new_velocity);
 }
