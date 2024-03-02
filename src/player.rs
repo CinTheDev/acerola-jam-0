@@ -4,12 +4,18 @@ use std::f32::consts::PI;
 const PLAYER_MAX_ROTATION: f32 =  PI / 2.0 - 0.05;
 const PLAYER_MIN_ROTATION: f32 = -PI / 2.0 + 0.05;
 
+mod collision;
+
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
         player: Player {
             speed: 3.0,
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
+        },
+        collider: collision::SphereCollider {
+            position: Vec3::ZERO,
+            radius: 1.0
         },
         camera: Camera3dBundle {
             transform: Transform::from_xyz(0.0, 1.0, 0.0),
@@ -21,6 +27,7 @@ pub fn instance_player(mut commands: Commands) {
 #[derive(Bundle)]
 struct PlayerBundle {
     player: Player,
+    collider: collision::SphereCollider,
     camera: Camera3dBundle,
 }
 
