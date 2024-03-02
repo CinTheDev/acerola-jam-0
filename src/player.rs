@@ -1,8 +1,8 @@
 use bevy::{input::mouse::MouseMotion, prelude::*};
 
 use std::f32::consts::PI;
-const PLAYER_MAX_ROTATION: f32 = PI;
-const PLAYER_MIN_ROTATION: f32 = -PI;
+const PLAYER_MAX_ROTATION: f32 = PI / 2.0;
+const PLAYER_MIN_ROTATION: f32 = -PI / 2.0;
 
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
@@ -56,8 +56,8 @@ pub fn move_player(
         .max(PLAYER_MIN_ROTATION);
 
     transform.rotation = Quat::IDENTITY;
-    transform.rotate_y(properties.rotation.x);
-    transform.rotate_local_x(properties.rotation.y);
+    transform.rotate_y(properties.rotation.x * -1.0);
+    transform.rotate_local_x(properties.rotation.y * -1.0);
 }
 
 fn get_keyboard_input(input: &Res<Input<KeyCode>>, player_trans: &Transform) -> Vec3 {
