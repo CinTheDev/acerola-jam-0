@@ -54,24 +54,25 @@ pub fn move_player(
     time: Res<Time>,
     keyboard_input: Res<Input<KeyCode>>,
     mut mouse_input: EventReader<MouseMotion>,
-    mut q_player: Query<(&mut Player, &mut Transform)>,
-    q_player_collider: Query<(&SphereCollider, &Transform), With<Player>>,
+    mut q_player: Query<(&mut Player, &mut Transform, &SphereCollider)>,
     q_walls_collider: Query<(&PlaneCollider, &Transform)>
 ) {
     // Variables setup
     let mut p = q_player.single_mut();
     let properties = p.0.as_mut();
+    let transform_copy = p.1.as_ref().clone();
     let transform = p.1.as_mut();
-
+    
     // Input processing
     let dir = get_keyboard_input(&keyboard_input, &transform);
     let mouse_delta = get_mouse_input(&mut mouse_input);
-
+    
     let vec_move = dir * properties.speed * time.delta_seconds();
     let trans_rot = mouse_delta * properties.sensitivity;
-
+    
     // Collision checks
-    let vec_move_checked = check_player_collisions(q_player_collider, q_walls_collider, vec_move);
+    let player_tuple = (p.2, &transform_copy);
+    let vec_move_checked = check_player_collisions(player_tuple, q_walls_collider, vec_move);
 
     // Moving the player
     transform.translation += vec_move_checked;
@@ -118,11 +119,10 @@ fn get_mouse_input(motion_evr: &mut EventReader<MouseMotion>) -> Vec2 {
 }
 
 pub fn check_player_collisions(
-    q_player: Query<(&SphereCollider, &Transform), With<Player>>,
+    player: (&SphereCollider, &Transform),
     q_walls: Query<(&PlaneCollider, &Transform)>,
     player_velocity: Vec3,
 ) -> Vec3 {
-    let player = q_player.single();
     let p_sphere_col = player.0;
     let p_trans = player.1;
 
