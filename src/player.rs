@@ -32,24 +32,28 @@ pub fn move_player(
     let properties = p.0;
     let transform = p.1.as_mut();
 
-    let mut dir = Vec3::ZERO;
-
-    if input.pressed(KeyCode::W) {
-        dir += transform.forward();
-    }
-    if input.pressed(KeyCode::A) {
-        dir += transform.left();
-    }
-    if input.pressed(KeyCode::S) {
-        dir += transform.back();
-    }
-    if input.pressed(KeyCode::D) {
-        dir += transform.right();
-    }
-
-    dir = dir.normalize_or_zero();
+    let dir = get_keyboard_input(&input, &transform);
 
     let vec_move = dir * properties.speed * time.delta_seconds();
 
     transform.translation += vec_move;
+}
+
+fn get_keyboard_input(input: &Res<Input<KeyCode>>, player_trans: &Transform) -> Vec3 {
+    let mut dir = Vec3::ZERO;
+
+    if input.pressed(KeyCode::W) {
+        dir += player_trans.forward();
+    }
+    if input.pressed(KeyCode::A) {
+        dir += player_trans.left();
+    }
+    if input.pressed(KeyCode::S) {
+        dir += player_trans.back();
+    }
+    if input.pressed(KeyCode::D) {
+        dir += player_trans.right();
+    }
+
+    return dir.normalize_or_zero();
 }
