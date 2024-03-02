@@ -1,6 +1,8 @@
 use bevy::{input::mouse::MouseMotion, prelude::*};
 
 use std::f32::consts::PI;
+
+use self::collision::{BoxCollider, SphereCollider};
 const PLAYER_MAX_ROTATION: f32 =  PI / 2.0 - 0.05;
 const PLAYER_MIN_ROTATION: f32 = -PI / 2.0 + 0.05;
 
@@ -104,4 +106,11 @@ fn get_mouse_input(motion_evr: &mut EventReader<MouseMotion>) -> Vec2 {
     }
 
     return mouse_delta;
+}
+
+pub fn check_player_collisions(
+    q_player: Query<(&SphereCollider, &Transform), With<Player>>,
+    q_walls: Query<(&BoxCollider, &Transform)>
+) {
+
 }
