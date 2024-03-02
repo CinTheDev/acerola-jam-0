@@ -3,7 +3,7 @@ use bevy::prelude::*;
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
         player: Player {
-            speed: 0.5
+            speed: 3.0
         },
         camera: Camera3dBundle {
             transform: Transform::from_xyz(0.0, 1.0, 0.0),
@@ -35,17 +35,21 @@ pub fn move_player(
     let mut dir = Vec3::ZERO;
 
     if input.pressed(KeyCode::W) {
-        dir += Vec3::new(0.0, 0.0, 1.0);
+        dir += Vec3::new(0.0, 0.0, -1.0);
     }
     if input.pressed(KeyCode::A) {
         dir += Vec3::new(-1.0, 0.0, 0.0);
     }
     if input.pressed(KeyCode::S) {
-        dir += Vec3::new(0.0, 0.0, -1.0);
+        dir += Vec3::new(0.0, 0.0, 1.0);
     }
     if input.pressed(KeyCode::D) {
         dir += Vec3::new(1.0, 0.0, 0.0);
     }
 
-    transform.translation += dir * properties.speed * time.delta_seconds();
+    dir = dir.normalize_or_zero();
+
+    let vec_move = dir * properties.speed * time.delta_seconds();
+
+    transform.translation += vec_move;
 }
