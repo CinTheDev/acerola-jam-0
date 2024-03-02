@@ -42,7 +42,7 @@ pub fn check_collision_dynamic(
 
     // Displace backwards
     let mut reverse_displacement = (sphere.radius - project_vector_sphere.length()) / plane.normal.dot(velocity.normalize() * -1.0);
-    if reverse_displacement.is_nan() {
+    if reverse_displacement.is_nan() || reverse_displacement.is_infinite() {
         reverse_displacement = 0.0;
     }
     let reverse_displacement_vector = velocity.normalize_or_zero() * reverse_displacement;
