@@ -70,8 +70,11 @@ pub fn move_player(
     let vec_move = dir * properties.speed * time.delta_seconds();
     let trans_rot = mouse_delta * properties.sensitivity;
 
+    // Collision checks
+    let vec_move_checked = check_player_collisions(q_player_collider, q_walls_collider, vec_move);
+
     // Moving the player
-    transform.translation += vec_move;
+    transform.translation += vec_move_checked;
 
     properties.rotation += trans_rot;
     properties.rotation.y = properties.rotation.y
@@ -81,9 +84,6 @@ pub fn move_player(
     transform.rotation = Quat::IDENTITY;
     transform.rotate_y(properties.rotation.x * -1.0);
     transform.rotate_local_x(properties.rotation.y * -1.0);
-
-    // Collision checks
-    check_player_collisions(q_player_collider, q_walls_collider, vec_move);
 }
 
 fn get_keyboard_input(input: &Res<Input<KeyCode>>, player_trans: &Transform) -> Vec3 {
