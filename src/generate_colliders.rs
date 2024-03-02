@@ -17,7 +17,7 @@ pub fn generate_colliders(mut commands: Commands) {
 // Generates 4 planes
 fn generate_cube(commands: &mut Commands, position: Vec2, rotation: f32, size: Vec2, inside: bool) {
     // Calculate directions from middle
-    let rotation_rad = rotation.to_radians();
+    let rotation_rad = -rotation.to_radians();
     let mut dir1 = Vec2::new(rotation_rad.cos(), rotation_rad.sin());
     let mut dir2 = Vec2::new(-dir1.y, dir1.x);
     let mut dir3 = Vec2::new(-dir2.y, dir2.x);
