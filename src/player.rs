@@ -9,7 +9,7 @@ pub mod collision;
 use collision::{PlaneCollider, SphereCollider};
 
 pub mod items;
-use items::ITEM_ID;
+use items::ItemId;
 
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
@@ -17,7 +17,7 @@ pub fn instance_player(mut commands: Commands) {
             speed: 3.0,
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
-            item_id: ITEM_ID::SOMETHING,
+            item_id: ItemId::SOMETHING,
         },
         collider: SphereCollider {
             radius: 1.0
@@ -42,7 +42,7 @@ pub struct Player {
     sensitivity: f32,
 
     rotation: Vec2,
-    item_id: ITEM_ID,
+    item_id: ItemId,
 }
 
 pub fn move_player(

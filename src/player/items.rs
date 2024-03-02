@@ -8,7 +8,7 @@ static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
 });
 
 #[derive(PartialEq)]
-pub enum ITEM_ID {
+pub enum ItemId {
     NONE,
     SOMETHING,
 }
@@ -22,7 +22,7 @@ pub struct ItemBundle {
 
 #[derive(Component)]
 pub struct Item {
-    id: ITEM_ID,
+    id: ItemId,
     pickup: bool,
 }
 
@@ -59,7 +59,7 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
             radius: 0.1
         },
         item: Item {
-            id: ITEM_ID::SOMETHING,
+            id: ItemId::SOMETHING,
             pickup: true
         }
     });
