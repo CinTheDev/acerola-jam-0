@@ -1,8 +1,9 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
-pub struct BoxCollider {
-    pub transform: Transform,
+pub struct PlaneCollider {
+    pub normal: Vec3,
+    pub size: Vec2,
 }
 
 #[derive(Component)]
@@ -14,8 +15,8 @@ pub struct SphereCollider {
 pub fn check_collision_dynamic(
     sphere: &SphereCollider,
     sphere_trans: &Transform,
-    cube: &BoxCollider,
-    cube_trans: &Transform,
+    plane: &PlaneCollider,
+    plane_trans: &Transform,
     velocity: &Vec3
 ) -> (bool, Vec3) {
     // Use "Collide and Slide" algorithm

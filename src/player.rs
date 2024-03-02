@@ -2,11 +2,11 @@ use bevy::{input::mouse::MouseMotion, prelude::*};
 
 use std::f32::consts::PI;
 
-use self::collision::{BoxCollider, SphereCollider};
 const PLAYER_MAX_ROTATION: f32 =  PI / 2.0 - 0.05;
 const PLAYER_MIN_ROTATION: f32 = -PI / 2.0 + 0.05;
 
 mod collision;
+use collision::{PlaneCollider, SphereCollider};
 
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
@@ -15,7 +15,7 @@ pub fn instance_player(mut commands: Commands) {
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
         },
-        collider: collision::SphereCollider {
+        collider: SphereCollider {
             position: Vec3::ZERO,
             radius: 1.0
         },
@@ -27,9 +27,10 @@ pub fn instance_player(mut commands: Commands) {
 
     // TODO: automate this (and move to other place)
     commands.spawn((
-        Transform::from_xyz(3.0, 1.0, 3.0).with_scale(Vec3::new(2.0, 2.0, 2.0)),
-        collision::BoxCollider {
-            transform: Transform::from_scale(Vec3::new(2.0, 2.0, 2.0))
+        Transform::from_xyz(2.0, 1.0, 2.0),
+        PlaneCollider {
+            normal: Vec3::new(-1.0, 0.0, 0.0),
+            size: Vec2::new(1.0, 1.0)
         }
     ));
 }
@@ -37,7 +38,7 @@ pub fn instance_player(mut commands: Commands) {
 #[derive(Bundle)]
 struct PlayerBundle {
     player: Player,
-    collider: collision::SphereCollider,
+    collider: SphereCollider,
     camera: Camera3dBundle,
 }
 
@@ -55,7 +56,7 @@ pub fn move_player(
     mut mouse_input: EventReader<MouseMotion>,
     mut q_player: Query<(&mut Player, &mut Transform)>,
     q_player_collider: Query<(&SphereCollider, &Transform), With<Player>>,
-    q_walls_collider: Query<(&BoxCollider, &Transform)>
+    q_walls_collider: Query<(&PlaneCollider, &Transform)>
 ) {
     // Variables setup
     let mut p = q_player.single_mut();
@@ -118,7 +119,7 @@ fn get_mouse_input(motion_evr: &mut EventReader<MouseMotion>) -> Vec2 {
 
 pub fn check_player_collisions(
     q_player: Query<(&SphereCollider, &Transform), With<Player>>,
-    q_walls: Query<(&BoxCollider, &Transform)>,
+    q_walls: Query<(&PlaneCollider, &Transform)>,
     player_velocity: Vec3,
 ) -> Vec3 {
     let player = q_player.single();
