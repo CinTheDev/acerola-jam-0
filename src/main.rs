@@ -2,11 +2,16 @@ use bevy::prelude::*;
 use bevy::window::{CursorGrabMode, PrimaryWindow};
 
 mod player;
+mod generate_colliders;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_systems(Startup, (setup, cursor_grab))
+        .add_systems(Startup, (
+            setup,
+            cursor_grab,
+            generate_colliders::generate_colliders
+        ))
         .add_systems(Update, player::move_player)
         .run();
 }
