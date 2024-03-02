@@ -7,6 +7,7 @@ static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
         .with_rotation(Quat::from_euler(EulerRot::YXZ, 1.0, 1.0, 0.0))
 });
 
+#[derive(PartialEq)]
 pub enum ITEM_ID {
     NONE,
     SOMETHING,
@@ -34,7 +35,15 @@ pub fn hold_item(
     let player_transform = player.1;
 
     for mut item in q_item.iter_mut() {
-        let id = item.0;
+        let item_properties = item.0;
         let trans = item.1.as_mut();
+
+        // Check if item is held
+        if item_properties.id != player_properties.item_id {
+            continue;
+        }
+
+        // If yes, do some transformation magix
+        *trans = *player_transform * *ITEM_HOLD_TRANSFORM;
     }
 }
