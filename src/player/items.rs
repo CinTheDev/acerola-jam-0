@@ -1,6 +1,11 @@
 use bevy::prelude::*;
 use super::collision;
 
+pub enum ITEM_ID {
+    NONE,
+    SOMETHING,
+}
+
 #[derive(Bundle)]
 struct ItemBundle {
     scene: SceneBundle,
@@ -10,5 +15,5 @@ struct ItemBundle {
 
 #[derive(Component)]
 struct Item {
-    is_held: bool,
+    id: ITEM_ID,
 }

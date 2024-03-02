@@ -7,7 +7,9 @@ const PLAYER_MIN_ROTATION: f32 = -PI / 2.0 + 0.05;
 
 pub mod collision;
 use collision::{PlaneCollider, SphereCollider};
+
 mod items;
+use items::ITEM_ID;
 
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
@@ -15,6 +17,7 @@ pub fn instance_player(mut commands: Commands) {
             speed: 3.0,
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
+            item_id: ITEM_ID::NONE,
         },
         collider: SphereCollider {
             radius: 1.0
@@ -39,6 +42,7 @@ pub struct Player {
     sensitivity: f32,
 
     rotation: Vec2,
+    item_id: ITEM_ID,
 }
 
 pub fn move_player(
