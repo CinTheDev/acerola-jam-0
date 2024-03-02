@@ -115,24 +115,27 @@ pub fn check_player_collisions(
 ) -> Vec3 {
     let p_sphere_col = player.0;
     let p_pos = player.1.translation.xz();
-    let p_velocity = player_velocity.xz();
 
-    for wall in q_walls.iter() {
-        let wall_properties = wall.0;
-        let wall_pos = wall.1.translation.xz();
+    let mut result = player_velocity;
 
-        let collision_result = collision::check_collision_dynamic(
-            p_sphere_col,
-            p_pos,
-            wall_properties,
-            wall_pos,
-            p_velocity
-        );
-
-        if collision_result.0 {
-            return Vec3::new(collision_result.1.x, 0.0, collision_result.1.y);
+    for _ in 0..2 {
+        for wall in q_walls.iter() {
+            let wall_properties = wall.0;
+            let wall_pos = wall.1.translation.xz();
+    
+            let collision_result = collision::check_collision_dynamic(
+                p_sphere_col,
+                p_pos,
+                wall_properties,
+                wall_pos,
+                result.xz()
+            );
+    
+            if collision_result.0 {
+                result = Vec3::new(collision_result.1.x, 0.0, collision_result.1.y);
+            }
         }
     }
 
-    return player_velocity;
+    return result;
 }
