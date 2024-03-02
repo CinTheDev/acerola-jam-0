@@ -23,11 +23,29 @@ pub struct Player {
     speed: f32
 }
 
-pub fn move_player(time: Res<Time>, mut query: Query<(&Player, &mut Transform)>) {
+pub fn move_player(
+    time: Res<Time>,
+    input: Res<Input<KeyCode>>,
+    mut query: Query<(&Player, &mut Transform)>
+) {
     let mut p = query.single_mut();
     let properties = p.0;
     let transform = p.1.as_mut();
 
-    let dir = Vec3::new(1.0, 0.0, 0.0);
+    let mut dir = Vec3::ZERO;
+
+    if input.pressed(KeyCode::W) {
+        dir += Vec3::new(0.0, 0.0, 1.0);
+    }
+    if input.pressed(KeyCode::A) {
+        dir += Vec3::new(-1.0, 0.0, 0.0);
+    }
+    if input.pressed(KeyCode::S) {
+        dir += Vec3::new(0.0, 0.0, -1.0);
+    }
+    if input.pressed(KeyCode::D) {
+        dir += Vec3::new(1.0, 0.0, 0.0);
+    }
+
     transform.translation += dir * properties.speed * time.delta_seconds();
 }
