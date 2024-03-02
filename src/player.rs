@@ -136,6 +136,10 @@ pub fn check_player_collisions(
             wall_trans,
             &player_velocity
         );
+
+        if collision_result.0 {
+            return collision_result.1;
+        }
     }
 
     return player_velocity;
