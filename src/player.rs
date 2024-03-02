@@ -55,8 +55,9 @@ pub fn move_player(
         .min(PLAYER_MAX_ROTATION)
         .max(PLAYER_MIN_ROTATION);
 
-    transform.rotation = Quat::from_axis_angle(Vec3::Y, properties.rotation.x);
-    transform.rotation *= Quat::from_axis_angle(transform.local_x(), properties.rotation.y);
+    transform.rotation = Quat::IDENTITY;
+    transform.rotate_y(properties.rotation.x);
+    transform.rotate_local_x(properties.rotation.y);
 }
 
 fn get_keyboard_input(input: &Res<Input<KeyCode>>, player_trans: &Transform) -> Vec3 {
