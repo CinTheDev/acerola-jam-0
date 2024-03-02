@@ -22,14 +22,11 @@ pub fn check_collision_dynamic(
     // TODO
 
     // Project
-    let plane_vector = Vec2::new(-plane.normal.y, plane.normal.x) * plane.size;
-    let plane_pos_vector = plane_pos - plane_vector * 0.5;
+    let plane_vector_normalized = Vec2::new(-plane.normal.y, plane.normal.x);
+    let plane_pos_vector = plane_pos - plane_vector_normalized * plane.size * 0.5;
     let sphere_pos_vector = (sphere_pos + velocity) - plane_pos_vector;
 
-    let plane_vector_length = plane_vector.length();
-    let plane_vector_normalized = plane_vector / plane_vector_length;
-
-    let project_t = sphere_pos_vector.dot(plane_vector_normalized).min(plane_vector_length).max(0.0);
+    let project_t = sphere_pos_vector.dot(plane_vector_normalized).min(plane.size).max(0.0);
     let project_vector_plane = plane_vector_normalized * project_t;
     let project_vector_sphere = sphere_pos_vector - project_vector_plane;
 
@@ -43,12 +40,13 @@ pub fn check_collision_dynamic(
     if reverse_displacement.is_nan() {
         reverse_displacement = 0.0;
     }
-    let reverse_displacement_vector = velocity.normalize_or_zero() * reverse_displacement * -1.0;
+    let reverse_displacement_vector = velocity.normalize_or_zero() * reverse_displacement;
     
     let mut new_velocity = velocity;
-    new_velocity += reverse_displacement_vector;
+    new_velocity -= reverse_displacement_vector;
     
     // Second projection to determine slide
+
 
     return (true, new_velocity);
 }
