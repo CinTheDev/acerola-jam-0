@@ -3,7 +3,8 @@ use bevy::{input::mouse::MouseMotion, prelude::*};
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
         player: Player {
-            speed: 3.0
+            speed: 3.0,
+            sensitivity: 0.1,
         },
         camera: Camera3dBundle {
             transform: Transform::from_xyz(0.0, 1.0, 0.0),
@@ -20,7 +21,8 @@ struct PlayerBundle {
 
 #[derive(Component)]
 pub struct Player {
-    speed: f32
+    speed: f32,
+    sensitivity: f32,
 }
 
 pub fn move_player(
@@ -37,7 +39,7 @@ pub fn move_player(
     let mouse_delta = get_mouse_input(&mut mouse_input);
 
     let vec_move = dir * properties.speed * time.delta_seconds();
-    let mouse_rotation = mouse_delta * 1.0 * time.delta_seconds(); // TODO: speed
+    let mouse_rotation = mouse_delta * properties.sensitivity * time.delta_seconds();
 
     transform.translation += vec_move;
 
