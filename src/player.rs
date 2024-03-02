@@ -8,7 +8,7 @@ const PLAYER_MIN_ROTATION: f32 = -PI / 2.0 + 0.05;
 pub mod collision;
 use collision::{PlaneCollider, SphereCollider};
 
-mod items;
+pub mod items;
 use items::ITEM_ID;
 
 pub fn instance_player(mut commands: Commands) {

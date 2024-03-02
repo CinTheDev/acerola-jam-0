@@ -12,7 +12,10 @@ fn main() {
             cursor_grab,
             generate_colliders::generate_colliders
         ))
-        .add_systems(Update, player::move_player)
+        .add_systems(Update, (
+            player::move_player,
+            player::items::hold_item
+        ))
         .run();
 }
 
