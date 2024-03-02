@@ -22,6 +22,14 @@ pub fn instance_player(mut commands: Commands) {
             ..default()
         }
     });
+
+    // TODO: automate this (and move to other place)
+    commands.spawn((
+        Transform::from_xyz(3.0, 1.0, 3.0).with_scale(Vec3::new(2.0, 2.0, 2.0)),
+        collision::BoxCollider {
+            transform: Transform::from_scale(Vec3::new(2.0, 2.0, 2.0))
+        }
+    ));
 }
 
 #[derive(Bundle)]
