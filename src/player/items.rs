@@ -7,7 +7,7 @@ static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
         .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))
 });
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 pub enum ItemId {
     NONE,
     SOMETHING,
@@ -63,4 +63,34 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
             pickup: true
         }
     });
+}
+
+pub fn check_item_collision(
+    mut q_player: Query<(&Transform, &collision::SphereCollider, &mut super::Player)>,
+    mut q_items: Query<(&Transform, &collision::SphereCollider, &mut Item), Without<super::Player>>
+) {
+    let mut player = q_player.single_mut();
+    let player_trans = player.0;
+    let player_collider = player.1;
+    let player_properties = player.2.as_mut();
+
+    for mut item in q_items.iter_mut() {
+        let item_trans = item.0;
+        let item_collider = item.1;
+        let item_properties = item.2.as_mut();
+
+        if item_properties.pickup {
+            // Check collision
+            let sqr_dist = (item_trans.translation - player_trans.translation).length_squared();
+            let radii = player_collider.radius + item_collider.radius;
+
+            if sqr_dist < radii * radii {
+                // Collision
+                item_properties.pickup = false;
+                player_properties.item_id = item_properties.id;
+
+                return;
+            }
+        }
+    }
 }
