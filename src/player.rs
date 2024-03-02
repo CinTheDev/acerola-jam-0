@@ -53,18 +53,23 @@ pub fn move_player(
     time: Res<Time>,
     keyboard_input: Res<Input<KeyCode>>,
     mut mouse_input: EventReader<MouseMotion>,
-    mut query: Query<(&mut Player, &mut Transform)>
+    mut q_player: Query<(&mut Player, &mut Transform)>,
+    q_player_collider: Query<(&SphereCollider, &Transform), With<Player>>,
+    q_walls_collider: Query<(&BoxCollider, &Transform)>
 ) {
-    let mut p = query.single_mut();
+    // Variables setup
+    let mut p = q_player.single_mut();
     let properties = p.0.as_mut();
     let transform = p.1.as_mut();
 
+    // Input processing
     let dir = get_keyboard_input(&keyboard_input, &transform);
     let mouse_delta = get_mouse_input(&mut mouse_input);
 
     let vec_move = dir * properties.speed * time.delta_seconds();
     let trans_rot = mouse_delta * properties.sensitivity;
 
+    // Moving the player
     transform.translation += vec_move;
 
     properties.rotation += trans_rot;
@@ -75,6 +80,9 @@ pub fn move_player(
     transform.rotation = Quat::IDENTITY;
     transform.rotate_y(properties.rotation.x * -1.0);
     transform.rotate_local_x(properties.rotation.y * -1.0);
+
+    // Collision checks
+    check_player_collisions(q_player_collider, q_walls_collider, vec_move);
 }
 
 fn get_keyboard_input(input: &Res<Input<KeyCode>>, player_trans: &Transform) -> Vec3 {
@@ -110,7 +118,25 @@ fn get_mouse_input(motion_evr: &mut EventReader<MouseMotion>) -> Vec2 {
 
 pub fn check_player_collisions(
     q_player: Query<(&SphereCollider, &Transform), With<Player>>,
-    q_walls: Query<(&BoxCollider, &Transform)>
-) {
+    q_walls: Query<(&BoxCollider, &Transform)>,
+    player_velocity: Vec3,
+) -> Vec3 {
+    let player = q_player.single();
+    let p_sphere_col = player.0;
+    let p_trans = player.1;
 
+    for wall in q_walls.iter() {
+        let wall_properties = wall.0;
+        let wall_trans = wall.1;
+
+        let collision_result = collision::check_collision_dynamic(
+            p_sphere_col,
+            p_trans,
+            wall_properties,
+            wall_trans,
+            &player_velocity
+        );
+    }
+
+    return player_velocity;
 }

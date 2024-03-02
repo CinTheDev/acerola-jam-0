@@ -12,14 +12,14 @@ pub struct SphereCollider {
 }
 
 pub fn check_collision_dynamic(
-    sphere: SphereCollider,
-    sphere_trans: Vec3,
-    cube: BoxCollider,
-    cube_trans: Vec3,
-    velocity: Vec3
-) -> Vec3 {
+    sphere: &SphereCollider,
+    sphere_trans: &Transform,
+    cube: &BoxCollider,
+    cube_trans: &Transform,
+    velocity: &Vec3
+) -> (bool, Vec3) {
     // Use "Collide and Slide" algorithm
     // TODO
 
-    return velocity;
+    return (false, velocity.clone());
 }
