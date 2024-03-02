@@ -1,9 +1,11 @@
 use bevy::prelude::*;
 use super::collision;
+use once_cell::sync::Lazy;
 
-static ITEM_HOLD_TRANSFORM: Transform = 
+static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
     Transform::from_xyz(0.0, 0.0, 0.0)
-    .with_rotation(Quat::from_euler(EulerRot::YXZ, 1.0, 1.0, 0.0));
+        .with_rotation(Quat::from_euler(EulerRot::YXZ, 1.0, 1.0, 0.0))
+});
 
 pub enum ITEM_ID {
     NONE,
