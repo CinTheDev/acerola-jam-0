@@ -15,7 +15,7 @@ pub struct TaskManager {
 
 pub fn task_manager(
     mut query: Query<&mut TaskManager>,
-    data_check_start: Res<Input<KeyCode>>
+    data_check: Res<Input<KeyCode>>
 ) {
     let mut q_task_manager = query.single_mut();
     let task_manager = q_task_manager.as_mut();
@@ -25,12 +25,12 @@ pub fn task_manager(
     }
 
     if ! task_manager.task_active {
-        task_manager.check_start(data_check_start);
+        task_manager.check_start(data_check);
         return;
     }
 
     // If a task is active
-    task_manager.check_task();
+    task_manager.check_task(data_check);
 }
 
 impl TaskManager {
@@ -49,9 +49,9 @@ impl TaskManager {
         current_task.start_task();
     }
 
-    fn check_task(&mut self) {
+    fn check_task(&mut self, data_check_task: Res<Input<KeyCode>>) {
         let current_task = self.tasks[self.task_index].as_mut();
-        let is_task_done = current_task.check_task();
+        let is_task_done = current_task.check_task(data_check_task);
 
         if ! is_task_done {
             return;
@@ -76,7 +76,7 @@ impl TaskManager {
 trait Task {
     fn check_start(&mut self, input: Res<Input<KeyCode>>) -> bool;
     fn start_task(&self);
-    fn check_task(&mut self) -> bool;
+    fn check_task(&mut self, input: Res<Input<KeyCode>>) -> bool;
     fn finish_task(&self);
 
     // If task finishes, next task will be started

@@ -28,13 +28,11 @@ impl Task for TestTask {
         info!("Starting task: {}", self.some_val);
     }
 
-    fn check_task(&mut self) -> bool {
-        self.some_val += 1;
-
-        info!("Doing task: {}", self.some_val);
+    fn check_task(&mut self, input: Res<Input<KeyCode>>) -> bool {
+        info!("Checking task");
 
         // Finish task when
-        self.some_val > 99
+        input.pressed(KeyCode::F)
     }
 
     fn finish_task(&self) {
