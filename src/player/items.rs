@@ -43,15 +43,6 @@ pub struct ItemDrop {
     activates_id: ItemId,
 }
 
-pub fn set_item_desired_transform(mut query: Query<(&Transform, &mut Item)>) {
-    for mut item in query.iter_mut() {
-        let item_trans = item.0;
-        let item_properties = item.1.as_mut();
-
-        item_properties.desired_transform = item_trans.clone();
-    }
-}
-
 pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
     for mut item in query.iter_mut() {
         let item_trans = item.0.as_mut();
@@ -110,7 +101,7 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
             id: ItemId::Something,
             pickup: true,
             desired_transform: Transform::IDENTITY,
-            lerp_active: true,
+            lerp_active: false,
         }
     });
 }
