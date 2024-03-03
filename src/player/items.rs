@@ -207,10 +207,13 @@ fn lerp_item_towards(item_transform: &Transform, desired_transform: &Transform) 
     let new_rotation = item_transform.rotation.slerp(
         desired_transform.rotation, ITEM_LERP_FACTOR
     );
+    let new_scale = item_transform.scale.lerp(
+        desired_transform.scale, ITEM_LERP_FACTOR
+    );
 
     return Transform {
         translation: new_translation,
         rotation: new_rotation,
-        scale: item_transform.scale
+        scale: new_scale,
     };
 }
