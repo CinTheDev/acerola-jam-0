@@ -4,8 +4,6 @@ use once_cell::sync::Lazy;
 
 const ITEM_LERP_FACTOR: f32 = 0.5;
 
-pub mod test_taskstarter;
-
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
     Transform::from_xyz(0.15, -0.15, -0.3)
         .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))

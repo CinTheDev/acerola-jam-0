@@ -22,6 +22,7 @@ fn main() {
             player::items::check_item_collision,
             player::items::check_drop_collision,
             player::tasks::task_manager,
+            player::tasks::test_task::check_if_dropped,
         ))
         .run();
 }
