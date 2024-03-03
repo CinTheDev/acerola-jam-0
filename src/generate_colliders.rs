@@ -3,7 +3,7 @@ use super::player::collision;
 
 // Let's go for hand input right now, I don't have time to figure out automating it
 pub fn generate_colliders(mut commands: Commands) {
-    for o in MANUAL_INFORMATION {
+    for o in MANUAL_INFORMATION_BOXES {
         generate_cube(
             &mut commands,
             o.0,
@@ -12,6 +12,29 @@ pub fn generate_colliders(mut commands: Commands) {
             o.3
         );
     }
+
+    for p in MANUAL_INFORMATION_PLANES {
+        generate_plane(
+            &mut commands,
+            p.0,
+            p.1
+        );
+    }
+}
+
+fn generate_plane(commands: &mut Commands, p1: Vec2, p2: Vec2) {
+    let dir = p2 - p1;
+
+    let position = p1 + dir * 0.5;
+    let normal = Vec2::new(-dir.y, dir.x).normalize();
+
+    commands.spawn(collision::PlaneColliderBundle {
+        transform: Transform::from_translation(Vec3::new(position.x, 0.0, position.y)),
+        collider: collision::PlaneCollider {
+            normal: normal,
+            size: dir.length(),
+        }
+    });
 }
 
 // Generates 4 planes
@@ -74,8 +97,14 @@ fn generate_cube(commands: &mut Commands, position: Vec2, rotation: f32, size: V
     });
 }
 
-const MANUAL_INFORMATION: [(Vec2, f32, Vec2, bool); 3] = [
-    (Vec2::new(0.0, 0.0), 0.0, Vec2::new(10.0, 10.0), true), // Environment
-    (Vec2::new(3.0, -3.0), 0.0, Vec2::new(2.0, 2.0), false), // Green cube
-    (Vec2::new(-2.41, 2.296), 25.274, Vec2::new(1.0, 1.0), false),
+const MANUAL_INFORMATION_BOXES: [(Vec2, f32, Vec2, bool); 3] = [
+    (Vec2::new(0.0, 0.0), 0.0, Vec2::new(16.0, 20.0), true), // Walls
+    (Vec2::new(0.0, 3.0), 0.0, Vec2::new(6.0, 6.0), false), // Table in middle
+    (Vec2::new(3.0, -9.0), 0.0, Vec2::new(8.0, 2.0), false), // Controls
+];
+
+const MANUAL_INFORMATION_PLANES: [(Vec2, Vec2); 3] = [
+    (Vec2::new(7.5, -0.5), Vec2::new(7.5, 3.5)), // Alloy machine
+    (Vec2::new(10.0, 8.0), Vec2::new(5.0, 8.0)), // Table corner upper
+    (Vec2::new(5.0, 8.0), Vec2::new(5.0, 10.0)), // Table corner left
 ];
