@@ -100,27 +100,6 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
     });
 }
 
-pub fn test_instance_itemdrop(mut commands: Commands, asset_server: Res<AssetServer>) {
-    /*
-    commands.spawn((
-        SceneBundle {
-            scene: asset_server.load("test_item.glb#Scene0"),
-            ..default()
-        },
-        ItemDropBundle {
-            transform: Transform::from_xyz(-3.0, 1.0, -3.0),
-            collider: collision::SphereCollider {
-                radius: 0.1
-            },
-            item_drop: ItemDrop {
-                accepts_id: ItemId::Something,
-                activates_id: ItemId::SomethingElse,
-                is_dropped: false,
-            }
-    }));
-    */
-}
-
 pub fn check_item_collision(
     mut q_player: Query<(&Transform, &collision::SphereCollider, &mut super::Player)>,
     mut q_items: Query<(&Transform, &collision::SphereCollider, &mut Item), Without<super::Player>>
@@ -161,14 +140,12 @@ pub fn check_drop_collision(
     mut q_itemdrops: Query<(&Transform, &collision::SphereCollider, &mut ItemDrop), Without<super::Player>>,
     mut q_items: Query<&mut Item, (Without<super::Player>, Without<ItemDrop>)>
 ) {
-    info!("Checking 1");
     let mut player = q_player.single_mut();
     let player_trans = player.0;
     let player_collider = player.1;
     let player_properties = player.2.as_mut();
 
     for mut itemdrop in q_itemdrops.iter_mut() {
-        info!("Checking 2");
         let itemdrop_trans = itemdrop.0;
         let itemdrop_collider = itemdrop.1;
         let itemdrop_properties = itemdrop.2.as_mut();
@@ -177,8 +154,6 @@ pub fn check_drop_collision(
             continue;
         }
 
-        info!("Checking 3");
-
         // Check collision
         let sqr_dist = (itemdrop_trans.translation - player_trans.translation).length_squared();
         let radii = itemdrop_collider.radius + player_collider.radius;
@@ -186,8 +161,6 @@ pub fn check_drop_collision(
         if sqr_dist > radii * radii {
             continue;
         }
-
-        info!("Checking 4");
 
         // Drop item
         

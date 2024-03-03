@@ -58,26 +58,3 @@ pub fn do_task(
     info!("Task finished");
     test_task.is_active = false;
 }
-
-/*
-impl Task for TestTask {
-    fn check_start(&mut self) -> bool {
-        return self.val;
-    }
-
-    fn start_task(&self) {
-        info!("Starting task");
-    }
-
-    fn check_task(&mut self, input: Res<Input<KeyCode>>) -> bool {
-        info!("Checking task");
-
-        // Finish task when
-        input.pressed(KeyCode::F)
-    }
-
-    fn finish_task(&self) {
-        info!("Finished task");
-    }
-}
-*/
