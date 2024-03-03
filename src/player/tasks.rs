@@ -68,6 +68,7 @@ impl TaskManager {
     fn check_all_done(&mut self) {
         if self.task_index >= TASK_COUNT {
             self.all_done = true;
+            info!("All tasks are finished.");
         }
     }
 }

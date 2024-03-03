@@ -30,7 +30,7 @@ impl Task for TestTask {
         info!("Doing task: {}", self.some_val);
 
         // Finish task when
-        self.some_val > 500
+        self.some_val > 99
     }
 
     fn finish_task(&self) {
