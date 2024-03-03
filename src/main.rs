@@ -13,6 +13,7 @@ fn main() {
             generate_colliders::generate_colliders,
             player::items::test_instance_item,
             player::items::test_instance_itemdrop,
+            player::tasks::instance_tasks,
         ))
         .add_systems(Update, (
             player::move_player,
@@ -20,6 +21,7 @@ fn main() {
             player::items::update_item_pos,
             player::items::check_item_collision,
             player::items::check_drop_collision,
+            player::tasks::task_manager,
         ))
         .run();
 }

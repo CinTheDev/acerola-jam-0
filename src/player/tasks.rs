@@ -56,13 +56,15 @@ trait Task {
     // If task finishes, next task will be started
 }
 
-pub fn instance_tasks() -> TaskManager {
+pub fn instance_tasks(
+    mut commands: Commands
+) {
     let test_task = test_task::test_task::new(2);
     let test_task_box = Box::new(test_task);
 
-    TaskManager {
+    commands.spawn(TaskManager {
         task_index: 0,
         tasks: [test_task_box],
         task_active: false,
-    }
+    });
 }
