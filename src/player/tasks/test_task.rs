@@ -3,6 +3,10 @@
 use bevy::prelude::*;
 use super::Task;
 
+// For testing:
+// Start the task by bringing the pink thing to the other thing
+// Finish task by pressing F on Keyboard
+
 pub struct TestTask {
     some_val: i32,
 }
