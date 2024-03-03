@@ -1,7 +1,7 @@
 // Task specific implementations
 
 use bevy::prelude::*;
-use crate::player::items::ItemDropBundle;
+use crate::player::items::{ItemDrop, ItemDropBundle};
 
 // For testing:
 // Start the task by bringing the pink thing to the other thing
@@ -10,31 +10,21 @@ use crate::player::items::ItemDropBundle;
 #[derive(Bundle)]
 pub struct TestTaskBundle {
     pub scene: SceneBundle,
+    pub item_drop: ItemDropBundle,
     pub test_task: TestTask,
 }
 
 #[derive(Component)]
 pub struct TestTask {
-    pub item_drop: ItemDropBundle,
-
-    is_active: bool,
-}
-
-impl TestTask {
-    pub fn new(item_drop_bundle: ItemDropBundle) -> Self {
-        Self {
-            item_drop: item_drop_bundle,
-            is_active: false,
-        }
-    }
+    pub is_active: bool,
 }
 
 pub fn check_if_dropped(
-    mut query: Query<&mut TestTask>,
+    mut query: Query<(&mut TestTask, &ItemDrop)>,
 ) {
     let mut q_test_task = query.single_mut();
-    let test_task = q_test_task.as_mut();
-    let item_drop = &test_task.item_drop.item_drop;
+    let test_task = q_test_task.0.as_mut();
+    let item_drop = q_test_task.1;
 
     if ! item_drop.is_dropped {
         return;

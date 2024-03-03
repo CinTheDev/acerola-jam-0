@@ -88,8 +88,10 @@ trait Task {
 */
 
 pub fn instance_tasks(
-    mut commands: Commands
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
 ) {
+    /*
     let test_task = test_task::TestTask::new(ItemDropBundle {
         transform: Transform::from_xyz(-3.0, 1.0, -3.0),
         collider: collision::SphereCollider {
@@ -104,6 +106,29 @@ pub fn instance_tasks(
 
     commands.spawn(test_task);
     //let test_task_box = Box::new(test_task);
+
+    */
+    commands.spawn(test_task::TestTaskBundle {
+        scene: SceneBundle {
+            scene: asset_server.load("test_item.glb#Scene0"),
+            transform: Transform::from_xyz(-3.0, 1.0, -3.0),
+            ..default()
+        },
+        item_drop: ItemDropBundle {
+            collider: collision::SphereCollider {
+                radius: 0.1
+            },
+
+            item_drop: ItemDrop {
+                accepts_id: ItemId::Something,
+                activates_id: ItemId::SomethingElse,
+                is_dropped: false,
+            }
+        },
+        test_task: test_task::TestTask {
+            is_active: false,
+        }
+    });
 
     commands.spawn(TaskManager {
         task_index: 0,
