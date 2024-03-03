@@ -10,6 +10,7 @@ pub struct TaskManager {
     task_index: usize,
     tasks: [Box<dyn Task + Send + Sync>; TASK_COUNT],
     task_active: bool,
+    all_done: bool,
 }
 
 pub fn task_manager(
@@ -18,6 +19,10 @@ pub fn task_manager(
 ) {
     let mut q_task_manager = query.single_mut();
     let task_manager = q_task_manager.as_mut();
+
+    if task_manager.all_done {
+        return;
+    }
 
     if ! task_manager.task_active {
         task_manager.check_start(data_check_start);
@@ -56,6 +61,14 @@ impl TaskManager {
 
         self.task_active = false;
         self.task_index += 1;
+
+        self.check_all_done();
+    }
+
+    fn check_all_done(&mut self) {
+        if self.task_index >= TASK_COUNT {
+            self.all_done = true;
+        }
     }
 }
 
@@ -78,5 +91,6 @@ pub fn instance_tasks(
         task_index: 0,
         tasks: [test_task_box],
         task_active: false,
+        all_done: false,
     });
 }
