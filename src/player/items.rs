@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use super::collision;
 use once_cell::sync::Lazy;
 
+const ITEM_LERP_FACTOR: f32 = 0.5;
+
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
     Transform::from_xyz(0.15, -0.15, -0.3)
         .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))
@@ -47,6 +49,28 @@ pub fn set_item_desired_transform(mut query: Query<(&Transform, &mut Item)>) {
         let item_properties = item.1.as_mut();
 
         item_properties.desired_transform = item_trans.clone();
+    }
+}
+
+pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
+    for mut item in query.iter_mut() {
+        let item_trans = item.0.as_mut();
+        let item_properties = item.1;
+
+        if ! item_properties.lerp_active {
+            continue;
+        }
+
+        // Lerp to desired transform
+        let new_translation = item_trans.translation.lerp(
+            item_properties.desired_transform.translation, ITEM_LERP_FACTOR
+        );
+        let new_rotation = item_trans.rotation.slerp(
+            item_properties.desired_transform.rotation, ITEM_LERP_FACTOR
+        );
+
+        item_trans.translation = new_translation;
+        item_trans.rotation = new_rotation;
     }
 }
 
