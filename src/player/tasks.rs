@@ -18,38 +18,48 @@ pub fn task_manager(
     let mut q_task_manager = query.single_mut();
     let task_manager = q_task_manager.as_mut();
 
-    let current_task = task_manager.tasks[task_manager.task_index].as_mut();
-
     if ! task_manager.task_active {
+        task_manager.check_start();
         return;
     }
 
     // If a task is active
-
-    let is_task_done = current_task.check_task();
-
-    if ! is_task_done {
-        return;
-    }
-
-    current_task.finish_task();
-    
-    task_manager.task_active = false;
-    task_manager.task_index += 1;
+    task_manager.check_task();
 }
 
 impl TaskManager {
-    fn start_next_task(&mut self) {
+    fn check_start(&mut self) {
+        let current_task = self.tasks[self.task_index].as_mut();
+        let is_task_activated = current_task.check_start();
+
+        if ! is_task_activated {
+            return;
+        }
+
+        // If task has been initiated
         self.task_active = true;
         
         let current_task = self.tasks[self.task_index].as_mut();
         current_task.start_task();
     }
+
+    fn check_task(&mut self) {
+        let current_task = self.tasks[self.task_index].as_mut();
+        let is_task_done = current_task.check_task();
+
+        if ! is_task_done {
+            return;
+        }
+
+        current_task.finish_task();
+
+        self.task_active = false;
+        self.task_index += 1;
+    }
 }
 
 trait Task {
-    // Task has 3 behaviours: start task, do (update) task, finish task
-    // These must be implemented per task
+    fn check_start(&mut self) -> bool;
     fn start_task(&self);
     fn check_task(&mut self) -> bool;
     fn finish_task(&self);
