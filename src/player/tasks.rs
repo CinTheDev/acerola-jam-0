@@ -28,6 +28,7 @@ pub fn instance_tasks(
         },
         test_task: test_task::TestTask {
             is_active: false,
+            needs_check: true,
         }
     });
 }

@@ -17,6 +17,7 @@ pub struct TestTaskBundle {
 #[derive(Component)]
 pub struct TestTask {
     pub is_active: bool,
+    pub needs_check: bool,
 }
 
 pub fn check_if_dropped(
@@ -26,14 +27,17 @@ pub fn check_if_dropped(
     let test_task = q_test_task.0.as_mut();
     let item_drop = q_test_task.1;
 
+    if ! test_task.needs_check {
+        return;
+    }
+
     if ! item_drop.is_dropped {
         return;
     }
 
-    info!("Something");
-
     // Yay the thing has been dropped
     test_task.is_active = true;
+    test_task.needs_check = false;
 }
 
 pub fn do_task(
