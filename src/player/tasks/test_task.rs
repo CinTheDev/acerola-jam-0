@@ -16,9 +16,8 @@ impl test_task {
 }
 
 impl Task for test_task {
-    fn start_task(&self) -> bool {
+    fn start_task(&self) {
         info!("Starting task: {}", self.some_val);
-        return false;
     }
 
     fn check_task(&mut self) -> bool {
