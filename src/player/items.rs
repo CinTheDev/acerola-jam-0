@@ -4,6 +4,8 @@ use once_cell::sync::Lazy;
 
 const ITEM_LERP_FACTOR: f32 = 0.5;
 
+pub mod test_taskstarter;
+
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
     Transform::from_xyz(0.15, -0.15, -0.3)
         .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))
@@ -39,8 +41,9 @@ pub struct ItemDropBundle {
 
 #[derive(Component)]
 pub struct ItemDrop {
-    accepts_id: ItemId,
-    activates_id: ItemId,
+    pub accepts_id: ItemId,
+    pub activates_id: ItemId,
+    pub is_dropped: bool,
 }
 
 pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
@@ -112,7 +115,8 @@ pub fn test_instance_itemdrop(mut commands: Commands, asset_server: Res<AssetSer
         },
         item_drop: ItemDrop {
             accepts_id: ItemId::Something,
-            activates_id: ItemId::SomethingElse
+            activates_id: ItemId::SomethingElse,
+            is_dropped: false,
         }
     }));
 }
@@ -196,6 +200,7 @@ pub fn check_drop_collision(
 
         // TODO: Properly drop of item
         player_properties.item_id = ItemId::None;
+        itemdrop_properties.is_dropped = true;
 
         return;
     }
