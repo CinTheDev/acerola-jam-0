@@ -67,7 +67,7 @@ pub fn hold_item(
 
     for mut item in q_item.iter_mut() {
         let item_properties = item.0;
-        let trans = item.1.as_mut();
+        let item_trans = item.1.as_mut();
 
         // Check if item is held
         if item_properties.id != player_properties.item_id {
@@ -75,7 +75,8 @@ pub fn hold_item(
         }
 
         // If yes, do some transformation magix
-        *trans = *player_transform * *ITEM_HOLD_TRANSFORM;
+        let desired_transform = *player_transform * *ITEM_HOLD_TRANSFORM;
+        *item_trans = lerp_item_towards(item_trans, &desired_transform);
     }
 }
 
