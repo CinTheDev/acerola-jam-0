@@ -9,12 +9,12 @@ pub mod test_task;
 
 #[derive(Component)]
 pub struct TaskManager {
-    task_index: usize,
-    tasks: [Box<dyn Task + Send + Sync>; TASK_COUNT],
-    task_active: bool,
-    all_done: bool,
+    pub task_index: usize,
+    pub task_active: bool,
+    pub all_done: bool,
 }
 
+/*
 pub fn task_manager(
     mut query: Query<&mut TaskManager>,
     data_check: Res<Input<KeyCode>>
@@ -74,7 +74,9 @@ impl TaskManager {
         }
     }
 }
+*/
 
+/*
 trait Task {
     fn check_start(&mut self) -> bool;
     fn start_task(&self);
@@ -83,6 +85,7 @@ trait Task {
 
     // If task finishes, next task will be started
 }
+*/
 
 pub fn instance_tasks(
     mut commands: Commands
@@ -104,7 +107,6 @@ pub fn instance_tasks(
 
     commands.spawn(TaskManager {
         task_index: 0,
-        tasks: [test_task_box],
         task_active: false,
         all_done: false,
     });

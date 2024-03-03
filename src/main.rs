@@ -21,8 +21,8 @@ fn main() {
             player::items::update_item_pos,
             player::items::check_item_collision,
             player::items::check_drop_collision,
-            player::tasks::task_manager,
             player::tasks::test_task::check_if_dropped,
+            player::tasks::test_task::do_task,
         ))
         .run();
 }
