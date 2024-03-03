@@ -76,6 +76,7 @@ name = "acerola_jam"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "once_cell",
 ]
 
 [[package]]
