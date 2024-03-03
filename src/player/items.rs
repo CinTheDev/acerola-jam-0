@@ -26,6 +26,18 @@ pub struct Item {
     pickup: bool,
 }
 
+#[derive(Bundle)]
+pub struct ItemDropBundle {
+    pub collider: collision::SphereCollider,
+    pub item_drop: ItemDrop,
+}
+
+#[derive(Component)]
+pub struct ItemDrop {
+    accepts_id: ItemId,
+    activates_id: ItemId,
+}
+
 pub fn hold_item(
     mut q_item: Query<(&Item, &mut Transform), Without<super::Player>>,
     q_player: Query<(&super::Player, &Transform), Without<Item>>
@@ -90,6 +102,43 @@ pub fn check_item_collision(
                 player_properties.item_id = item_properties.id;
 
                 return;
+            }
+        }
+    }
+}
+
+pub fn check_drop_collision(
+    mut q_player: Query<(&Transform, &collision::SphereCollider, &mut super::Player)>,
+    mut q_itemdrops: Query<(&Transform, &collision::SphereCollider, &mut ItemDrop), Without<super::Player>>,
+    mut q_items: Query<&mut Item, (Without<super::Player>, Without<ItemDrop>)>
+) {
+    let mut player = q_player.single_mut();
+    let player_trans = player.0;
+    let player_collider = player.1;
+    let player_properties = player.2.as_mut();
+
+    for mut itemdrop in q_itemdrops.iter_mut() {
+        let itemdrop_trans = itemdrop.0;
+        let itemdrop_collider = itemdrop.1;
+        let itemdrop_properties = itemdrop.2.as_mut();
+
+        if itemdrop_properties.accepts_id == player_properties.item_id {
+            let sqr_dist = (itemdrop_trans.translation - player_trans.translation).length_squared();
+            let radii = itemdrop_collider.radius + player_collider.radius;
+
+            if sqr_dist < radii * radii {
+                // Drop item
+                // TODO
+                
+                // Search next item and activate
+                for mut item in q_items.iter_mut() {
+                    let item_properties = item.as_mut();
+
+                    if item_properties.id == itemdrop_properties.activates_id {
+                        item_properties.pickup = true;
+                        break;
+                    }
+                }
             }
         }
     }
