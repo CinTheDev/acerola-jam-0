@@ -14,6 +14,21 @@ pub fn generate_colliders(mut commands: Commands) {
     }
 }
 
+fn generate_plane(commands: &mut Commands, p1: Vec2, p2: Vec2) {
+    let dir = p2 - p1;
+
+    let position = p1 + dir * 0.5;
+    let normal = Vec2::new(-dir.y, dir.x).normalize();
+
+    commands.spawn(collision::PlaneColliderBundle {
+        transform: Transform::from_translation(Vec3::new(position.x, 0.0, position.y)),
+        collider: collision::PlaneCollider {
+            normal: normal,
+            size: dir.length(),
+        }
+    });
+}
+
 // Generates 4 planes
 fn generate_cube(commands: &mut Commands, position: Vec2, rotation: f32, size: Vec2, inside: bool) {
     // Calculate directions from middle

@@ -28,7 +28,7 @@ fn main() {
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(SceneBundle {
-        scene: asset_server.load("test_env.glb#Scene0"),
+        scene: asset_server.load("lab.glb#Scene0"),
         transform: Transform::from_xyz(0.0, 0.0, 0.0),
         ..default()
     });
