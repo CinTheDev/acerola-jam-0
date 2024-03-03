@@ -53,15 +53,7 @@ pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
         }
 
         // Lerp to desired transform
-        let new_translation = item_trans.translation.lerp(
-            item_properties.desired_transform.translation, ITEM_LERP_FACTOR
-        );
-        let new_rotation = item_trans.rotation.slerp(
-            item_properties.desired_transform.rotation, ITEM_LERP_FACTOR
-        );
-
-        item_trans.translation = new_translation;
-        item_trans.rotation = new_rotation;
+        *item_trans = lerp_item_towards(&item_trans, &item_properties.desired_transform);
     }
 }
 
@@ -206,4 +198,19 @@ pub fn check_drop_collision(
 
         return;
     }
+}
+
+fn lerp_item_towards(item_transform: &Transform, desired_transform: &Transform) -> Transform {
+    let new_translation = item_transform.translation.lerp(
+        desired_transform.translation, ITEM_LERP_FACTOR
+    );
+    let new_rotation = item_transform.rotation.slerp(
+        desired_transform.rotation, ITEM_LERP_FACTOR
+    );
+
+    return Transform {
+        translation: new_translation,
+        rotation: new_rotation,
+        scale: item_transform.scale
+    };
 }
