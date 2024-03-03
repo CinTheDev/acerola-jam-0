@@ -39,8 +39,9 @@ pub struct ItemDropBundle {
 
 #[derive(Component)]
 pub struct ItemDrop {
-    accepts_id: ItemId,
-    activates_id: ItemId,
+    pub accepts_id: ItemId,
+    pub activates_id: ItemId,
+    pub is_dropped: bool,
 }
 
 pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
@@ -97,24 +98,6 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
             lerp_active: false,
         }
     });
-}
-
-pub fn test_instance_itemdrop(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn((
-        SceneBundle {
-            scene: asset_server.load("test_item.glb#Scene0"),
-            transform: Transform::from_xyz(-3.0, 1.0, -3.0),
-            ..default()
-        },
-        ItemDropBundle {
-        collider: collision::SphereCollider {
-            radius: 0.1
-        },
-        item_drop: ItemDrop {
-            accepts_id: ItemId::Something,
-            activates_id: ItemId::SomethingElse
-        }
-    }));
 }
 
 pub fn check_item_collision(
@@ -196,6 +179,7 @@ pub fn check_drop_collision(
 
         // TODO: Properly drop of item
         player_properties.item_id = ItemId::None;
+        itemdrop_properties.is_dropped = true;
 
         return;
     }
