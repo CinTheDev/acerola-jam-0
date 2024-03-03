@@ -23,7 +23,7 @@ pub fn instance_player(mut commands: Commands) {
             radius: 1.0
         },
         camera: Camera3dBundle {
-            transform: Transform::from_xyz(0.0, 1.0, 0.0),
+            transform: Transform::from_xyz(3.0, 1.0, 0.0),
             ..default()
         }
     });

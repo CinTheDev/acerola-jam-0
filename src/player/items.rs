@@ -161,6 +161,7 @@ pub fn check_item_collision(
 
         // Collision
         item_properties.pickup = false;
+        item_properties.lerp_active = false;
         player_properties.item_id = item_properties.id;
 
         return;
@@ -195,19 +196,23 @@ pub fn check_drop_collision(
         }
 
         // Drop item
-        // TODO
-        player_properties.item_id = ItemId::None;
         
         // Search next item and activate
         for mut item in q_items.iter_mut() {
             let item_properties = item.as_mut();
 
-            if item_properties.id != itemdrop_properties.activates_id {
-                continue;
+            if item_properties.id == itemdrop_properties.activates_id {
+                item_properties.pickup = true;
             }
-
-            item_properties.pickup = true;
-            break;
+            if item_properties.id == player_properties.item_id {
+                item_properties.desired_transform = itemdrop_trans.clone();
+                item_properties.lerp_active = true;
+            }
         }
+
+        // TODO: Properly drop of item
+        player_properties.item_id = ItemId::None;
+
+        return;
     }
 }
