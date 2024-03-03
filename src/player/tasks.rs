@@ -60,7 +60,7 @@ trait Task {
 pub fn instance_tasks(
     mut commands: Commands
 ) {
-    let test_task = test_task::test_task::new(2);
+    let test_task = test_task::TestTask::new(2);
     let test_task_box = Box::new(test_task);
 
     commands.spawn(TaskManager {
