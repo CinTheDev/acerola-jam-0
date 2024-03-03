@@ -12,6 +12,7 @@ fn main() {
             cursor_grab,
             generate_colliders::generate_colliders,
             player::items::test_instance_item,
+            player::items::test_instance_itemdrop,
         ))
         .add_systems(Update, (
             player::move_player,
