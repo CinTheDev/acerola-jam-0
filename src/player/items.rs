@@ -9,9 +9,9 @@ static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
 
 #[derive(PartialEq, Clone, Copy)]
 pub enum ItemId {
-    NONE,
-    SOMETHING,
-    SOMETHING_ELSE,
+    None,
+    Something,
+    SomethingElse,
 }
 
 #[derive(Bundle)]
@@ -72,7 +72,7 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
             radius: 0.1
         },
         item: Item {
-            id: ItemId::SOMETHING,
+            id: ItemId::Something,
             pickup: true
         }
     });
@@ -90,8 +90,8 @@ pub fn test_instance_itemdrop(mut commands: Commands, asset_server: Res<AssetSer
             radius: 0.1
         },
         item_drop: ItemDrop {
-            accepts_id: ItemId::SOMETHING,
-            activates_id: ItemId::SOMETHING_ELSE
+            accepts_id: ItemId::Something,
+            activates_id: ItemId::SomethingElse
         }
     }));
 }
@@ -159,7 +159,7 @@ pub fn check_drop_collision(
 
         // Drop item
         // TODO
-        player_properties.item_id = ItemId::NONE;
+        player_properties.item_id = ItemId::None;
         
         // Search next item and activate
         for mut item in q_items.iter_mut() {
