@@ -17,6 +17,7 @@ fn main() {
             player::move_player,
             player::items::hold_item,
             player::items::check_item_collision,
+            player::items::check_drop_collision,
         ))
         .run();
 }
