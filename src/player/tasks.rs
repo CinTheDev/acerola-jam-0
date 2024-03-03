@@ -88,6 +88,7 @@ pub fn instance_tasks(
     mut commands: Commands
 ) {
     let test_task = test_task::TestTask::new(ItemDropBundle {
+        transform: Transform::from_xyz(-3.0, 1.0, -3.0),
         collider: collision::SphereCollider {
             radius: 0.1
         },
@@ -97,7 +98,9 @@ pub fn instance_tasks(
             is_dropped: false,
         }
     });
-    let test_task_box = Box::new(test_task);
+
+    commands.spawn(test_task);
+    //let test_task_box = Box::new(test_task);
 
     commands.spawn(TaskManager {
         task_index: 0,

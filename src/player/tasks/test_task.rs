@@ -33,12 +33,15 @@ pub fn check_if_dropped(
     mut query: Query<&mut TestTask>,
 ) {
     for mut thingy in query.iter_mut() {
+        info!("Checking");
         let test_task = thingy.as_mut();
         let item_drop = &test_task.item_drop.item_drop;
 
         if ! item_drop.is_dropped {
             continue;
         }
+
+        info!("Something");
 
         // Yay the thing has been dropped
         test_task.val = true;
