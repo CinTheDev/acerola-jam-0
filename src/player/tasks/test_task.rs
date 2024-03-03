@@ -16,12 +16,14 @@ impl test_task {
 }
 
 impl Task for test_task {
-    fn start_task(&self) {
+    fn start_task(&self) -> bool {
         info!("Starting task: {}", self.some_val);
+        return false;
     }
 
-    fn check_task(&mut self) {
+    fn check_task(&mut self) -> bool {
         self.some_val += 1;
+        return false;
     }
 
     fn finish_task(&self) {
