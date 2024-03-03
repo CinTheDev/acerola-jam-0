@@ -32,9 +32,10 @@ pub fn task_manager(
         return;
     }
 
-    task_manager.task_active = false;
     current_task.finish_task();
-    task_manager.start_next_task();
+    
+    task_manager.task_active = false;
+    task_manager.task_index += 1;
 }
 
 impl TaskManager {
