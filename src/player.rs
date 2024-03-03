@@ -11,6 +11,8 @@ use collision::{PlaneCollider, SphereCollider};
 pub mod items;
 use items::ItemId;
 
+pub mod tasks;
+
 pub fn instance_player(mut commands: Commands) {
     commands.spawn(PlayerBundle {
         player: Player {
