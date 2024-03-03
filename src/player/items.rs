@@ -140,6 +140,7 @@ pub fn check_drop_collision(
 
         // Drop item
         // TODO
+        player_properties.item_id = ItemId::NONE;
         
         // Search next item and activate
         for mut item in q_items.iter_mut() {
