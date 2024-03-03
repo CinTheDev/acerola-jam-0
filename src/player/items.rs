@@ -91,19 +91,23 @@ pub fn check_item_collision(
         let item_collider = item.1;
         let item_properties = item.2.as_mut();
 
-        if item_properties.pickup {
-            // Check collision
-            let sqr_dist = (item_trans.translation - player_trans.translation).length_squared();
-            let radii = player_collider.radius + item_collider.radius;
-
-            if sqr_dist < radii * radii {
-                // Collision
-                item_properties.pickup = false;
-                player_properties.item_id = item_properties.id;
-
-                return;
-            }
+        if ! item_properties.pickup {
+            continue;
         }
+
+        // Check collision
+        let sqr_dist = (item_trans.translation - player_trans.translation).length_squared();
+        let radii = player_collider.radius + item_collider.radius;
+
+        if sqr_dist > radii * radii {
+            continue;
+        }
+
+        // Collision
+        item_properties.pickup = false;
+        player_properties.item_id = item_properties.id;
+
+        return;
     }
 }
 
@@ -122,24 +126,31 @@ pub fn check_drop_collision(
         let itemdrop_collider = itemdrop.1;
         let itemdrop_properties = itemdrop.2.as_mut();
 
-        if itemdrop_properties.accepts_id == player_properties.item_id {
-            let sqr_dist = (itemdrop_trans.translation - player_trans.translation).length_squared();
-            let radii = itemdrop_collider.radius + player_collider.radius;
+        if itemdrop_properties.accepts_id != player_properties.item_id {
+            continue;
+        }
 
-            if sqr_dist < radii * radii {
-                // Drop item
-                // TODO
-                
-                // Search next item and activate
-                for mut item in q_items.iter_mut() {
-                    let item_properties = item.as_mut();
+        // Check collision
+        let sqr_dist = (itemdrop_trans.translation - player_trans.translation).length_squared();
+        let radii = itemdrop_collider.radius + player_collider.radius;
 
-                    if item_properties.id == itemdrop_properties.activates_id {
-                        item_properties.pickup = true;
-                        break;
-                    }
-                }
+        if sqr_dist > radii * radii {
+            continue;
+        }
+
+        // Drop item
+        // TODO
+        
+        // Search next item and activate
+        for mut item in q_items.iter_mut() {
+            let item_properties = item.as_mut();
+
+            if item_properties.id != itemdrop_properties.activates_id {
+                continue;
             }
+
+            item_properties.pickup = true;
+            break;
         }
     }
 }
