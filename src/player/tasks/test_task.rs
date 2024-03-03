@@ -16,8 +16,8 @@ impl TestTask {
 }
 
 impl Task for TestTask {
-    fn check_start(&mut self) -> bool {
-        return false;
+    fn check_start(&mut self, input: Res<Input<KeyCode>>) -> bool {
+        input.pressed(KeyCode::F)
     }
 
     fn start_task(&self) {
