@@ -11,8 +11,9 @@ fn main() {
             setup,
             cursor_grab,
             generate_colliders::generate_colliders,
-            player::items::test_instance_item,
+            (player::items::test_instance_item,
             player::items::test_instance_itemdrop,
+            player::items::set_item_desired_transform).chain(),
         ))
         .add_systems(Update, (
             player::move_player,

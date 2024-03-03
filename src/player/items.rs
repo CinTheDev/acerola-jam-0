@@ -25,6 +25,8 @@ pub struct ItemBundle {
 pub struct Item {
     id: ItemId,
     pickup: bool,
+    desired_transform: Transform,
+    lerp_active: bool,
 }
 
 #[derive(Bundle)]
@@ -37,6 +39,15 @@ pub struct ItemDropBundle {
 pub struct ItemDrop {
     accepts_id: ItemId,
     activates_id: ItemId,
+}
+
+pub fn set_item_desired_transform(mut query: Query<(&Transform, &mut Item)>) {
+    for mut item in query.iter_mut() {
+        let item_trans = item.0;
+        let item_properties = item.1.as_mut();
+
+        item_properties.desired_transform = item_trans.clone();
+    }
 }
 
 pub fn hold_item(
@@ -73,7 +84,9 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
         },
         item: Item {
             id: ItemId::Something,
-            pickup: true
+            pickup: true,
+            desired_transform: Transform::IDENTITY,
+            lerp_active: true,
         }
     });
 }
