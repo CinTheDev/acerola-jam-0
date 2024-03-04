@@ -4,6 +4,16 @@ This is a game dedicated to the Acerola Jam 0.
 
 The theme is ABERRATION.
 
+## Additional info
+
+### Color palette
+
+- 00D9C0
+- 748CAB
+- B6465F
+- 294936
+- 2C0735
+
 ## Final idea development
 
 I've chosen to go with [Modifying laws of physics - Modified physics law - Changed formula / equation - Gravity does not decrease with distance]
