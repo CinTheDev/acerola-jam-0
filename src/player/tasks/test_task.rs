@@ -53,7 +53,7 @@ pub fn do_task(
 
     info!("Task active");
 
-    if ! input.pressed(KeyCode::F) {
+    if ! input.pressed(KeyCode::E) {
         return;
     }
 
