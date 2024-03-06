@@ -163,6 +163,7 @@ pub fn raycast_items(
 
     info!("Raycast result: {}", raycast_item.is_some() || raycast_drop.is_some());
     
+    check_drop_item(player_prop, &input);
     check_raycast_item(raycast_item, player_prop, &input);
     check_raycast_itemdrop(raycast_drop, player_prop, &input);
 }
@@ -187,4 +188,13 @@ fn check_raycast_itemdrop<'a>(
 
     let mut itemdrop = raycast_result.unwrap();
     items::put_item(itemdrop.as_mut(), player);
+}
+
+fn check_drop_item(
+    player: &mut Player,
+    input: &Res<Input<KeyCode>>,
+) {
+    if input.just_pressed(KeyCode::X) {
+        items::drop_item(player);
+    }
 }

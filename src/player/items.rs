@@ -112,11 +112,11 @@ pub fn pick_item(
 
 // Drop the item back to its initial location
 pub fn drop_item(
-    item: &mut Item,
     player: &mut super::Player
 ) {
-    item.pickup = true;
-    item.lerp_active = true;
+    // TODO: Get item reference from player
+    //item.pickup = true;
+    //item.lerp_active = true;
     player.item_id = ItemId::None;
 }
 
