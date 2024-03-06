@@ -22,6 +22,7 @@ fn main() {
             player::items::drop_item,
             player::items::cancel_itemdrop,
             player::tasks::clean_dark_matter::check_if_finished,
+            player::tasks::alloy_machine::check_if_finished,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
