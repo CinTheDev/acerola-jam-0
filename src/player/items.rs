@@ -108,6 +108,8 @@ pub fn pickup_item(
         for mut i in q_items.iter_mut() {
             if i.id != item_id { continue }
 
+            if ! i.pickup { return } // Do not pick up item twice or something
+
             i.pickup = false;
             i.lerp_active = false;
             player.item_id = i.id;
