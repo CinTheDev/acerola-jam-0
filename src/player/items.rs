@@ -36,6 +36,7 @@ pub struct Item {
 
 #[derive(Bundle)]
 pub struct ItemDropBundle {
+    pub transform: Transform,
     pub collider: collision::SphereCollider,
     pub item_drop: ItemDrop,
 }

@@ -28,6 +28,7 @@ pub fn check_if_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)
 pub fn instance() -> CleanDarkMatterBundle {
     CleanDarkMatterBundle {
         item_drop: ItemDropBundle {
+            transform: Transform::from_xyz(-9.0, 0.75, 8.0),
             collider: SphereCollider {
                 radius: 1.0
             },

@@ -17,6 +17,7 @@ pub fn instance_tasks(
             ..default()
         },
         item_drop: ItemDropBundle {
+            transform: Transform::IDENTITY,
             collider: collision::SphereCollider {
                 radius: 0.1
             },
