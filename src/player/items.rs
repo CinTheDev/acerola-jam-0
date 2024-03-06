@@ -100,6 +100,40 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
     });
 }
 
+// Pick up the item
+fn pick_item(
+    item: &mut Item,
+    player: &mut super::Player
+) {
+    item.pickup = false;
+    item.lerp_active = false;
+    player.item_id = item.id;
+}
+
+// Drop the item back to its initial location
+fn drop_item(
+    item: &mut Item,
+    player: &mut super::Player
+) {
+    item.pickup = true;
+    item.lerp_active = true;
+    player.item_id = ItemId::None;
+}
+
+// Put the item in the dedicated spot
+fn put_item(
+    item: &mut Item,
+    itemdrop: &mut ItemDrop,
+    location: Transform,
+    player: &mut super::Player,
+) {
+    // TODO: Properly drop of item
+    player.item_id = ItemId::None;
+    item.desired_transform = location;
+    item.lerp_active = true;
+    itemdrop.is_dropped = true;
+}
+
 /*
 pub fn check_item_collision(
     mut q_player: Query<(&Transform, &collision::SphereCollider, &mut super::Player)>,
