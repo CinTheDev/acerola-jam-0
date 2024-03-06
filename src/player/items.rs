@@ -109,12 +109,13 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
     });
 }
 
-fn pickup_item(
+pub fn pickup_item(
     mut ev_pickup: EventReader<PickupEvent>,
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
 ) {
     let mut player = q_player.single_mut();
+    info!("Pickup Event");
     
     if player.item_id != ItemId::None {
         // Cancel events if player is holding something already
@@ -139,13 +140,15 @@ fn pickup_item(
     }
 }
 
-fn cancel_itemdrop(
+pub fn cancel_itemdrop(
     mut ev_cancel: EventReader<DropCancelEvent>,
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
 ) {
     let mut player = q_player.single_mut();
     let item_id = player.item_id;
+
+    info!("Cancel event");
 
     if player.item_id == ItemId::None {
         ev_cancel.clear();
@@ -165,13 +168,14 @@ fn cancel_itemdrop(
     }
 }
 
-fn drop_item(
+pub fn drop_item(
     mut ev_itemdrop: EventReader<DropEvent>,
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
     mut q_itemdrops: Query<&mut ItemDrop>,
 ) {
     let mut player = q_player.single_mut();
+    info!("Drop Event");
 
     if player.item_id == ItemId::None {
         ev_itemdrop.clear();
