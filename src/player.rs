@@ -13,7 +13,7 @@ use items::ItemId;
 
 pub mod tasks;
 
-pub fn instance_player(mut commands: Commands) {
+pub fn instance_player(commands: &mut Commands) {
     commands.spawn(PlayerBundle {
         player: Player {
             speed: 3.0,

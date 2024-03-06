@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use super::collision;
 use once_cell::sync::Lazy;
 
+pub mod spawn_items;
+
 const ITEM_LERP_FACTOR: f32 = 0.5;
 
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
@@ -14,6 +16,7 @@ pub enum ItemId {
     None,
     Something,
     SomethingElse,
+    DarkMatter,
 }
 
 #[derive(Bundle)]
