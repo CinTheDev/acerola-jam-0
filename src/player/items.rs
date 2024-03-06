@@ -122,16 +122,17 @@ pub fn drop_item(
 
 // Put the item in the dedicated spot
 pub fn put_item(
-    item: &mut Item,
     itemdrop: &mut ItemDrop,
-    location: Transform,
     player: &mut super::Player,
 ) {
+    if player.item_id != itemdrop.accepts_id { return }
+
     // TODO: Properly drop of item
     player.item_id = ItemId::None;
-    item.desired_transform = location;
-    item.lerp_active = true;
+    //item.desired_transform = ;
+    //item.lerp_active = true;
     itemdrop.is_dropped = true;
+    info!("Item has been dopped");
 }
 
 /*

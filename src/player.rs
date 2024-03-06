@@ -184,4 +184,7 @@ fn check_raycast_itemdrop<'a>(
     input: &Res<Input<KeyCode>>
 ) {
     if raycast_result.is_none() || !input.pressed(KeyCode::F) { return }
+
+    let mut itemdrop = raycast_result.unwrap();
+    items::put_item(itemdrop.as_mut(), player);
 }
