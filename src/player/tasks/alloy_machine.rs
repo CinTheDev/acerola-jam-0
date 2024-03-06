@@ -88,7 +88,7 @@ fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Que
 pub fn instance_lead() -> LeadTaskBundle {
     LeadTaskBundle {
         item_drop: ItemDropBundle {
-            transform: Transform::from_xyz(8.0, -2.84, 1.5),
+            transform: Transform::from_xyz(8.0, 1.6, 2.84),
             collider: SphereCollider {
                 radius: 0.5
             },
@@ -105,19 +105,79 @@ pub fn instance_lead() -> LeadTaskBundle {
 }
 
 pub fn instance_ironblock() -> IronBlockTaskBundle {
-    todo!();
+    IronBlockTaskBundle {
+        item_drop: ItemDropBundle {
+            transform: Transform::from_xyz(8.0, 1.5, 0.3),
+            collider: SphereCollider {
+                radius: 0.5
+            },
+            item_drop: ItemDrop {
+                accepts_id: ItemId::IronBlock,
+                activates_id: ItemId::None,
+                is_dropped: false,
+            }
+        },
+        task: IronBlockTask {
+            is_done: false
+        }
+    }
 }
 
 pub fn instance_ironhammer() -> IronHammerTaskBundle {
-    todo!();
+    IronHammerTaskBundle {
+        item_drop: ItemDropBundle {
+            transform: Transform::from_xyz(8.0, 1.5, 0.3),
+            collider: SphereCollider {
+                radius: 0.5
+            },
+            item_drop: ItemDrop {
+                accepts_id: ItemId::IronHammer,
+                activates_id: ItemId::None,
+                is_dropped: false,
+            }
+        },
+        task: IronHammerTask {
+            is_done: false
+        }
+    }
 }
 
 pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
-    todo!();
+    IronScrewdriverTaskBundle {
+        item_drop: ItemDropBundle {
+            transform: Transform::from_xyz(8.0, 1.5, 0.3),
+            collider: SphereCollider {
+                radius: 0.5
+            },
+            item_drop: ItemDrop {
+                accepts_id: ItemId::IronScrewdriver,
+                activates_id: ItemId::None,
+                is_dropped: false,
+            }
+        },
+        task: IronScrewdriverTask {
+            is_done: false
+        }
+    }
 }
 
 pub fn instance_ironphone() -> IronPhoneTaskBundle {
-    todo!();
+    IronPhoneTaskBundle {
+        item_drop: ItemDropBundle {
+            transform: Transform::from_xyz(8.0, 1.5, 0.3),
+            collider: SphereCollider {
+                radius: 0.5
+            },
+            item_drop: ItemDrop {
+                accepts_id: ItemId::IronPhone,
+                activates_id: ItemId::None,
+                is_dropped: false,
+            }
+        },
+        task: IronPhoneTask {
+            is_done: false
+        }
+    }
 }
 
 impl ItemDropTask for LeadTask {
