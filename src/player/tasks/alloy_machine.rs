@@ -58,6 +58,20 @@ pub struct IronPhoneTask {
     is_done: bool,
 }
 
+// TODO: Fix problem of overlapping colliders
+// All iron objects have a shared ItemDrop point,
+// and the overlapping colliders seem to confuse my cheap
+// functions.
+//
+// 2 Possible fixes:
+//
+// 1. (Smart approach) Instance only one ItemDropBundle and
+//    making the Tasks share it somehow
+//
+// 2. (Cheap approach) Only make it possible to drop the items
+//    in order. Therefore only one collider needs to be active
+//    at a point
+
 pub fn check_if_finished(
     q_task_lead: Query<(&mut LeadTask, &ItemDrop)>,
     q_task_block: Query<(&mut IronBlockTask, &ItemDrop)>,
@@ -65,24 +79,26 @@ pub fn check_if_finished(
     q_task_screwdriver: Query<(&mut IronScrewdriverTask, &ItemDrop)>,
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
 ) {
-    check_task(q_task_lead);
-    check_task(q_task_block);
-    check_task(q_task_hammer);
-    check_task(q_task_screwdriver);
-    check_task(q_task_phone);
+    info!("Lead: {}", check_task(q_task_lead));
+    info!("Iron Block: {}", check_task(q_task_block));
+    info!("Iron Hammer: {}", check_task(q_task_hammer));
+    info!("Iron Screwdriver: {}", check_task(q_task_screwdriver));
+    info!("Iron Phone: {}", check_task(q_task_phone));
 }
 
-fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Query<(&mut T, &ItemDrop)>) {
+fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Query<(&mut T, &ItemDrop)>) -> bool {
     let mut task_ref = q_task.single_mut();
     let task = task_ref.0.as_mut();
     let itemdrop = task_ref.1;
 
-    if task.is_done() { return }
+    if task.is_done() { return true }
 
-    if ! itemdrop.is_dropped { return }
+    if ! itemdrop.is_dropped { return false }
 
     task.set_done(true);
     info!("Generic task done");
+
+    return true;
 }
 
 pub fn instance_lead() -> LeadTaskBundle {
