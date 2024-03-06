@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::player::items::{ItemDrop, ItemDropBundle};
+use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
 
 #[derive(Bundle)]
 pub struct CleanDarkMatterBundle {
@@ -23,4 +23,22 @@ pub fn check_if_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)
 
     task.is_done = true;
     info!("Dark matter task finished");
+}
+
+pub fn instance() -> CleanDarkMatterBundle {
+    CleanDarkMatterBundle {
+        item_drop: ItemDropBundle {
+            collider: SphereCollider {
+                radius: 1.0
+            },
+            item_drop: ItemDrop {
+                accepts_id: ItemId::DarkMatter,
+                activates_id: ItemId::None,
+                is_dropped: false,
+            },
+        },
+        task: CleanDarkMatterTask {
+            is_done: false,
+        }
+    }
 }

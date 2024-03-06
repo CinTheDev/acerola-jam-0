@@ -32,4 +32,6 @@ pub fn instance_tasks(
             needs_check: true,
         }
     });
+
+    commands.spawn(clean_dark_matter::instance());
 }
