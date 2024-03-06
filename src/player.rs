@@ -159,10 +159,10 @@ pub fn raycast_items(
     let ray = player_trans.forward() * 5.0;
     let raycast_result = collision::raycast(player_trans.translation, ray, q_items.iter_mut());
 
-    info!("Raycast result: {}", raycast_result.0);
+    info!("Raycast result: {}", raycast_result.is_some());
     
-    if raycast_result.0 && input.pressed(KeyCode::F) {
-        let mut item = raycast_result.1.unwrap();
+    if raycast_result.is_some() && input.pressed(KeyCode::F) {
+        let mut item = raycast_result.unwrap();
         items::pick_item(item.as_mut(), player_prop);
     }
 }

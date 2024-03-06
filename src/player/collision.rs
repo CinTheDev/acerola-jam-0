@@ -67,7 +67,7 @@ pub fn raycast<'a, I>(
     ray_pos: Vec3,
     ray_dir: Vec3,
     q_spheres: I,
-) -> (bool, Option<Mut<'a, Item>>)
+) -> Option<Mut<'a, Item>>
 where
     I: Iterator<Item = (&'a Transform, &'a SphereCollider, Mut<'a, Item>)>,
 {
@@ -89,8 +89,8 @@ where
         if dist.length_squared() > s_coll.radius*s_coll.radius { continue; }
 
         // Sphere has been intersected
-        return (true, Some(s_prop));
+        return Some(s_prop);
     }
 
-    return (false, None);
+    return None;
 }
