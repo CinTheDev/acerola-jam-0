@@ -59,3 +59,32 @@ pub fn check_collision_dynamic(
 
     return (true, new_velocity);
 }
+
+// Casts a ray in 3D space and checks for sphere intersections
+pub fn raycast(
+    ray_pos: Vec3,
+    ray_dir: Vec3,
+    q_spheres: Query<(&Transform, &SphereCollider)>,
+) -> bool {
+    for s in q_spheres.iter() {
+        let s_trans = s.0;
+        let s_coll = s.1;
+
+        let s_pos = s_trans.translation - ray_pos;
+
+        let ray_len = ray_dir.length();
+        let ray_norm = ray_dir / ray_len;
+
+        let t = ray_norm.dot(s_pos).max(0.0).min(ray_len);
+        let t_pos = ray_norm * t;
+
+        let dist = s_pos - t_pos;
+
+        if dist.length_squared() > s_coll.radius*s_coll.radius { continue; }
+
+        // Sphere has been intersected
+        return true;
+    }
+
+    return false;
+}
