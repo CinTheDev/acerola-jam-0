@@ -44,6 +44,15 @@ pub struct ItemDrop {
     pub is_dropped: bool,
 }
 
+#[derive(Event)]
+pub struct PickupEvent(ItemId);
+
+#[derive(Event)]
+pub struct DropCancelEvent();
+
+#[derive(Event)]
+pub struct DropEvent(ItemId);
+
 pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
     for mut item in query.iter_mut() {
         let item_trans = item.0.as_mut();
@@ -100,6 +109,106 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
     });
 }
 
+fn pickup_item(
+    mut ev_pickup: EventReader<PickupEvent>,
+    mut q_player: Query<&mut super::Player>,
+    mut q_items: Query<&mut Item>,
+) {
+    let mut player = q_player.single_mut().as_mut();
+    
+    if player.item_id != ItemId::None {
+        // Cancel events if player is holding something already
+        ev_pickup.clear();
+        return;
+    }
+    
+    for ev in ev_pickup.read() {
+        
+        let item_id = ev.0;
+
+        // Search for item
+        for mut i in q_items.iter_mut() {
+            if i.id != item_id { continue }
+
+            i.pickup = false;
+            i.lerp_active = false;
+            player.item_id = i.id;
+
+            return;
+        }
+    }
+}
+
+fn cancel_itemdrop(
+    mut ev_cancel: EventReader<DropCancelEvent>,
+    mut q_player: Query<&mut super::Player>,
+    mut q_items: Query<&mut Item>,
+) {
+    let mut player = q_player.single_mut().as_mut();
+    let item_id = player.item_id;
+
+    if player.item_id == ItemId::None {
+        ev_cancel.clear();
+        return;
+    }
+
+    for ev in ev_cancel.read() {
+        for mut i in q_items.iter_mut() {
+            if i.id != item_id { continue }
+
+            i.pickup = true;
+            i.lerp_active = true;
+            player.item_id = ItemId::None;
+
+            return;
+        }
+    }
+}
+
+fn drop_item(
+    mut ev_itemdrop: EventReader<DropEvent>,
+    mut q_player: Query<&mut super::Player>,
+    mut q_items: Query<&mut Item>,
+    mut q_itemdrops: Query<&mut ItemDrop>,
+) {
+    let mut player = q_player.single_mut().as_mut();
+
+    if player.item_id == ItemId::None {
+        ev_itemdrop.clear();
+        return;
+    }
+
+    for ev in ev_itemdrop.read() {
+        let item_id = ev.0;
+
+        let mut item: &mut Item;
+        let mut itemdrop: &mut ItemDrop;
+
+        for mut i in q_items.iter_mut() {
+            if i.id != item_id { continue }
+
+            item = i.as_mut();
+            break;
+        }
+
+        for mut d in q_itemdrops.iter_mut() {
+            if d.accepts_id != item_id { continue }
+
+            itemdrop = d.as_mut();
+            break;
+        }
+
+        // TODO: Properly drop of item
+        // Drop item
+        //item_properties.pickup = true; Activate next item pickup
+        //item.desired_transform = [Itemdrop transform];
+        item.lerp_active = true;
+        player.item_id = ItemId::None;
+        itemdrop.is_dropped = true;
+    }
+}
+
+/*
 // Pick up the item
 pub fn pick_item(
     item: &mut Item,
@@ -134,6 +243,7 @@ pub fn put_item(
     itemdrop.is_dropped = true;
     info!("Item has been dopped");
 }
+*/
 
 /*
 pub fn check_item_collision(
