@@ -114,7 +114,7 @@ fn pickup_item(
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
 ) {
-    let mut player = q_player.single_mut().as_mut();
+    let mut player = q_player.single_mut();
     
     if player.item_id != ItemId::None {
         // Cancel events if player is holding something already
@@ -144,7 +144,7 @@ fn cancel_itemdrop(
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
 ) {
-    let mut player = q_player.single_mut().as_mut();
+    let mut player = q_player.single_mut();
     let item_id = player.item_id;
 
     if player.item_id == ItemId::None {
@@ -152,7 +152,7 @@ fn cancel_itemdrop(
         return;
     }
 
-    for ev in ev_cancel.read() {
+    for _ev in ev_cancel.read() {
         for mut i in q_items.iter_mut() {
             if i.id != item_id { continue }
 
@@ -171,7 +171,7 @@ fn drop_item(
     mut q_items: Query<&mut Item>,
     mut q_itemdrops: Query<&mut ItemDrop>,
 ) {
-    let mut player = q_player.single_mut().as_mut();
+    let mut player = q_player.single_mut();
 
     if player.item_id == ItemId::None {
         ev_itemdrop.clear();
@@ -181,20 +181,17 @@ fn drop_item(
     for ev in ev_itemdrop.read() {
         let item_id = ev.0;
 
-        let mut item: &mut Item;
-        let mut itemdrop: &mut ItemDrop;
-
         for mut i in q_items.iter_mut() {
             if i.id != item_id { continue }
 
-            item = i.as_mut();
+            i.lerp_active = true;
             break;
         }
 
         for mut d in q_itemdrops.iter_mut() {
             if d.accepts_id != item_id { continue }
 
-            itemdrop = d.as_mut();
+            d.is_dropped = true;
             break;
         }
 
@@ -202,9 +199,7 @@ fn drop_item(
         // Drop item
         //item_properties.pickup = true; Activate next item pickup
         //item.desired_transform = [Itemdrop transform];
-        item.lerp_active = true;
         player.item_id = ItemId::None;
-        itemdrop.is_dropped = true;
     }
 }
 
