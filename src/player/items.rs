@@ -100,6 +100,7 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
     });
 }
 
+/*
 pub fn check_item_collision(
     mut q_player: Query<(&Transform, &collision::SphereCollider, &mut super::Player)>,
     mut q_items: Query<(&Transform, &collision::SphereCollider, &mut Item), Without<super::Player>>
@@ -184,6 +185,7 @@ pub fn check_drop_collision(
         return;
     }
 }
+*/
 
 fn lerp_item_towards(item_transform: &Transform, desired_transform: &Transform) -> Transform {
     let new_translation = item_transform.translation.lerp(
