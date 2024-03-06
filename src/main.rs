@@ -24,6 +24,9 @@ fn main() {
             player::tasks::test_task::check_if_dropped,
             player::tasks::test_task::do_task,
         ))
+        .add_event::<player::items::PickupEvent>()
+        .add_event::<player::items::DropCancelEvent>()
+        .add_event::<player::items::DropEvent>()
         .run();
 }
 

@@ -65,9 +65,9 @@ pub fn raycast<'a, I, T>(
     ray_pos: Vec3,
     ray_dir: Vec3,
     q_spheres: I,
-) -> Option<Mut<'a, T>>
+) -> Option<&'a T>
 where
-    I: Iterator<Item = (&'a Transform, &'a SphereCollider, Mut<'a, T>)>,
+    I: Iterator<Item = (&'a Transform, &'a SphereCollider, &'a T)>,
 {
     for s in q_spheres {
         let s_trans = s.0;

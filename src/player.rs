@@ -148,53 +148,54 @@ pub fn check_player_collisions(
 }
 
 pub fn raycast_items(
-    mut q_player: Query<(&Transform, &mut Player)>,
-    mut q_items: Query<(&Transform, &SphereCollider, &mut items::Item)>,
-    mut q_drops: Query<(&Transform, &SphereCollider, &mut items::ItemDrop)>,
+    q_player: Query<&Transform, With<Player>>,
+    q_items: Query<(&Transform, &SphereCollider, &items::Item)>,
+    q_drops: Query<(&Transform, &SphereCollider, &items::ItemDrop)>,
     input: Res<Input<KeyCode>>,
+    ev_pickup: EventWriter<items::PickupEvent>,
+    ev_drop: EventWriter<items::DropEvent>,
+    ev_cancel: EventWriter<items::DropCancelEvent>,
 ) {
-    let mut player = q_player.single_mut();
-    let player_trans = player.0;
-    let player_prop = player.1.as_mut();
+    let player_trans = q_player.single();
 
     let ray = player_trans.forward() * 5.0;
-    let raycast_item = collision::raycast(player_trans.translation, ray, q_items.iter_mut());
-    let raycast_drop = collision::raycast(player_trans.translation, ray, q_drops.iter_mut());
+    let raycast_item = collision::raycast(player_trans.translation, ray, q_items.iter());
+    let raycast_drop = collision::raycast(player_trans.translation, ray, q_drops.iter());
 
     info!("Raycast result: {}", raycast_item.is_some() || raycast_drop.is_some());
     
-    check_drop_item(player_prop, &input);
-    check_raycast_item(raycast_item, player_prop, &input);
-    check_raycast_itemdrop(raycast_drop, player_prop, &input);
+    check_drop_item(&input, ev_cancel);
+    check_raycast_item(raycast_item, &input, ev_pickup);
+    check_raycast_itemdrop(raycast_drop, &input, ev_drop);
 }
 
 fn check_raycast_item<'a>(
-    raycast_result: Option<Mut<'a, items::Item>>,
-    player: &mut Player,
-    input: &Res<Input<KeyCode>>
+    raycast_result: Option<&items::Item>,
+    input: &Res<Input<KeyCode>>,
+    mut ev_pickup: EventWriter<items::PickupEvent>,
 ) {
     if raycast_result.is_none() || !input.pressed(KeyCode::F) { return }
 
-    let mut item = raycast_result.unwrap();
-    items::pick_item(item.as_mut(), player);
+    let item = raycast_result.unwrap();
+    ev_pickup.send(items::PickupEvent(item.id));
 }
 
 fn check_raycast_itemdrop<'a>(
-    raycast_result: Option<Mut<'a, items::ItemDrop>>,
-    player: &mut Player,
-    input: &Res<Input<KeyCode>>
+    raycast_result: Option<&items::ItemDrop>,
+    input: &Res<Input<KeyCode>>,
+    mut ev_drop: EventWriter<items::DropEvent>,
 ) {
     if raycast_result.is_none() || !input.pressed(KeyCode::F) { return }
 
-    let mut itemdrop = raycast_result.unwrap();
-    items::put_item(itemdrop.as_mut(), player);
+    let itemdrop = raycast_result.unwrap();
+    ev_drop.send(items::DropEvent(itemdrop.accepts_id));
 }
 
 fn check_drop_item(
-    player: &mut Player,
     input: &Res<Input<KeyCode>>,
+    mut ev_cancel: EventWriter<items::DropCancelEvent>,
 ) {
     if input.just_pressed(KeyCode::X) {
-        items::drop_item(player);
+        ev_cancel.send(items::DropCancelEvent());
     }
 }

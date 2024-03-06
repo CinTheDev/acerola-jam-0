@@ -25,7 +25,7 @@ pub struct ItemBundle {
 
 #[derive(Component)]
 pub struct Item {
-    id: ItemId,
+    pub id: ItemId,
     pickup: bool,
     desired_transform: Transform,
     lerp_active: bool,
@@ -45,13 +45,13 @@ pub struct ItemDrop {
 }
 
 #[derive(Event)]
-pub struct PickupEvent(ItemId);
+pub struct PickupEvent(pub ItemId);
 
 #[derive(Event)]
 pub struct DropCancelEvent();
 
 #[derive(Event)]
-pub struct DropEvent(ItemId);
+pub struct DropEvent(pub ItemId);
 
 pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
     for mut item in query.iter_mut() {
