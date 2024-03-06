@@ -23,6 +23,7 @@ fn main() {
             player::items::cancel_itemdrop,
             player::tasks::test_task::check_if_dropped,
             player::tasks::test_task::do_task,
+            player::tasks::clean_dark_matter::check_if_finished,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()

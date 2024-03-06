@@ -4,6 +4,7 @@ use bevy::prelude::*;
 use super::{collision, items::{ItemDrop, ItemDropBundle, ItemId}};
 
 pub mod test_task;
+pub mod clean_dark_matter;
 
 pub fn instance_tasks(
     mut commands: Commands,
