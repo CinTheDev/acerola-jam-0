@@ -101,7 +101,7 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
 }
 
 // Pick up the item
-fn pick_item(
+pub fn pick_item(
     item: &mut Item,
     player: &mut super::Player
 ) {
@@ -111,7 +111,7 @@ fn pick_item(
 }
 
 // Drop the item back to its initial location
-fn drop_item(
+pub fn drop_item(
     item: &mut Item,
     player: &mut super::Player
 ) {
@@ -121,7 +121,7 @@ fn drop_item(
 }
 
 // Put the item in the dedicated spot
-fn put_item(
+pub fn put_item(
     item: &mut Item,
     itemdrop: &mut ItemDrop,
     location: Transform,

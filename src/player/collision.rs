@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use super::items::Item;
+
 #[derive(Bundle)]
 pub struct PlaneColliderBundle {
     pub transform: Transform,
@@ -65,13 +67,14 @@ pub fn raycast<'a, I>(
     ray_pos: Vec3,
     ray_dir: Vec3,
     q_spheres: I,
-) -> bool
+) -> (bool, Option<Mut<'a, Item>>)
 where
-    I: Iterator<Item = (&'a Transform, &'a SphereCollider)>,
+    I: Iterator<Item = (&'a Transform, &'a SphereCollider, Mut<'a, Item>)>,
 {
     for s in q_spheres {
         let s_trans = s.0;
         let s_coll = s.1;
+        let s_prop = s.2;
 
         let s_pos = s_trans.translation - ray_pos;
 
@@ -86,8 +89,8 @@ where
         if dist.length_squared() > s_coll.radius*s_coll.radius { continue; }
 
         // Sphere has been intersected
-        return true;
+        return (true, Some(s_prop));
     }
 
-    return false;
+    return (false, None);
 }

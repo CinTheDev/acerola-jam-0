@@ -148,13 +148,21 @@ pub fn check_player_collisions(
 }
 
 pub fn raycast_items(
-    q_player: Query<&Transform, With<Player>>,
-    q_items: Query<(&Transform, &SphereCollider), With<items::Item>>
+    mut q_player: Query<(&Transform, &mut Player)>,
+    mut q_items: Query<(&Transform, &SphereCollider, &mut items::Item)>,
+    input: Res<Input<KeyCode>>,
 ) {
-    let player = q_player.single();
+    let mut player = q_player.single_mut();
+    let player_trans = player.0;
+    let player_prop = player.1.as_mut();
 
-    let ray = player.forward() * 5.0;
-    let raycast_result = collision::raycast(player.translation, ray, q_items.iter());
+    let ray = player_trans.forward() * 5.0;
+    let raycast_result = collision::raycast(player_trans.translation, ray, q_items.iter_mut());
 
-    info!("Raycast result: {}", raycast_result);
+    info!("Raycast result: {}", raycast_result.0);
+    
+    if raycast_result.0 && input.pressed(KeyCode::F) {
+        let mut item = raycast_result.1.unwrap();
+        items::pick_item(item.as_mut(), player_prop);
+    }
 }
