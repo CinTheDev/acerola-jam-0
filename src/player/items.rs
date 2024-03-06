@@ -25,7 +25,7 @@ pub struct ItemBundle {
 
 #[derive(Component)]
 pub struct Item {
-    id: ItemId,
+    pub id: ItemId,
     pickup: bool,
     desired_transform: Transform,
     lerp_active: bool,
@@ -43,6 +43,15 @@ pub struct ItemDrop {
     pub activates_id: ItemId,
     pub is_dropped: bool,
 }
+
+#[derive(Event)]
+pub struct PickupEvent(pub ItemId);
+
+#[derive(Event)]
+pub struct DropCancelEvent();
+
+#[derive(Event)]
+pub struct DropEvent(pub ItemId);
 
 pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
     for mut item in query.iter_mut() {
@@ -100,88 +109,87 @@ pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>
     });
 }
 
-pub fn check_item_collision(
-    mut q_player: Query<(&Transform, &collision::SphereCollider, &mut super::Player)>,
-    mut q_items: Query<(&Transform, &collision::SphereCollider, &mut Item), Without<super::Player>>
-) {
-    let mut player = q_player.single_mut();
-    let player_trans = player.0;
-    let player_collider = player.1;
-    let player_properties = player.2.as_mut();
+pub fn pickup_item(
+    mut ev_pickup: EventReader<PickupEvent>,
+    mut q_player: Query<&mut super::Player>,
+    mut q_items: Query<&mut Item>,
+) { 
+    for ev in ev_pickup.read() {
+        let mut player = q_player.single_mut();
+        let item_id = ev.0;
+        info!("Pickup Event");
 
-    for mut item in q_items.iter_mut() {
-        let item_trans = item.0;
-        let item_collider = item.1;
-        let item_properties = item.2.as_mut();
+        if player.item_id != ItemId::None { return; }
 
-        if ! item_properties.pickup {
-            continue;
+        // Search for item
+        for mut i in q_items.iter_mut() {
+            if i.id != item_id { continue }
+
+            i.pickup = false;
+            i.lerp_active = false;
+            player.item_id = i.id;
+
+            return;
         }
-
-        // Check collision
-        let sqr_dist = (item_trans.translation - player_trans.translation).length_squared();
-        let radii = player_collider.radius + item_collider.radius;
-
-        if sqr_dist > radii * radii {
-            continue;
-        }
-
-        // Collision
-        item_properties.pickup = false;
-        item_properties.lerp_active = false;
-        player_properties.item_id = item_properties.id;
-
-        return;
     }
 }
 
-pub fn check_drop_collision(
-    mut q_player: Query<(&Transform, &collision::SphereCollider, &mut super::Player)>,
-    mut q_itemdrops: Query<(&Transform, &collision::SphereCollider, &mut ItemDrop), Without<super::Player>>,
-    mut q_items: Query<&mut Item, (Without<super::Player>, Without<ItemDrop>)>
+pub fn cancel_itemdrop(
+    mut ev_cancel: EventReader<DropCancelEvent>,
+    mut q_player: Query<&mut super::Player>,
+    mut q_items: Query<&mut Item>,
 ) {
-    let mut player = q_player.single_mut();
-    let player_trans = player.0;
-    let player_collider = player.1;
-    let player_properties = player.2.as_mut();
+    for _ev in ev_cancel.read() {
+        let mut player = q_player.single_mut();
+        let item_id = player.item_id;
+        info!("Cancel event");
 
-    for mut itemdrop in q_itemdrops.iter_mut() {
-        let itemdrop_trans = itemdrop.0;
-        let itemdrop_collider = itemdrop.1;
-        let itemdrop_properties = itemdrop.2.as_mut();
+        if player.item_id == ItemId::None { return }
 
-        if itemdrop_properties.accepts_id != player_properties.item_id {
-            continue;
+        for mut i in q_items.iter_mut() {
+            if i.id != item_id { continue }
+
+            i.pickup = true;
+            i.lerp_active = true;
+            player.item_id = ItemId::None;
+
+            return;
+        }
+    }
+}
+
+pub fn drop_item(
+    mut ev_itemdrop: EventReader<DropEvent>,
+    mut q_player: Query<&mut super::Player>,
+    mut q_items: Query<&mut Item>,
+    mut q_itemdrops: Query<&mut ItemDrop>,
+) {
+    for ev in ev_itemdrop.read() {
+        let item_id = ev.0;
+        let mut player = q_player.single_mut();
+        info!("Drop Event");
+
+        if player.item_id == ItemId::None { return }
+
+        for mut i in q_items.iter_mut() {
+            if i.id != item_id { continue }
+
+            i.lerp_active = true;
+            break;
         }
 
-        // Check collision
-        let sqr_dist = (itemdrop_trans.translation - player_trans.translation).length_squared();
-        let radii = itemdrop_collider.radius + player_collider.radius;
+        for mut d in q_itemdrops.iter_mut() {
+            if d.accepts_id != item_id { continue }
 
-        if sqr_dist > radii * radii {
-            continue;
-        }
-
-        // Drop item
-        
-        // Search next item and activate
-        for mut item in q_items.iter_mut() {
-            let item_properties = item.as_mut();
-
-            if item_properties.id == itemdrop_properties.activates_id {
-                item_properties.pickup = true;
-            }
-            if item_properties.id == player_properties.item_id {
-                item_properties.desired_transform = itemdrop_trans.clone();
-                item_properties.lerp_active = true;
-            }
+            d.is_dropped = true;
+            break;
         }
 
         // TODO: Properly drop of item
-        player_properties.item_id = ItemId::None;
-        itemdrop_properties.is_dropped = true;
-
-        return;
+        // Drop item
+        //item_properties.pickup = true; Activate next item pickup
+        //item.desired_transform = [Itemdrop transform];
+        player.item_id = ItemId::None;
     }
 }
 

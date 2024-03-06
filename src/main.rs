@@ -16,13 +16,20 @@ fn main() {
         ))
         .add_systems(Update, (
             player::move_player,
+            player::raycast_items,
             player::items::hold_item,
             player::items::update_item_pos,
-            player::items::check_item_collision,
-            player::items::check_drop_collision,
+            player::items::pickup_item,
+            player::items::drop_item,
+            player::items::cancel_itemdrop,
+            //player::items::check_item_collision,
+            //player::items::check_drop_collision,
             player::tasks::test_task::check_if_dropped,
             player::tasks::test_task::do_task,
         ))
+        .add_event::<player::items::PickupEvent>()
+        .add_event::<player::items::DropCancelEvent>()
+        .add_event::<player::items::DropEvent>()
         .run();
 }
 

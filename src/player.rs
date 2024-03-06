@@ -25,7 +25,7 @@ pub fn instance_player(mut commands: Commands) {
             radius: 1.0
         },
         camera: Camera3dBundle {
-            transform: Transform::from_xyz(3.0, 1.0, 0.0),
+            transform: Transform::from_xyz(3.0, 1.5, 0.0),
             ..default()
         }
     });
@@ -145,4 +145,57 @@ pub fn check_player_collisions(
     }
 
     return result;
+}
+
+pub fn raycast_items(
+    q_player: Query<&Transform, With<Player>>,
+    q_items: Query<(&Transform, &SphereCollider, &items::Item)>,
+    q_drops: Query<(&Transform, &SphereCollider, &items::ItemDrop)>,
+    input: Res<Input<KeyCode>>,
+    ev_pickup: EventWriter<items::PickupEvent>,
+    ev_drop: EventWriter<items::DropEvent>,
+    ev_cancel: EventWriter<items::DropCancelEvent>,
+) {
+    let player_trans = q_player.single();
+
+    let ray = player_trans.forward() * 5.0;
+    let raycast_item = collision::raycast(player_trans.translation, ray, q_items.iter());
+    let raycast_drop = collision::raycast(player_trans.translation, ray, q_drops.iter());
+
+    info!("Raycast result: {}", raycast_item.is_some() || raycast_drop.is_some());
+    
+    check_drop_item(&input, ev_cancel);
+    check_raycast_item(raycast_item, &input, ev_pickup);
+    check_raycast_itemdrop(raycast_drop, &input, ev_drop);
+}
+
+fn check_raycast_item<'a>(
+    raycast_result: Option<&items::Item>,
+    input: &Res<Input<KeyCode>>,
+    mut ev_pickup: EventWriter<items::PickupEvent>,
+) {
+    if raycast_result.is_none() || !input.pressed(KeyCode::F) { return }
+
+    let item = raycast_result.unwrap();
+    ev_pickup.send(items::PickupEvent(item.id));
+}
+
+fn check_raycast_itemdrop<'a>(
+    raycast_result: Option<&items::ItemDrop>,
+    input: &Res<Input<KeyCode>>,
+    mut ev_drop: EventWriter<items::DropEvent>,
+) {
+    if raycast_result.is_none() || !input.pressed(KeyCode::F) { return }
+
+    let itemdrop = raycast_result.unwrap();
+    ev_drop.send(items::DropEvent(itemdrop.accepts_id));
+}
+
+fn check_drop_item(
+    input: &Res<Input<KeyCode>>,
+    mut ev_cancel: EventWriter<items::DropCancelEvent>,
+) {
+    if input.just_pressed(KeyCode::X) {
+        ev_cancel.send(items::DropCancelEvent());
+    }
 }
