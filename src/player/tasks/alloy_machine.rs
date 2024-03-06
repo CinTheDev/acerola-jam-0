@@ -9,6 +9,30 @@ pub struct LeadTaskBundle {
     task: LeadTask,
 }
 
+#[derive(Bundle)]
+pub struct IronBlockTaskBundle {
+    item_drop: ItemDropBundle,
+    task: IronBlockTask,
+}
+
+#[derive(Bundle)]
+pub struct IronHammerTaskBundle {
+    item_drop: ItemDropBundle,
+    task: IronHammerTask,
+}
+
+#[derive(Bundle)]
+pub struct IronScrewdriverTaskBundle {
+    item_drop: ItemDropBundle,
+    task: IronScrewdriverTask,
+}
+
+#[derive(Bundle)]
+pub struct IronPhoneTaskBundle {
+    item_drop: ItemDropBundle,
+    task: IronPhoneTask,
+}
+
 #[derive(Component)]
 pub struct LeadTask {
     is_done: bool,
