@@ -150,6 +150,7 @@ pub fn check_player_collisions(
 pub fn raycast_items(
     mut q_player: Query<(&Transform, &mut Player)>,
     mut q_items: Query<(&Transform, &SphereCollider, &mut items::Item)>,
+    mut q_drops: Query<(&Transform, &SphereCollider, &mut items::ItemDrop)>,
     input: Res<Input<KeyCode>>,
 ) {
     let mut player = q_player.single_mut();
@@ -157,12 +158,30 @@ pub fn raycast_items(
     let player_prop = player.1.as_mut();
 
     let ray = player_trans.forward() * 5.0;
-    let raycast_result = collision::raycast(player_trans.translation, ray, q_items.iter_mut());
+    let raycast_item = collision::raycast(player_trans.translation, ray, q_items.iter_mut());
+    let raycast_drop = collision::raycast(player_trans.translation, ray, q_drops.iter_mut());
 
-    info!("Raycast result: {}", raycast_result.is_some());
+    info!("Raycast result: {}", raycast_item.is_some() || raycast_drop.is_some());
     
-    if raycast_result.is_some() && input.pressed(KeyCode::F) {
-        let mut item = raycast_result.unwrap();
-        items::pick_item(item.as_mut(), player_prop);
-    }
+    check_raycast_item(raycast_item, player_prop, &input);
+    check_raycast_itemdrop(raycast_drop, player_prop, &input);
+}
+
+fn check_raycast_item<'a>(
+    raycast_result: Option<Mut<'a, items::Item>>,
+    player: &mut Player,
+    input: &Res<Input<KeyCode>>
+) {
+    if raycast_result.is_none() || !input.pressed(KeyCode::F) { return }
+
+    let mut item = raycast_result.unwrap();
+    items::pick_item(item.as_mut(), player);
+}
+
+fn check_raycast_itemdrop<'a>(
+    raycast_result: Option<Mut<'a, items::ItemDrop>>,
+    player: &mut Player,
+    input: &Res<Input<KeyCode>>
+) {
+    if raycast_result.is_none() || !input.pressed(KeyCode::F) { return }
 }
