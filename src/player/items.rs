@@ -14,7 +14,14 @@ static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
 #[derive(PartialEq, Clone, Copy)]
 pub enum ItemId {
     None,
+    Lead,
+    ExoticAlloy,
+    IronBlock,
+    IronHammer,
+    IronScrewdriver,
+    IronPhone,
     DarkMatter,
+    CopperFuel,
 }
 
 #[derive(Bundle)]

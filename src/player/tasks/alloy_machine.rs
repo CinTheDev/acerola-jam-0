@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::player::items::{ItemDrop, ItemDropBundle};
+use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
 use super::ItemDropTask;
 
 #[derive(Bundle)]
@@ -83,6 +83,41 @@ fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Que
 
     task.set_done(true);
     info!("Generic task done");
+}
+
+pub fn instance_lead() -> LeadTaskBundle {
+    LeadTaskBundle {
+        item_drop: ItemDropBundle {
+            transform: Transform::from_xyz(8.0, -2.84, 1.5),
+            collider: SphereCollider {
+                radius: 0.5
+            },
+            item_drop: ItemDrop {
+                accepts_id: ItemId::Lead,
+                activates_id: ItemId::None,
+                is_dropped: false,
+            }
+        },
+        task: LeadTask {
+            is_done: false
+        }
+    }
+}
+
+pub fn instance_ironblock() -> IronBlockTaskBundle {
+    todo!();
+}
+
+pub fn instance_ironhammer() -> IronHammerTaskBundle {
+    todo!();
+}
+
+pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
+    todo!();
+}
+
+pub fn instance_ironphone() -> IronPhoneTaskBundle {
+    todo!();
 }
 
 impl ItemDropTask for LeadTask {

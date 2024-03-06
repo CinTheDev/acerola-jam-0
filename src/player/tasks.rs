@@ -6,6 +6,8 @@ pub mod alloy_machine;
 
 pub fn instance_tasks(mut commands: Commands) {
     commands.spawn(clean_dark_matter::instance());
+
+    commands.spawn(alloy_machine::instance_lead());
 }
 
 trait ItemDropTask {
