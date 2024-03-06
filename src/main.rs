@@ -16,6 +16,7 @@ fn main() {
         ))
         .add_systems(Update, (
             player::move_player,
+            player::raycast_items,
             player::items::hold_item,
             player::items::update_item_pos,
             player::items::check_item_collision,

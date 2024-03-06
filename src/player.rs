@@ -146,3 +146,15 @@ pub fn check_player_collisions(
 
     return result;
 }
+
+pub fn raycast_items(
+    q_player: Query<&Transform, With<Player>>,
+    q_items: Query<(&Transform, &SphereCollider), With<items::Item>>
+) {
+    let player = q_player.single();
+
+    let ray = player.forward() * 5.0;
+    let raycast_result = collision::raycast(player.translation, ray, q_items.iter());
+
+    info!("Raycast result: {}", raycast_result);
+}

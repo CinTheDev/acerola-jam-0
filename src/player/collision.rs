@@ -61,12 +61,15 @@ pub fn check_collision_dynamic(
 }
 
 // Casts a ray in 3D space and checks for sphere intersections
-pub fn raycast(
+pub fn raycast<'a, I>(
     ray_pos: Vec3,
     ray_dir: Vec3,
-    q_spheres: Query<(&Transform, &SphereCollider)>,
-) -> bool {
-    for s in q_spheres.iter() {
+    q_spheres: I,
+) -> bool
+where
+    I: Iterator<Item = (&'a Transform, &'a SphereCollider)>,
+{
+    for s in q_spheres {
         let s_trans = s.0;
         let s_coll = s.1;
 
