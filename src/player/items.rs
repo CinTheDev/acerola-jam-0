@@ -93,25 +93,6 @@ pub fn hold_item(
     }
 }
 
-pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(ItemBundle {
-        scene: SceneBundle {
-            scene: asset_server.load("test_item.glb#Scene0"),
-            transform: Transform::from_xyz(3.0, 1.0, 3.0),
-            ..default()
-        },
-        collider: collision::SphereCollider {
-            radius: 0.1
-        },
-        item: Item {
-            id: ItemId::Something,
-            pickup: true,
-            desired_transform: Transform::IDENTITY,
-            lerp_active: false,
-        }
-    });
-}
-
 pub fn pickup_item(
     mut ev_pickup: EventReader<PickupEvent>,
     mut q_player: Query<&mut super::Player>,

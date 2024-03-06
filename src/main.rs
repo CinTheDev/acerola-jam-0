@@ -11,7 +11,6 @@ fn main() {
             setup,
             cursor_grab,
             generate_colliders::generate_colliders,
-            player::items::test_instance_item,
             player::tasks::instance_tasks,
         ))
         .add_systems(Update, (
@@ -22,8 +21,6 @@ fn main() {
             player::items::pickup_item,
             player::items::drop_item,
             player::items::cancel_itemdrop,
-            //player::items::check_item_collision,
-            //player::items::check_drop_collision,
             player::tasks::test_task::check_if_dropped,
             player::tasks::test_task::do_task,
         ))
