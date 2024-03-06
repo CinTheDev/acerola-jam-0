@@ -113,19 +113,13 @@ pub fn pickup_item(
     mut ev_pickup: EventReader<PickupEvent>,
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
-) {
-    let mut player = q_player.single_mut();
-    info!("Pickup Event");
-    
-    if player.item_id != ItemId::None {
-        // Cancel events if player is holding something already
-        ev_pickup.clear();
-        return;
-    }
-    
+) { 
     for ev in ev_pickup.read() {
-        
+        let mut player = q_player.single_mut();
         let item_id = ev.0;
+        info!("Pickup Event");
+
+        if player.item_id != ItemId::None { return; }
 
         // Search for item
         for mut i in q_items.iter_mut() {
@@ -145,17 +139,13 @@ pub fn cancel_itemdrop(
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
 ) {
-    let mut player = q_player.single_mut();
-    let item_id = player.item_id;
-
-    info!("Cancel event");
-
-    if player.item_id == ItemId::None {
-        ev_cancel.clear();
-        return;
-    }
-
     for _ev in ev_cancel.read() {
+        let mut player = q_player.single_mut();
+        let item_id = player.item_id;
+        info!("Cancel event");
+
+        if player.item_id == ItemId::None { return }
+
         for mut i in q_items.iter_mut() {
             if i.id != item_id { continue }
 
@@ -174,16 +164,12 @@ pub fn drop_item(
     mut q_items: Query<&mut Item>,
     mut q_itemdrops: Query<&mut ItemDrop>,
 ) {
-    let mut player = q_player.single_mut();
-    info!("Drop Event");
-
-    if player.item_id == ItemId::None {
-        ev_itemdrop.clear();
-        return;
-    }
-
     for ev in ev_itemdrop.read() {
         let item_id = ev.0;
+        let mut player = q_player.single_mut();
+        info!("Drop Event");
+
+        if player.item_id == ItemId::None { return }
 
         for mut i in q_items.iter_mut() {
             if i.id != item_id { continue }
