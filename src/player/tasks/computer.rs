@@ -66,6 +66,14 @@ pub fn input_from_keyboard(
         return;
     }
 
+    if input.just_pressed(KeyCode::Return) {
+        // TODO: Implement this
+    }
+
+    if input.just_pressed(KeyCode::Back) {
+        task.input.pop();
+    }
+
     for c in ev_char.read() {
         if c.char.is_control() { continue }
 
