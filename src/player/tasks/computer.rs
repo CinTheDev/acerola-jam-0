@@ -18,17 +18,16 @@ pub struct ComputerTask {
 }
 
 pub fn check_activation(
-    q_player: Query<(&Player, &SphereCollider, &Transform)>,
+    mut q_player: Query<(&mut Player, &mut SphereCollider, &Transform)>,
     mut q_task: Query<(&Transform, &SphereCollider, &mut ComputerTask)>,
     input: Res<Input<KeyCode>>,
 ) {
-    let player = q_player.single();
-    let player_prop = player.0;
-    let player_coll = player.1;
+    let mut player = q_player.single_mut();
+    let player_prop = player.0.as_mut();
+    let player_coll = player.1.as_mut();
     let player_trans = player.2;
 
     let mut task = q_task.single_mut();
-    let task_coll = task.1;
     
     if task.2.as_ref().is_active {
         // TODO: Implement
@@ -46,8 +45,19 @@ pub fn check_activation(
     
     if ! interaction { return }
     
-    task.2.as_mut().is_active = true;
     info!("Computer has been activated");
+    task.2.as_mut().is_active = true;
+    lock_player(player_prop, player_coll);
+}
+
+fn lock_player(player: &mut Player, collider: &mut SphereCollider) {
+    player.locked = true;
+    collider.enabled = false;
+}
+
+fn unlock_player(player: &mut Player, collider: &mut SphereCollider) {
+    player.locked = false;
+    collider.enabled = true;
 }
 
 fn check_interaction(input: Res<Input<KeyCode>>) -> bool {

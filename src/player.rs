@@ -20,6 +20,7 @@ pub fn instance_player(commands: &mut Commands) {
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
             item_id: ItemId::None,
+            locked: false,
         },
         collider: SphereCollider {
             radius: 1.0,
@@ -46,6 +47,8 @@ pub struct Player {
 
     rotation: Vec2,
     item_id: ItemId,
+
+    locked: bool,
 }
 
 pub fn move_player(
