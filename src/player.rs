@@ -63,6 +63,8 @@ pub fn move_player(
     let properties = p.0.as_mut();
     let transform_copy = p.1.as_ref().clone();
     let transform = p.1.as_mut();
+
+    if properties.locked { return } // Don't move if player is locked
     
     // Input processing
     let dir = get_keyboard_input(&keyboard_input, &transform);

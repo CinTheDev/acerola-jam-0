@@ -19,7 +19,7 @@ pub struct ComputerTask {
 
 pub fn check_activation(
     mut q_player: Query<(&mut Player, &mut SphereCollider, &Transform)>,
-    mut q_task: Query<(&Transform, &SphereCollider, &mut ComputerTask)>,
+    mut q_task: Query<(&Transform, &SphereCollider, &mut ComputerTask), Without<Player>>,
     input: Res<Input<KeyCode>>,
 ) {
     let mut player = q_player.single_mut();
