@@ -106,7 +106,8 @@ pub fn instance_lead() -> LeadTaskBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(8.0, 1.6, 2.84),
             collider: SphereCollider {
-                radius: 0.5
+                radius: 0.5,
+                enabled: true,
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::Lead,
@@ -125,7 +126,8 @@ pub fn instance_ironblock() -> IronBlockTaskBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(8.0, 1.5, 0.3),
             collider: SphereCollider {
-                radius: 0.5
+                radius: 0.5,
+                enabled: false,
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronBlock,
@@ -144,7 +146,8 @@ pub fn instance_ironhammer() -> IronHammerTaskBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(8.0, 1.5, 0.3),
             collider: SphereCollider {
-                radius: 0.5
+                radius: 0.5,
+                enabled: false,
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronHammer,
@@ -163,7 +166,8 @@ pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(8.0, 1.5, 0.3),
             collider: SphereCollider {
-                radius: 0.5
+                radius: 0.5,
+                enabled: false,
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronScrewdriver,
@@ -182,7 +186,8 @@ pub fn instance_ironphone() -> IronPhoneTaskBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(8.0, 1.5, 0.3),
             collider: SphereCollider {
-                radius: 0.5
+                radius: 0.5,
+                enabled: false,
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronPhone,

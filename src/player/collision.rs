@@ -15,6 +15,7 @@ pub struct PlaneCollider {
 #[derive(Component)]
 pub struct SphereCollider {
     pub radius: f32,
+    pub enabled: bool,
 }
 
 pub fn check_collision_dynamic(
@@ -70,9 +71,12 @@ where
     I: Iterator<Item = (&'a Transform, &'a SphereCollider, &'a T)>,
 {
     for s in q_spheres {
+
         let s_trans = s.0;
         let s_coll = s.1;
         let s_prop = s.2;
+
+        if ! s_coll.enabled { continue }
 
         let s_pos = s_trans.translation - ray_pos;
 

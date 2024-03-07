@@ -105,6 +105,7 @@ fn spawn_item(
         },
         collider: SphereCollider {
             radius,
+            enabled: true,
         },
         item: Item {
             id,

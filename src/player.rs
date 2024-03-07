@@ -22,7 +22,8 @@ pub fn instance_player(commands: &mut Commands) {
             item_id: ItemId::None,
         },
         collider: SphereCollider {
-            radius: 1.0
+            radius: 1.0,
+            enabled: true,
         },
         camera: Camera3dBundle {
             transform: Transform::from_xyz(3.0, 1.5, 0.0),

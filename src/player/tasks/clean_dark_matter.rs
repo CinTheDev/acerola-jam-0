@@ -30,7 +30,8 @@ pub fn instance() -> CleanDarkMatterBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(-9.0, 0.75, 8.0),
             collider: SphereCollider {
-                radius: 1.0
+                radius: 1.0,
+                enabled: true,
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::DarkMatter,
