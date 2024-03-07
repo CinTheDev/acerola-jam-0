@@ -11,7 +11,7 @@ static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
         .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))
 });
 
-#[derive(PartialEq, Clone, Copy)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum ItemId {
     None,
     Lead,
@@ -123,7 +123,6 @@ pub fn pickup_item(
     for ev in ev_pickup.read() {
         let mut player = q_player.single_mut();
         let item_id = ev.0;
-        info!("Pickup Event");
 
         if player.item_id != ItemId::None { return; }
 
@@ -136,6 +135,8 @@ pub fn pickup_item(
             i.pickup = false;
             i.lerp_active = false;
             player.item_id = i.id;
+
+            info!("Pickup Event: {:?}", i.id);
 
             return;
         }
@@ -150,7 +151,6 @@ pub fn cancel_itemdrop(
     for _ev in ev_cancel.read() {
         let mut player = q_player.single_mut();
         let item_id = player.item_id;
-        info!("Cancel event");
 
         if player.item_id == ItemId::None { return }
 
@@ -160,6 +160,8 @@ pub fn cancel_itemdrop(
             i.pickup = true;
             i.lerp_active = true;
             player.item_id = ItemId::None;
+
+            info!("Cancel event: {:?}", i.id);
 
             return;
         }
@@ -175,7 +177,6 @@ pub fn drop_item(
     for ev in ev_itemdrop.read() {
         let item_id = ev.0;
         let mut player = q_player.single_mut();
-        info!("Drop Event");
 
         if player.item_id == ItemId::None { return }
 
@@ -198,6 +199,8 @@ pub fn drop_item(
         //item_properties.pickup = true; Activate next item pickup
         //item.desired_transform = [Itemdrop transform];
         player.item_id = ItemId::None;
+
+        info!("Drop Event: {:?}", item_id);
     }
 }
 

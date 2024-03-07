@@ -79,11 +79,11 @@ pub fn check_if_finished(
     q_task_screwdriver: Query<(&mut IronScrewdriverTask, &ItemDrop)>,
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
 ) {
-    info!("Lead: {}", check_task(q_task_lead));
-    info!("Iron Block: {}", check_task(q_task_block));
-    info!("Iron Hammer: {}", check_task(q_task_hammer));
-    info!("Iron Screwdriver: {}", check_task(q_task_screwdriver));
-    info!("Iron Phone: {}", check_task(q_task_phone));
+    check_task(q_task_lead);
+    check_task(q_task_block);
+    check_task(q_task_hammer);
+    check_task(q_task_screwdriver);
+    check_task(q_task_phone);
 }
 
 fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Query<(&mut T, &ItemDrop)>) -> bool {
