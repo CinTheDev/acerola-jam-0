@@ -4,6 +4,11 @@ use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle,
 use super::ItemDropTask;
 
 #[derive(Bundle)]
+pub struct AlloyMachineTaskBundle {
+    master_task: MasterTask,
+}
+
+#[derive(Bundle)]
 pub struct LeadTaskBundle {
     item_drop: ItemDropBundle,
     task: LeadTask,
@@ -34,6 +39,11 @@ pub struct IronPhoneTaskBundle {
 }
 
 #[derive(Component)]
+pub struct MasterTask {
+    is_all_done: bool,
+}
+
+#[derive(Component)]
 pub struct LeadTask {
     is_done: bool,
 }
@@ -58,32 +68,34 @@ pub struct IronPhoneTask {
     is_done: bool,
 }
 
-// TODO: Fix problem of overlapping colliders
-// All iron objects have a shared ItemDrop point,
-// and the overlapping colliders seem to confuse my cheap
-// functions.
-//
-// 2 Possible fixes:
-//
-// 1. (Smart approach) Instance only one ItemDropBundle and
-//    making the Tasks share it somehow
-//
-// 2. (Cheap approach) Only make it possible to drop the items
-//    in order. Therefore only one collider needs to be active
-//    at a point
+fn finish_master_task(mut commands: Commands, task_master: &mut MasterTask) {
+    info!("Alloy machine task has been finished.");
+
+    // TODO: Spawn exotic matter
+}
 
 pub fn check_if_finished(
+    commands: Commands,
+    mut q_task_master: Query<&mut MasterTask>,
     q_task_lead: Query<(&mut LeadTask, &ItemDrop)>,
     q_task_block: Query<(&mut IronBlockTask, &ItemDrop)>,
     q_task_hammer: Query<(&mut IronHammerTask, &ItemDrop)>,
     q_task_screwdriver: Query<(&mut IronScrewdriverTask, &ItemDrop)>,
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
 ) {
-    check_task(q_task_lead);
-    check_task(q_task_block);
-    check_task(q_task_hammer);
-    check_task(q_task_screwdriver);
-    check_task(q_task_phone);
+    let mut task_master = q_task_master.single_mut();
+
+    if task_master.is_all_done { return }
+
+    let all_tasks_finished = 
+        check_task(q_task_lead) &&
+        check_task(q_task_block) &&
+        check_task(q_task_hammer) &&
+        check_task(q_task_screwdriver) &&
+        check_task(q_task_phone);
+    
+    task_master.is_all_done = all_tasks_finished;
+    finish_master_task(commands, task_master.as_mut());
 }
 
 fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Query<(&mut T, &ItemDrop)>) -> bool {
