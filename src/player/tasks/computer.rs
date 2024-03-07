@@ -38,7 +38,7 @@ pub fn check_activation(
     // Check for player interaction
     let raycast_result = raycast(
         player_trans.translation,
-        player_trans.forward(),
+        player_trans.forward() * 5.0,
         std::iter::once((task.0, task.1, task.2.as_ref()))
     );
     
