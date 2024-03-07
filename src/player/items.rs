@@ -99,6 +99,22 @@ pub fn hold_item(
     }
 }
 
+pub fn enable_itemdrops(
+    q_player: Query<&super::Player>,
+    mut q_itemdrops: Query<(&ItemDrop, &mut collision::SphereCollider)>
+) {
+    let player = q_player.single();
+
+    for itemdrop in q_itemdrops.iter_mut() {
+        let itemdrop_prop = itemdrop.0;
+        let mut itemdrop_coll = itemdrop.1;
+
+        let is_itemdrop_enabled = itemdrop_prop.accepts_id == player.item_id;
+
+        itemdrop_coll.enabled = is_itemdrop_enabled;
+    }
+}
+
 pub fn pickup_item(
     mut ev_pickup: EventReader<PickupEvent>,
     mut q_player: Query<&mut super::Player>,

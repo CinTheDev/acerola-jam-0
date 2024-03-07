@@ -18,6 +18,7 @@ fn main() {
             player::raycast_items,
             player::items::hold_item,
             player::items::update_item_pos,
+            player::items::enable_itemdrops,
             player::items::pickup_item,
             player::items::drop_item,
             player::items::cancel_itemdrop,
