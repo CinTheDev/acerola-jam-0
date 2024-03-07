@@ -20,6 +20,9 @@ pub struct ComputerTask {
     input: String,
 }
 
+#[derive(Event)]
+pub struct SuccessEvent;
+
 pub fn check_activation(
     mut q_player: Query<(&mut Player, &mut SphereCollider, &mut Transform)>,
     mut q_task: Query<(&Transform, &SphereCollider, &mut ComputerTask), Without<Player>>,
@@ -84,6 +87,22 @@ pub fn input_from_keyboard(
         task.input.push(c.char);
 
         info!("Appended char. Now is: {}", task.input);
+    }
+}
+
+pub fn task_success(
+    mut ev_success: EventReader<SuccessEvent>,
+    mut q_player: Query<(&mut Player, &mut SphereCollider, &mut Transform)>,
+    mut q_task: Query<&mut ComputerTask>,
+) {
+    for _ in ev_success.read() {
+        let mut player = q_player.single_mut();
+        let mut task = q_task.single_mut();
+
+        task.is_finished = true;
+        task.is_active = false;
+
+        unlock_player(player.0.as_mut(), player.1.as_mut());
     }
 }
 
