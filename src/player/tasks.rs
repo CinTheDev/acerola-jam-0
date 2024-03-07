@@ -7,6 +7,7 @@ pub mod alloy_machine;
 pub fn instance_tasks(mut commands: Commands) {
     commands.spawn(clean_dark_matter::instance());
 
+    commands.spawn(alloy_machine::instance_master());
     commands.spawn(alloy_machine::instance_lead());
     commands.spawn(alloy_machine::instance_ironblock());
     commands.spawn(alloy_machine::instance_ironhammer());

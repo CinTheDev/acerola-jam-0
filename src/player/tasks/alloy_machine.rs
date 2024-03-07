@@ -113,6 +113,12 @@ fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Que
     return true;
 }
 
+pub fn instance_master() -> MasterTask {
+    MasterTask {
+        is_all_done: false
+    }
+}
+
 pub fn instance_lead() -> LeadTaskBundle {
     LeadTaskBundle {
         item_drop: ItemDropBundle {
