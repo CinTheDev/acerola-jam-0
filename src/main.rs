@@ -26,10 +26,12 @@ fn main() {
             player::tasks::alloy_machine::check_if_finished,
             player::tasks::computer::check_activation,
             player::tasks::computer::input_from_keyboard,
+            player::tasks::computer::task_success,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
         .add_event::<player::items::DropEvent>()
+        .add_event::<player::tasks::computer::SuccessEvent>()
         .run();
 }
 

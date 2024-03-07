@@ -21,7 +21,7 @@ pub struct ComputerTask {
 }
 
 #[derive(Event)]
-pub struct SuccessEvent;
+pub struct SuccessEvent();
 
 pub fn check_activation(
     mut q_player: Query<(&mut Player, &mut SphereCollider, &mut Transform)>,
@@ -34,9 +34,10 @@ pub fn check_activation(
     let player_trans = player.2.as_mut();
 
     let mut task = q_task.single_mut();
+
+    if task.2.is_finished { return }
     
-    if task.2.as_ref().is_active {
-        // TODO: Implement
+    if task.2.is_active {
         lerp_camera(player_trans);
         return;
     }
@@ -59,6 +60,7 @@ pub fn check_activation(
 
 pub fn input_from_keyboard(
     mut ev_char: EventReader<ReceivedCharacter>,
+    mut ev_success: EventWriter<SuccessEvent>,
     mut q_task: Query<&mut ComputerTask>,
     input: Res<Input<KeyCode>>,
 ) {
@@ -70,7 +72,7 @@ pub fn input_from_keyboard(
 
     if input.just_pressed(KeyCode::Return) {
         if task.input == PASSWORD {
-            // TODO: Task successful
+            ev_success.send(SuccessEvent());
         }
         else {
             clear_input(task.as_mut());
@@ -103,6 +105,7 @@ pub fn task_success(
         task.is_active = false;
 
         unlock_player(player.0.as_mut(), player.1.as_mut());
+        info!("Computer task finished");
     }
 }
 
