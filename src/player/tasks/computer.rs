@@ -5,7 +5,7 @@ use crate::player::{collision::{raycast, SphereCollider}, Player};
 const PASSWORD: &str = "abc";
 
 #[derive(Bundle)]
-struct ComputerTaskBundle {
+pub struct ComputerTaskBundle {
     transform: Transform,
     collider: SphereCollider,
     task: ComputerTask,
@@ -52,4 +52,18 @@ pub fn check_activation(
 
 fn check_interaction(input: Res<Input<KeyCode>>) -> bool {
     input.just_pressed(KeyCode::F)
+}
+
+pub fn instance_computer() -> ComputerTaskBundle {
+    ComputerTaskBundle {
+        transform: Transform::from_xyz(1.2, 1.0, 5.5),
+        collider: SphereCollider {
+            radius: 0.35,
+            enabled: true,
+        },
+        task: ComputerTask { 
+            is_active: false,
+            is_finished: false,
+        }
+    }
 }
