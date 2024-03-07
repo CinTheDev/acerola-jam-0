@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
+use crate::player::{collision::SphereCollider, items::{Item, ItemBundle, ItemDrop, ItemDropBundle, ItemId}};
 use super::ItemDropTask;
 
 #[derive(Bundle)]
@@ -68,14 +68,31 @@ pub struct IronPhoneTask {
     is_done: bool,
 }
 
-fn finish_master_task(mut commands: Commands, task_master: &mut MasterTask) {
+fn finish_master_task(mut commands: Commands, asset_server: Res<AssetServer>) {
     info!("Alloy machine task has been finished.");
 
-    // TODO: Spawn exotic matter
+    commands.spawn(ItemBundle {
+        scene: SceneBundle {
+            scene: asset_server.load("items/exotic_alloy.glb#Scene0"),
+            transform: Transform::from_xyz(7.75, 0.2, 1.5),
+            ..default()
+        },
+        collider: SphereCollider {
+            radius: 0.2,
+            enabled: true,
+        },
+        item: Item {
+            id: ItemId::ExoticAlloy,
+            pickup: true,
+            desired_transform: Transform::from_xyz(7.75, 0.2, 1.5),
+            lerp_active: true
+        }
+    });
 }
 
 pub fn check_if_finished(
     commands: Commands,
+    asset_server: Res<AssetServer>,
     mut q_task_master: Query<&mut MasterTask>,
     q_task_lead: Query<(&mut LeadTask, &ItemDrop)>,
     q_task_block: Query<(&mut IronBlockTask, &ItemDrop)>,
@@ -95,7 +112,10 @@ pub fn check_if_finished(
         check_task(q_task_phone);
     
     task_master.is_all_done = all_tasks_finished;
-    finish_master_task(commands, task_master.as_mut());
+
+    if all_tasks_finished {
+        finish_master_task(commands, asset_server);
+    }
 }
 
 fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Query<(&mut T, &ItemDrop)>) -> bool {

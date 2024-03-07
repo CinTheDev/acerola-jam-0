@@ -34,9 +34,9 @@ pub struct ItemBundle {
 #[derive(Component)]
 pub struct Item {
     pub id: ItemId,
-    pickup: bool,
-    desired_transform: Transform,
-    lerp_active: bool,
+    pub pickup: bool,
+    pub desired_transform: Transform,
+    pub lerp_active: bool,
 }
 
 #[derive(Bundle)]
