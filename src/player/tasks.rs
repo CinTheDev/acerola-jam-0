@@ -3,6 +3,7 @@ use bevy::prelude::*;
 
 pub mod clean_dark_matter;
 pub mod alloy_machine;
+pub mod computer;
 
 pub fn instance_tasks(mut commands: Commands) {
     commands.spawn(clean_dark_matter::instance());
