@@ -16,6 +16,8 @@ pub struct ComputerTaskBundle {
 pub struct ComputerTask {
     is_active: bool,
     is_finished: bool,
+
+    input: String,
 }
 
 pub fn check_activation(
@@ -52,6 +54,27 @@ pub fn check_activation(
     lock_player(player_prop, player_coll);
 }
 
+pub fn input_from_keyboard(
+    mut ev_char: EventReader<ReceivedCharacter>,
+    mut q_task: Query<&mut ComputerTask>,
+    input: Res<Input<KeyCode>>,
+) {
+    //info!("Pressed key: {}", input.type_path());
+    let mut task = q_task.single_mut();
+    if ! task.is_active {
+        ev_char.clear();
+        return;
+    }
+
+    for c in ev_char.read() {
+        if c.char.is_control() { continue }
+
+        task.input.push(c.char);
+
+        info!("Appended char. Now is: {}", task.input);
+    }
+}
+
 fn lerp_camera(transform: &mut Transform) {
     let target = Transform::from_xyz(1.2, 1.05, 6.0).looking_to(-Vec3::Z, Vec3::Y);
 
@@ -83,6 +106,7 @@ pub fn instance_computer() -> ComputerTaskBundle {
         task: ComputerTask { 
             is_active: false,
             is_finished: false,
+            input: "".to_string(),
         }
     }
 }

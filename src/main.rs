@@ -25,6 +25,7 @@ fn main() {
             player::tasks::clean_dark_matter::check_if_finished,
             player::tasks::alloy_machine::check_if_finished,
             player::tasks::computer::check_activation,
+            player::tasks::computer::input_from_keyboard,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
