@@ -66,7 +66,12 @@ pub fn input_from_keyboard(
     }
 
     if input.just_pressed(KeyCode::Return) {
-        // TODO: Implement this
+        if task.input == PASSWORD {
+            // TODO: Task successful
+        }
+        else {
+            clear_input(task.as_mut());
+        }
     }
 
     if input.just_pressed(KeyCode::Back) {
@@ -87,6 +92,10 @@ fn lerp_camera(transform: &mut Transform) {
 
     transform.translation = transform.translation.lerp(target.translation, LERP_FACTOR);
     transform.rotation = transform.rotation.slerp(target.rotation, LERP_FACTOR);
+}
+
+fn clear_input(task: &mut ComputerTask) {
+    task.input.clear();
 }
 
 fn lock_player(player: &mut Player, collider: &mut SphereCollider) {
