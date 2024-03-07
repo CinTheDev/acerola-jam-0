@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::player::{collision::SphereCollider, items::{Item, ItemBundle, ItemDrop, ItemDropBundle, ItemId}};
+use crate::player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}};
 use super::ItemDropTask;
 
 #[derive(Bundle)]
@@ -68,9 +68,21 @@ pub struct IronPhoneTask {
     is_done: bool,
 }
 
-fn finish_master_task(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn finish_master_task(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>) {
     info!("Alloy machine task has been finished.");
 
+    for mut i in items.iter_mut() {
+        let item_id = i.1.id;
+
+        if item_id != ItemId::ExoticAlloy { continue }
+
+        let vis = i.0.as_mut();
+        let coll = i.2.as_mut();
+        *vis = Visibility::Inherited;
+        coll.enabled = true;
+
+    }
+    /*
     commands.spawn(ItemBundle {
         scene: SceneBundle {
             scene: asset_server.load("items/exotic_alloy.glb#Scene0"),
@@ -88,17 +100,17 @@ fn finish_master_task(mut commands: Commands, asset_server: Res<AssetServer>) {
             lerp_active: true
         }
     });
+    */
 }
 
 pub fn check_if_finished(
-    commands: Commands,
-    asset_server: Res<AssetServer>,
     mut q_task_master: Query<&mut MasterTask>,
     q_task_lead: Query<(&mut LeadTask, &ItemDrop)>,
     q_task_block: Query<(&mut IronBlockTask, &ItemDrop)>,
     q_task_hammer: Query<(&mut IronHammerTask, &ItemDrop)>,
     q_task_screwdriver: Query<(&mut IronScrewdriverTask, &ItemDrop)>,
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
+    q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>
 ) {
     let mut task_master = q_task_master.single_mut();
 
@@ -114,7 +126,7 @@ pub fn check_if_finished(
     task_master.is_all_done = all_tasks_finished;
 
     if all_tasks_finished {
-        finish_master_task(commands, asset_server);
+        finish_master_task(q_items);
     }
 }
 
