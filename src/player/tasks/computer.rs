@@ -59,7 +59,6 @@ pub fn input_from_keyboard(
     mut q_task: Query<&mut ComputerTask>,
     input: Res<Input<KeyCode>>,
 ) {
-    //info!("Pressed key: {}", input.type_path());
     let mut task = q_task.single_mut();
     if ! task.is_active {
         ev_char.clear();
