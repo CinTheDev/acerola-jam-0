@@ -47,12 +47,8 @@ pub fn rotate_buttons(
         let mut button_trans = button.0;
         let button_prop = button.1;
 
-        let button_standard_rotation = Quat::from_rotation_x(BUTTON_ROTATION);
-        let button_desired_rotation = Quat::from_axis_angle(
-            button_standard_rotation.xyz(),
-            0.5 * PI * button_prop.rotation as f32
-        );
-        let button_total_rotation = button_standard_rotation * button_desired_rotation;
+        let button_total_rotation = Quat::from_rotation_x(BUTTON_ROTATION)
+            * Quat::from_rotation_y(0.5 * PI * button_prop.rotation as f32);
 
         button_trans.rotation = button_trans.rotation.slerp(button_total_rotation, LERP_FACTOR);
     }
