@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::primitives::Sphere};
+use bevy::prelude::*;
 
 use crate::player::collision::SphereCollider;
 
@@ -26,7 +26,7 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
             let trans = first_transform.with_translation(
                 first_transform.translation
                 + first_transform.right() * dist_right * x as f32
-                + first_transform.down() * dist_down * y as f32
+                + first_transform.back() * dist_down * y as f32
             );
 
             commands.spawn(RotateButtonBundle {

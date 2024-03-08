@@ -6,7 +6,7 @@ pub mod alloy_machine;
 pub mod computer;
 pub mod particle_accelerator;
 
-pub fn instance_tasks(mut commands: Commands) {
+pub fn instance_tasks(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(clean_dark_matter::instance());
 
     commands.spawn(alloy_machine::instance_master());
@@ -20,6 +20,8 @@ pub fn instance_tasks(mut commands: Commands) {
 
     commands.spawn(particle_accelerator::instance_master());
     commands.spawn(particle_accelerator::instance_copper());
+
+    particle_accelerator::rotate_button::spawn_buttons(commands, asset_server);
 }
 
 trait ItemDropTask {
