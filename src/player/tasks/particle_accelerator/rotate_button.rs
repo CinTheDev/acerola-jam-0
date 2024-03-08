@@ -21,8 +21,11 @@ pub struct RotateButton {
 
 pub fn check_button_interaction(
     mut q_buttons: Query<(&Transform, &SphereCollider, &mut RotateButton)>,
-    q_player: Query<&Transform, With<Player>>
+    q_player: Query<&Transform, With<Player>>,
+    input: Res<Input<KeyCode>>,
 ) {
+    if ! input.just_pressed(KeyCode::F) { return }
+
     let player = q_player.single();
 
     let result = raycast_mut(
