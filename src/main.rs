@@ -25,6 +25,7 @@ fn main() {
             player::tasks::q_t_de::check_all_tasks_finished,
             player::tasks::q_t_de::check_dark_matter_finished,
             player::tasks::alloy_machine::check_if_finished,
+            player::tasks::alloy_machine::check_alloy_finished,
             player::tasks::computer::check_activation,
             player::tasks::computer::input_from_keyboard,
             player::tasks::computer::task_success,

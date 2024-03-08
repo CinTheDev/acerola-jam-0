@@ -79,7 +79,7 @@ pub struct IronPhoneTask {
     is_done: bool,
 }
 
-fn finish_master_task(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>) {
+fn output_alloy(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>) {
     info!("Alloy machine task has been finished.");
 
     for mut i in items.iter_mut() {
@@ -93,6 +93,23 @@ fn finish_master_task(mut items: Query<(&mut Visibility, &Item, &mut SphereColli
         coll.enabled = true;
 
     }
+}
+
+pub fn check_alloy_finished(
+    mut q_task_master: Query<&mut MasterTask>,
+    mut q_task: Query<(&mut AlloyTask, &ItemDrop)>,
+) {
+    let mut task_master = q_task_master.single_mut();
+    let task = q_task.single_mut();
+    let mut task_prop = task.0;
+    let task_coll = task.1;
+
+    if task_prop.is_done { return }
+
+    if ! task_coll.is_dropped { return }
+
+    task_prop.is_done = true;
+    task_master.is_all_done = true;
 }
 
 pub fn check_if_finished(
@@ -118,7 +135,7 @@ pub fn check_if_finished(
     task_master.is_all_done = all_tasks_finished;
 
     if all_tasks_finished {
-        finish_master_task(q_items);
+        output_alloy(q_items);
     }
 }
 
