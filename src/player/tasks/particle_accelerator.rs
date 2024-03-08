@@ -4,6 +4,8 @@ use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle,
 
 pub mod rotate_button;
 
+use rotate_button::{RotateButton, check_button_solution};
+
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,
@@ -15,6 +17,11 @@ pub struct CopperTaskBundle {
     task: CopperTask,
 }
 
+#[derive(Bundle)]
+pub struct RotateButtonsTaskBundle {
+    task: RotateButtonsTask,
+}
+
 #[derive(Component)]
 pub struct MasterTask {
     is_all_done: bool,
@@ -23,6 +30,32 @@ pub struct MasterTask {
 #[derive(Component)]
 pub struct CopperTask {
     is_done: bool,
+}
+
+#[derive(Component)]
+pub struct RotateButtonsTask {
+    is_active: bool,
+    is_done: bool,
+}
+
+pub fn check_buttons_solution(
+    q_buttons: Query<&RotateButton>,
+    mut q_task: Query<&mut RotateButtonsTask>,
+    mut q_master: Query<&mut MasterTask>,
+) {
+    let mut task = q_task.single_mut();
+    let mut master = q_master.single_mut();
+
+    if ! task.is_active || task.is_done { return }
+
+    let solution_correct = check_button_solution(q_buttons);
+
+    if ! solution_correct { return }
+
+    task.is_done = true;
+    task.is_active = false;
+
+    master.is_all_done = true;
 }
 
 fn enable_buttons() {

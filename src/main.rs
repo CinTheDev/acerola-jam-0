@@ -30,7 +30,7 @@ fn main() {
             player::tasks::particle_accelerator::check_coppertask,
             player::tasks::particle_accelerator::rotate_button::check_button_interaction,
             player::tasks::particle_accelerator::rotate_button::rotate_buttons,
-            player::tasks::particle_accelerator::rotate_button::check_button_solution,
+            player::tasks::particle_accelerator::check_buttons_solution,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
