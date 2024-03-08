@@ -7,7 +7,7 @@ pub mod computer;
 pub mod particle_accelerator;
 
 pub fn instance_tasks(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(q_t_de::instance());
+    commands.spawn(q_t_de::instance_dark_matter());
 
     commands.spawn(alloy_machine::instance_master());
     commands.spawn(alloy_machine::instance_lead());

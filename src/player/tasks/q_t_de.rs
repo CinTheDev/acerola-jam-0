@@ -12,7 +12,7 @@ pub struct CleanDarkMatterTask {
     pub is_done: bool
 }
 
-pub fn check_if_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>) {
+pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>) {
     let mut task_ref = q_task.single_mut();
     let task = task_ref.0.as_mut();
     let itemdrop = task_ref.1;
@@ -25,7 +25,7 @@ pub fn check_if_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)
     info!("Dark matter task finished");
 }
 
-pub fn instance() -> CleanDarkMatterBundle {
+pub fn instance_dark_matter() -> CleanDarkMatterBundle {
     CleanDarkMatterBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(-9.0, 0.75, 8.0),
