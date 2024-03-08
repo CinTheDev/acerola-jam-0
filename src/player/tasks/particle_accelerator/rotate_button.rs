@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, render::primitives::Sphere};
 
 use crate::player::collision::SphereCollider;
 
@@ -29,9 +29,20 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
                 + first_transform.down() * dist_down * y as f32
             );
 
-            // TODO: Spawn bundle
+            commands.spawn(RotateButtonBundle {
+                scene: SceneBundle {
+                    scene: asset_server.load("items/rotate_button_1.glb#Scene0"),
+                    transform: trans,
+                    ..default()
+                },
+                collider: SphereCollider {
+                    radius: 0.1,
+                    enabled: true,
+                },
+                rotate_button: RotateButton {
+                    rotation: 0,
+                },
+            });
         }
     }
-
-    // TODO: Spawn 14 Buttons to right and 4 down
 }
