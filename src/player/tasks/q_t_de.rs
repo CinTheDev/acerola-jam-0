@@ -9,27 +9,44 @@ pub struct CleanDarkMatterBundle {
     pub task: CleanDarkMatterTask,
 }
 
+#[derive(Bundle)]
+pub struct FinalButtonTaskBundle {
+    transform: Transform,
+    collider: SphereCollider,
+    task: FinalButtonTask,
+}
+
 #[derive(Component)]
 pub struct CleanDarkMatterTask {
     pub is_done: bool
+}
+
+#[derive(Component)]
+pub struct FinalButtonTask {
+    is_done: bool,
 }
 
 pub fn check_all_tasks_finished(
     q_darkmatter: Query<&CleanDarkMatterTask>,
     q_alloy: Query<&alloy_machine::MasterTask>,
     q_particle_accelerator: Query<&particle_accelerator::MasterTask>,
-    // TODO: Final button
+    mut q_finalbutton: Query<(&FinalButtonTask, &mut SphereCollider)>
 ) {
     let task_darkmatter = q_darkmatter.single();
     let task_alloy = q_alloy.single();
     let task_particle_accelerator = q_particle_accelerator.single();
+    let mut task_finalbutton = q_finalbutton.single_mut();
 
-    let all_done =
+    let tasks_done =
         task_darkmatter.is_done &&
         task_alloy.is_all_done &&
         task_particle_accelerator.is_all_done;
     
-    if ! all_done { return }
+    if ! tasks_done { return }
+
+    activate_final_button(task_finalbutton.1.as_mut());
+
+    if ! task_finalbutton.0.is_done { return }
 
     info!("Yay we did it")
 }
@@ -47,6 +64,10 @@ pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &
     info!("Dark matter task finished");
 }
 
+fn activate_final_button(collider: &mut SphereCollider) {
+    collider.enabled = true;
+}
+
 pub fn instance_dark_matter() -> CleanDarkMatterBundle {
     CleanDarkMatterBundle {
         item_drop: ItemDropBundle {
@@ -62,6 +83,19 @@ pub fn instance_dark_matter() -> CleanDarkMatterBundle {
             },
         },
         task: CleanDarkMatterTask {
+            is_done: false,
+        }
+    }
+}
+
+pub fn instance_finalbutton() -> FinalButtonTaskBundle {
+    FinalButtonTaskBundle {
+        transform: Transform::from_xyz(-2.5, 0.75, 2.5),
+        collider: SphereCollider {
+            radius: 0.1,
+            enabled: false,
+        },
+        task: FinalButtonTask {
             is_done: false,
         }
     }

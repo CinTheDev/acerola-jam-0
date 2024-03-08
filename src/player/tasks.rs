@@ -23,6 +23,8 @@ pub fn instance_tasks(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(particle_accelerator::instance_copper());
     commands.spawn(particle_accelerator::instance_buttons());
 
+    commands.spawn(q_t_de::instance_finalbutton());
+
     particle_accelerator::rotate_button::spawn_buttons(commands, asset_server);
 }
 
