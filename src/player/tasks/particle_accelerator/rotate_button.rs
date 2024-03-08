@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use std::f32::consts::PI;
+use rand;
 
 use crate::player::{collision::{raycast_mut, SphereCollider}, Player};
 
@@ -68,6 +69,8 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
                 + first_transform.back() * dist_down * y as f32
             );
 
+            let rotation = rand::random::<u8>() % 4;
+
             commands.spawn(RotateButtonBundle {
                 scene: SceneBundle {
                     scene: asset_server.load("items/rotate_button_T.glb#Scene0"),
@@ -79,7 +82,7 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
                     enabled: true,
                 },
                 rotate_button: RotateButton {
-                    rotation: 0,
+                    rotation,
                 },
             });
         }
