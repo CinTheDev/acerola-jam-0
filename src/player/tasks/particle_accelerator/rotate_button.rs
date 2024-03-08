@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::player::collision::SphereCollider;
+use crate::player::{collision::{raycast_mut, SphereCollider}, Player};
 
 #[derive(Bundle)]
 pub struct RotateButtonBundle {
@@ -12,6 +12,24 @@ pub struct RotateButtonBundle {
 #[derive(Component)]
 pub struct RotateButton {
     rotation: u8,
+}
+
+pub fn rotate_buttons(
+    mut q_buttons: Query<(&Transform, &SphereCollider, &mut RotateButton)>,
+    q_player: Query<(&Transform), With<Player>>
+) {
+    let player = q_player.single();
+
+    let result = raycast_mut(
+        player.translation,
+        player.forward() * 5.0,
+        q_buttons.iter_mut()
+    );
+
+    if result.is_none() { return }
+
+    let mut button = result.unwrap();
+    button.rotation = (button.rotation + 1) % 4;
 }
 
 pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
