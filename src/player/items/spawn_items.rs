@@ -9,6 +9,7 @@ pub fn spawn_all_items(commands: &mut Commands, asset_server: &Res<AssetServer>)
     spawn_ironhammer(commands, asset_server);
     spawn_ironscrewdriver(commands, asset_server);
     spawn_ironphone(commands, asset_server);
+    spawn_copperfuel(commands, asset_server);
 }
 
 fn spawn_dark_matter(commands: &mut Commands, asset_server: &Res<AssetServer>) {
@@ -108,6 +109,20 @@ fn spawn_ironphone(commands: &mut Commands, asset_server: &Res<AssetServer>) {
         ItemId::IronPhone,
         true,
     )
+}
+
+fn spawn_copperfuel(commands: &mut Commands, asset_server: &Res<AssetServer>) {
+    let transform = Transform::from_xyz(8.5, 0.95, -6.5);
+
+    spawn_item(
+        commands,
+        asset_server,
+        "items/copper_fuel.glb#Scene0".to_owned(),
+        transform,
+        0.4,
+        ItemId::CopperFuel,
+        true,
+    );
 }
 
 fn spawn_item(
