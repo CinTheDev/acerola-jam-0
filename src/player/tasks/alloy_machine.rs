@@ -80,8 +80,6 @@ pub struct IronPhoneTask {
 }
 
 fn output_alloy(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>) {
-    info!("Alloy machine task has been finished.");
-
     for mut i in items.iter_mut() {
         let item_id = i.1.id;
 
@@ -110,6 +108,7 @@ pub fn check_alloy_finished(
 
     task_prop.is_done = true;
     task_master.is_all_done = true;
+    info!("Finished alloy machine tasks");
 }
 
 pub fn check_if_finished(
