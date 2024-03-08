@@ -26,12 +26,10 @@ pub fn check_button_solution(q_buttons: Query<&RotateButton>) -> bool {
         let correct_rotation = BUTTON_ROT_SOLUTION[button.position_y][button.position_x];
 
         if button.rotation % 4 != correct_rotation {
-            info!("Puzzle is no");
             return false;
         }
     }
 
-    info!("Puzzle is Yeah");
     return true;
 }
 
@@ -110,7 +108,7 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
                 },
                 collider: SphereCollider {
                     radius: 0.1,
-                    enabled: true,
+                    enabled: false,
                 },
                 rotate_button: RotateButton {
                     //rotation,
