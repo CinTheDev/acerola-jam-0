@@ -46,7 +46,7 @@ pub struct IronPhoneTaskBundle {
 
 #[derive(Component)]
 pub struct MasterTask {
-    is_all_done: bool,
+    pub is_all_done: bool,
 }
 
 #[derive(Component)]
