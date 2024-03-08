@@ -1,6 +1,5 @@
-use std::f32::consts::PI;
-
 use bevy::prelude::*;
+use std::f32::consts::PI;
 
 use crate::player::{collision::{raycast_mut, SphereCollider}, Player};
 
@@ -71,7 +70,7 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
 
             commands.spawn(RotateButtonBundle {
                 scene: SceneBundle {
-                    scene: asset_server.load("items/rotate_button_1.glb#Scene0"),
+                    scene: asset_server.load("items/rotate_button_T.glb#Scene0"),
                     transform: trans,
                     ..default()
                 },
