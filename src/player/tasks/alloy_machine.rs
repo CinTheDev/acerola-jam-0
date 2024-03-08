@@ -4,8 +4,14 @@ use crate::player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropB
 use super::ItemDropTask;
 
 #[derive(Bundle)]
-pub struct AlloyMachineTaskBundle {
-    master_task: MasterTask,
+pub struct MasterTaskBundle {
+    task: MasterTask,
+}
+
+#[derive(Bundle)]
+pub struct AlloyTaskBundle {
+    item_drop: ItemDropBundle,
+    task: AlloyTask,
 }
 
 #[derive(Bundle)]
@@ -41,6 +47,11 @@ pub struct IronPhoneTaskBundle {
 #[derive(Component)]
 pub struct MasterTask {
     is_all_done: bool,
+}
+
+#[derive(Component)]
+pub struct AlloyTask {
+    is_done: bool,
 }
 
 #[derive(Component)]
@@ -82,25 +93,6 @@ fn finish_master_task(mut items: Query<(&mut Visibility, &Item, &mut SphereColli
         coll.enabled = true;
 
     }
-    /*
-    commands.spawn(ItemBundle {
-        scene: SceneBundle {
-            scene: asset_server.load("items/exotic_alloy.glb#Scene0"),
-            transform: Transform::from_xyz(7.75, 0.2, 1.5),
-            ..default()
-        },
-        collider: SphereCollider {
-            radius: 0.2,
-            enabled: true,
-        },
-        item: Item {
-            id: ItemId::ExoticAlloy,
-            pickup: true,
-            desired_transform: Transform::from_xyz(7.75, 0.2, 1.5),
-            lerp_active: true
-        }
-    });
-    */
 }
 
 pub fn check_if_finished(
@@ -145,9 +137,11 @@ fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Que
     return true;
 }
 
-pub fn instance_master() -> MasterTask {
-    MasterTask {
-        is_all_done: false
+pub fn instance_master() -> MasterTaskBundle {
+    MasterTaskBundle {
+        task: MasterTask {
+            is_all_done: false,
+        }
     }
 }
 
