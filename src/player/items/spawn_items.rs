@@ -119,7 +119,7 @@ fn spawn_copperfuel(commands: &mut Commands, asset_server: &Res<AssetServer>) {
         asset_server,
         "items/copper_fuel.glb#Scene0".to_owned(),
         transform,
-        0.4,
+        0.25,
         ItemId::CopperFuel,
         true,
     );

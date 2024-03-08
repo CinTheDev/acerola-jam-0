@@ -17,6 +17,9 @@ pub fn instance_tasks(mut commands: Commands) {
     commands.spawn(alloy_machine::instance_ironphone());
 
     commands.spawn(computer::instance_computer());
+
+    commands.spawn(particle_accelerator::instance_master());
+    commands.spawn(particle_accelerator::instance_copper());
 }
 
 trait ItemDropTask {
