@@ -15,7 +15,7 @@ pub struct ComputerTaskBundle {
 #[derive(Component)]
 pub struct ComputerTask {
     is_active: bool,
-    is_finished: bool,
+    pub is_finished: bool,
 
     input: String,
 

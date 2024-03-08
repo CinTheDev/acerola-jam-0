@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use crate::player::{collision::{raycast, SphereCollider}, items::{ItemDrop, ItemDropBundle, ItemId}, Player};
+use super::computer;
 use super::alloy_machine;
 use super::particle_accelerator;
 
@@ -28,17 +29,20 @@ pub struct FinalButtonTask {
 
 pub fn check_all_tasks_finished(
     q_darkmatter: Query<&CleanDarkMatterTask>,
+    q_computer: Query<&computer::ComputerTask>,
     q_alloy: Query<&alloy_machine::MasterTask>,
     q_particle_accelerator: Query<&particle_accelerator::MasterTask>,
     mut q_finalbutton: Query<(&FinalButtonTask, &mut SphereCollider)>
 ) {
     let task_darkmatter = q_darkmatter.single();
+    let task_computer = q_computer.single();
     let task_alloy = q_alloy.single();
     let task_particle_accelerator = q_particle_accelerator.single();
     let mut task_finalbutton = q_finalbutton.single_mut();
 
     let tasks_done =
         task_darkmatter.is_done &&
+        task_computer.is_finished &&
         task_alloy.is_all_done &&
         task_particle_accelerator.is_all_done;
     
