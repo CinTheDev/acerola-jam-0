@@ -1,13 +1,13 @@
 // Structure and general implementation of tasks
 use bevy::prelude::*;
 
-pub mod clean_dark_matter;
+pub mod q_t_de;
 pub mod alloy_machine;
 pub mod computer;
 pub mod particle_accelerator;
 
 pub fn instance_tasks(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(clean_dark_matter::instance());
+    commands.spawn(q_t_de::instance());
 
     commands.spawn(alloy_machine::instance_master());
     commands.spawn(alloy_machine::instance_lead());
