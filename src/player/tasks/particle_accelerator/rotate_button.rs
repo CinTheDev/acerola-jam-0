@@ -7,5 +7,17 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
     let dist_right: f32 = 0.228 * 1.14;
     let dist_down: f32 = 0.228 * 1.15;
 
+    for x in 0..14 {
+        for y in 0..4 {
+            let trans = first_transform.with_translation(
+                first_transform.translation
+                + first_transform.right() * dist_right * x as f32
+                + first_transform.down() * dist_down * y as f32
+            );
+
+            // TODO: Spawn bundle
+        }
+    }
+
     // TODO: Spawn 14 Buttons to right and 4 down
 }
