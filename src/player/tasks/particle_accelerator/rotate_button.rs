@@ -37,7 +37,7 @@ pub fn check_button_interaction(
     if result.is_none() { return }
 
     let mut button = result.unwrap();
-    button.rotation = (button.rotation + 1) % 4;
+    button.rotation += 1;
 }
 
 pub fn rotate_buttons(
