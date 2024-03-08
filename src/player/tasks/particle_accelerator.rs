@@ -24,7 +24,7 @@ pub struct RotateButtonsTaskBundle {
 
 #[derive(Component)]
 pub struct MasterTask {
-    is_all_done: bool,
+    pub is_all_done: bool,
 }
 
 #[derive(Component)]

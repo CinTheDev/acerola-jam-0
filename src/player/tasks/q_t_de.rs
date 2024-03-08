@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
+use super::particle_accelerator;
 
 #[derive(Bundle)]
 pub struct CleanDarkMatterBundle {
@@ -10,6 +11,24 @@ pub struct CleanDarkMatterBundle {
 #[derive(Component)]
 pub struct CleanDarkMatterTask {
     pub is_done: bool
+}
+
+pub fn check_all_tasks_finished(
+    q_darkmatter: Query<&CleanDarkMatterTask>,
+    // TODO: q_alloy:
+    q_particle_accelerator: Query<&particle_accelerator::MasterTask>,
+    // TODO: Final button
+) {
+    let task_darkmatter = q_darkmatter.single();
+    let task_particle_accelerator = q_particle_accelerator.single();
+
+    let all_done =
+        task_darkmatter.is_done &&
+        task_particle_accelerator.is_all_done;
+    
+    if ! all_done { return }
+
+    info!("Yay we did it")
 }
 
 pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>) {
