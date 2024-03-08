@@ -1,34 +1,34 @@
 // Structure and general implementation of tasks
 use bevy::prelude::*;
 
-use super::{collision, items::{ItemDrop, ItemDropBundle, ItemId}};
+pub mod q_t_de;
+pub mod alloy_machine;
+pub mod computer;
+pub mod particle_accelerator;
 
-pub mod test_task;
+pub fn instance_tasks(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn(q_t_de::instance_dark_matter());
 
-pub fn instance_tasks(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-) {
-    commands.spawn(test_task::TestTaskBundle {
-        scene: SceneBundle {
-            scene: asset_server.load("test_item.glb#Scene0"),
-            transform: Transform::from_xyz(-3.0, 1.0, -3.0),
-            ..default()
-        },
-        item_drop: ItemDropBundle {
-            collider: collision::SphereCollider {
-                radius: 0.1
-            },
+    commands.spawn(alloy_machine::instance_master());
+    commands.spawn(alloy_machine::instance_alloy());
+    commands.spawn(alloy_machine::instance_lead());
+    commands.spawn(alloy_machine::instance_ironblock());
+    commands.spawn(alloy_machine::instance_ironhammer());
+    commands.spawn(alloy_machine::instance_ironscrewdriver());
+    commands.spawn(alloy_machine::instance_ironphone());
 
-            item_drop: ItemDrop {
-                accepts_id: ItemId::Something,
-                activates_id: ItemId::SomethingElse,
-                is_dropped: false,
-            }
-        },
-        test_task: test_task::TestTask {
-            is_active: false,
-            needs_check: true,
-        }
-    });
+    commands.spawn(computer::instance_computer());
+
+    commands.spawn(particle_accelerator::instance_master());
+    commands.spawn(particle_accelerator::instance_copper());
+    commands.spawn(particle_accelerator::instance_buttons());
+
+    commands.spawn(q_t_de::instance_finalbutton());
+
+    particle_accelerator::rotate_button::spawn_buttons(commands, asset_server);
+}
+
+trait ItemDropTask {
+    fn is_done(&self) -> bool;
+    fn set_done(&mut self, val: bool);
 }

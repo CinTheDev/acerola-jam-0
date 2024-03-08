@@ -13,16 +13,18 @@ use items::ItemId;
 
 pub mod tasks;
 
-pub fn instance_player(mut commands: Commands) {
+pub fn instance_player(commands: &mut Commands) {
     commands.spawn(PlayerBundle {
         player: Player {
             speed: 3.0,
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
             item_id: ItemId::None,
+            locked: false,
         },
         collider: SphereCollider {
-            radius: 1.0
+            radius: 1.0,
+            enabled: true,
         },
         camera: Camera3dBundle {
             transform: Transform::from_xyz(3.0, 1.5, 0.0),
@@ -45,6 +47,8 @@ pub struct Player {
 
     rotation: Vec2,
     item_id: ItemId,
+
+    locked: bool,
 }
 
 pub fn move_player(
@@ -59,6 +63,8 @@ pub fn move_player(
     let properties = p.0.as_mut();
     let transform_copy = p.1.as_ref().clone();
     let transform = p.1.as_mut();
+
+    if properties.locked { return } // Don't move if player is locked
     
     // Input processing
     let dir = get_keyboard_input(&keyboard_input, &transform);
@@ -162,7 +168,8 @@ pub fn raycast_items(
     let raycast_item = collision::raycast(player_trans.translation, ray, q_items.iter());
     let raycast_drop = collision::raycast(player_trans.translation, ray, q_drops.iter());
 
-    info!("Raycast result: {}", raycast_item.is_some() || raycast_drop.is_some());
+    //info!("Raycast item result: {}", raycast_item.is_some());
+    //info!("Raycast drop result: {}", raycast_drop.is_some());
     
     check_drop_item(&input, ev_cancel);
     check_raycast_item(raycast_item, &input, ev_pickup);

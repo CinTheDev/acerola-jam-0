@@ -11,7 +11,6 @@ fn main() {
             setup,
             cursor_grab,
             generate_colliders::generate_colliders,
-            player::items::test_instance_item,
             player::tasks::instance_tasks,
         ))
         .add_systems(Update, (
@@ -19,17 +18,27 @@ fn main() {
             player::raycast_items,
             player::items::hold_item,
             player::items::update_item_pos,
+            player::items::enable_itemdrops,
             player::items::pickup_item,
             player::items::drop_item,
             player::items::cancel_itemdrop,
-            //player::items::check_item_collision,
-            //player::items::check_drop_collision,
-            player::tasks::test_task::check_if_dropped,
-            player::tasks::test_task::do_task,
+            player::tasks::q_t_de::check_all_tasks_finished,
+            player::tasks::q_t_de::check_final_button_input,
+            player::tasks::q_t_de::check_dark_matter_finished,
+            player::tasks::alloy_machine::check_if_finished,
+            player::tasks::alloy_machine::check_alloy_finished,
+            player::tasks::computer::check_activation,
+            player::tasks::computer::input_from_keyboard,
+            player::tasks::computer::task_success,
+            player::tasks::particle_accelerator::check_coppertask,
+            player::tasks::particle_accelerator::rotate_button::check_button_interaction,
+            player::tasks::particle_accelerator::rotate_button::rotate_buttons,
+            player::tasks::particle_accelerator::check_buttons_solution,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
         .add_event::<player::items::DropEvent>()
+        .add_event::<player::tasks::computer::SuccessEvent>()
         .run();
 }
 
@@ -40,7 +49,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ..default()
     });
 
-    player::instance_player(commands);
+    player::items::spawn_items::spawn_all_items(&mut commands, &asset_server);
+    player::instance_player(&mut commands);
 }
 
 fn cursor_grab(mut query: Query<&mut Window, With<PrimaryWindow>>) {

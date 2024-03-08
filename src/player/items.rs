@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use super::collision;
 use once_cell::sync::Lazy;
 
+pub mod spawn_items;
+
 const ITEM_LERP_FACTOR: f32 = 0.5;
 
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
@@ -9,11 +11,17 @@ static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
         .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))
 });
 
-#[derive(PartialEq, Clone, Copy)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum ItemId {
     None,
-    Something,
-    SomethingElse,
+    Lead,
+    ExoticAlloy,
+    IronBlock,
+    IronHammer,
+    IronScrewdriver,
+    IronPhone,
+    DarkMatter,
+    CopperFuel,
 }
 
 #[derive(Bundle)]
@@ -26,13 +34,14 @@ pub struct ItemBundle {
 #[derive(Component)]
 pub struct Item {
     pub id: ItemId,
-    pickup: bool,
-    desired_transform: Transform,
-    lerp_active: bool,
+    pub pickup: bool,
+    pub desired_transform: Transform,
+    pub lerp_active: bool,
 }
 
 #[derive(Bundle)]
 pub struct ItemDropBundle {
+    pub transform: Transform,
     pub collider: collision::SphereCollider,
     pub item_drop: ItemDrop,
 }
@@ -90,23 +99,20 @@ pub fn hold_item(
     }
 }
 
-pub fn test_instance_item(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(ItemBundle {
-        scene: SceneBundle {
-            scene: asset_server.load("test_item.glb#Scene0"),
-            transform: Transform::from_xyz(3.0, 1.0, 3.0),
-            ..default()
-        },
-        collider: collision::SphereCollider {
-            radius: 0.1
-        },
-        item: Item {
-            id: ItemId::Something,
-            pickup: true,
-            desired_transform: Transform::IDENTITY,
-            lerp_active: false,
-        }
-    });
+pub fn enable_itemdrops(
+    q_player: Query<&super::Player>,
+    mut q_itemdrops: Query<(&ItemDrop, &mut collision::SphereCollider)>
+) {
+    let player = q_player.single();
+
+    for itemdrop in q_itemdrops.iter_mut() {
+        let itemdrop_prop = itemdrop.0;
+        let mut itemdrop_coll = itemdrop.1;
+
+        let is_itemdrop_enabled = itemdrop_prop.accepts_id == player.item_id;
+
+        itemdrop_coll.enabled = is_itemdrop_enabled;
+    }
 }
 
 pub fn pickup_item(
@@ -117,7 +123,6 @@ pub fn pickup_item(
     for ev in ev_pickup.read() {
         let mut player = q_player.single_mut();
         let item_id = ev.0;
-        info!("Pickup Event");
 
         if player.item_id != ItemId::None { return; }
 
@@ -125,9 +130,13 @@ pub fn pickup_item(
         for mut i in q_items.iter_mut() {
             if i.id != item_id { continue }
 
+            if ! i.pickup { return } // Do not pick up item twice or something
+
             i.pickup = false;
             i.lerp_active = false;
             player.item_id = i.id;
+
+            info!("Pickup Event: {:?}", i.id);
 
             return;
         }
@@ -142,7 +151,6 @@ pub fn cancel_itemdrop(
     for _ev in ev_cancel.read() {
         let mut player = q_player.single_mut();
         let item_id = player.item_id;
-        info!("Cancel event");
 
         if player.item_id == ItemId::None { return }
 
@@ -152,6 +160,8 @@ pub fn cancel_itemdrop(
             i.pickup = true;
             i.lerp_active = true;
             player.item_id = ItemId::None;
+
+            info!("Cancel event: {:?}", i.id);
 
             return;
         }
@@ -167,7 +177,6 @@ pub fn drop_item(
     for ev in ev_itemdrop.read() {
         let item_id = ev.0;
         let mut player = q_player.single_mut();
-        info!("Drop Event");
 
         if player.item_id == ItemId::None { return }
 
@@ -190,6 +199,8 @@ pub fn drop_item(
         //item_properties.pickup = true; Activate next item pickup
         //item.desired_transform = [Itemdrop transform];
         player.item_id = ItemId::None;
+
+        info!("Drop Event: {:?}", item_id);
     }
 }
 
