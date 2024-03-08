@@ -2,6 +2,8 @@ use bevy::prelude::*;
 
 use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
 
+pub mod rotate_button;
+
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,
