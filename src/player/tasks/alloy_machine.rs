@@ -145,6 +145,26 @@ pub fn instance_master() -> MasterTaskBundle {
     }
 }
 
+pub fn instance_alloy() -> AlloyTaskBundle {
+    AlloyTaskBundle {
+        item_drop: ItemDropBundle {
+            transform: Transform::from_xyz(-2.691, 1.108, 0.761),
+            collider: SphereCollider {
+                radius: 0.25,
+                enabled: true,
+            },
+            item_drop: ItemDrop {
+                accepts_id: ItemId::ExoticAlloy,
+                activates_id: ItemId::None,
+                is_dropped: false
+            },
+        },
+        task: AlloyTask {
+            is_done: false,
+        },
+    }
+}
+
 pub fn instance_lead() -> LeadTaskBundle {
     LeadTaskBundle {
         item_drop: ItemDropBundle {
