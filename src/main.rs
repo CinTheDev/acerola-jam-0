@@ -27,6 +27,7 @@ fn main() {
             player::tasks::computer::check_activation,
             player::tasks::computer::input_from_keyboard,
             player::tasks::computer::task_success,
+            player::tasks::particle_accelerator::check_coppertask,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
