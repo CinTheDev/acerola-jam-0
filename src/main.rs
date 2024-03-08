@@ -23,6 +23,7 @@ fn main() {
             player::items::drop_item,
             player::items::cancel_itemdrop,
             player::tasks::q_t_de::check_all_tasks_finished,
+            player::tasks::q_t_de::check_final_button_input,
             player::tasks::q_t_de::check_dark_matter_finished,
             player::tasks::alloy_machine::check_if_finished,
             player::tasks::alloy_machine::check_alloy_finished,

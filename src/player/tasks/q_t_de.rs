@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
+use crate::player::{collision::{raycast, SphereCollider}, items::{ItemDrop, ItemDropBundle, ItemId}, Player};
 use super::alloy_machine;
 use super::particle_accelerator;
 
@@ -62,6 +62,27 @@ pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &
 
     task.is_done = true;
     info!("Dark matter task finished");
+}
+
+pub fn check_final_button_input(
+    mut q_finalbutton: Query<(&Transform, &SphereCollider, &mut FinalButtonTask)>,
+    q_player: Query<&Transform, With<Player>>,
+    input: Res<Input<KeyCode>>,
+) {
+    if ! input.just_pressed(KeyCode::F) || q_finalbutton.single().2.is_done { return }
+
+    let player = q_player.single();
+
+    let raycast_hit = raycast(
+        player.translation,
+        player.forward() * 5.0,
+        q_finalbutton.iter(),
+    ).is_some();
+
+    if ! raycast_hit { return }
+
+    let mut finalbutton = q_finalbutton.single_mut().2;
+    finalbutton.is_done = true;
 }
 
 fn activate_final_button(collider: &mut SphereCollider) {
