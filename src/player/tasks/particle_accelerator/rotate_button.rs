@@ -17,6 +17,23 @@ pub struct RotateButtonBundle {
 #[derive(Component)]
 pub struct RotateButton {
     rotation: u8,
+    position_x: usize,
+    position_y: usize,
+}
+
+pub fn check_button_solution(
+    q_buttons: Query<&RotateButton>
+) {
+    for button in q_buttons.iter() {
+        let correct_rotation = BUTTON_ROT_SOLUTION[button.position_y][button.position_x];
+
+        if button.rotation % 4 != correct_rotation {
+            info!("Puzzle is no");
+            return;
+        }
+    }
+
+    info!("Puzzle is Yeah");
 }
 
 pub fn check_button_interaction(
@@ -93,6 +110,8 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
                 rotate_button: RotateButton {
                     //rotation,
                     rotation: 0,
+                    position_x: x,
+                    position_y: y,
                 },
             });
         }
