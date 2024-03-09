@@ -64,8 +64,12 @@ fn spawn_task_text(parent: &mut ChildBuilder, index: usize) {
 
 pub fn check_task_darkmatter(
     mut event: EventReader<DarkMatterFinished>,
+    mut query: Query<(&TaskText, &mut Text)>,
 ) {
-    todo!();
+    for _ in event.read() {
+        let mut text = get_task(0, query.iter_mut());
+        cross_out_text(&mut text);
+    }
 }
 
 pub fn check_task_exoticalloy(
@@ -96,6 +100,11 @@ pub fn check_task_finalbutton(
     mut event: EventReader<TimerStop>,
 ) {
     todo!();
+}
+
+fn cross_out_text(text: &mut Text) {
+    let section = text.sections.first_mut().unwrap();
+    section.style.color = Color::rgb(0.0, 0.0, 1.0);
 }
 
 fn get_task<'a, I>(
