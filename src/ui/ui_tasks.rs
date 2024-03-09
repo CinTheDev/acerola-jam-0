@@ -41,3 +41,39 @@ fn spawn_task_text(parent: &mut ChildBuilder, text: &str) {
         )
     );
 }
+
+pub fn check_task_darkmatter(
+
+) {
+    todo!();
+}
+
+pub fn check_task_exoticalloy(
+
+) {
+    todo!();
+}
+
+pub fn check_task_alloyplacement(
+
+) {
+    todo!();
+}
+
+pub fn check_task_particleaccelerator(
+
+) {
+    todo!();
+}
+
+pub fn check_task_computer(
+
+) {
+    todo!();
+}
+
+pub fn check_task_finalbutton(
+
+) {
+    todo!();
+}
