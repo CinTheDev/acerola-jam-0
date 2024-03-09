@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use crate::player::{collision::{raycast, SphereCollider}, items::{ItemDrop, ItemDropBundle, ItemId}, Player};
+use crate::RaycastCursor;
 use crate::timer::TimerStop;
 use super::computer;
 use super::alloy_machine;
@@ -112,6 +113,7 @@ pub fn instance_dark_matter() -> CleanDarkMatterBundle {
                 activates_id: ItemId::None,
                 is_dropped: false,
             },
+            r_cursor: RaycastCursor,
         },
         task: CleanDarkMatterTask {
             is_done: false,

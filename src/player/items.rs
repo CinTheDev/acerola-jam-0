@@ -1,4 +1,6 @@
 use bevy::prelude::*;
+use crate::RaycastCursor;
+
 use super::collision;
 use once_cell::sync::Lazy;
 
@@ -29,6 +31,7 @@ pub struct ItemBundle {
     pub scene: SceneBundle,
     pub collider: collision::SphereCollider,
     pub item: Item,
+    pub r_cursor: RaycastCursor,
 }
 
 #[derive(Component)]
@@ -44,6 +47,7 @@ pub struct ItemDropBundle {
     pub transform: Transform,
     pub collider: collision::SphereCollider,
     pub item_drop: ItemDrop,
+    pub r_cursor: RaycastCursor,
 }
 
 #[derive(Component)]

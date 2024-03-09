@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use super::{collision::SphereCollider, Item, ItemBundle, ItemId};
+use crate::RaycastCursor;
 
 pub fn spawn_all_items(commands: &mut Commands, asset_server: &Res<AssetServer>) {
     spawn_dark_matter(commands, asset_server);
@@ -155,6 +156,7 @@ fn spawn_item(
             pickup: true,
             desired_transform: transform,
             lerp_active: true,
-        }
+        },
+        r_cursor: RaycastCursor,
     });
 }

@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
+use crate::RaycastCursor;
 
 pub mod rotate_button;
 
@@ -106,6 +107,7 @@ pub fn instance_copper() -> CopperTaskBundle {
                 activates_id: ItemId::None,
                 is_dropped: false,
             },
+            r_cursor: RaycastCursor,
         },
         task: CopperTask {
             is_done: false,

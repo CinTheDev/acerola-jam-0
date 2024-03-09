@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::player::{collision::{raycast, SphereCollider}, Player};
+use crate::RaycastCursor;
 
 const PASSWORD: &str = "abc";
 const LERP_FACTOR: f32 = 0.1;
@@ -10,6 +11,7 @@ pub struct ComputerTaskBundle {
     transform: Transform,
     collider: SphereCollider,
     task: ComputerTask,
+    r_cursor: RaycastCursor,
 }
 
 #[derive(Component)]
@@ -152,6 +154,7 @@ pub fn instance_computer() -> ComputerTaskBundle {
             is_finished: false,
             input: "".to_string(),
             player_position: Transform::IDENTITY,
-        }
+        },
+        r_cursor: RaycastCursor,
     }
 }

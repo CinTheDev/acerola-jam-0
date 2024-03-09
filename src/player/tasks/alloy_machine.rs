@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}};
+use crate::{player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}}, RaycastCursor};
 use super::ItemDropTask;
 
 #[derive(Bundle)]
@@ -174,6 +174,7 @@ pub fn instance_alloy() -> AlloyTaskBundle {
                 activates_id: ItemId::None,
                 is_dropped: false
             },
+            r_cursor: RaycastCursor,
         },
         task: AlloyTask {
             is_done: false,
@@ -193,7 +194,8 @@ pub fn instance_lead() -> LeadTaskBundle {
                 accepts_id: ItemId::Lead,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: LeadTask {
             is_done: false
@@ -213,7 +215,8 @@ pub fn instance_ironblock() -> IronBlockTaskBundle {
                 accepts_id: ItemId::IronBlock,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronBlockTask {
             is_done: false
@@ -233,7 +236,8 @@ pub fn instance_ironhammer() -> IronHammerTaskBundle {
                 accepts_id: ItemId::IronHammer,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronHammerTask {
             is_done: false
@@ -253,7 +257,8 @@ pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
                 accepts_id: ItemId::IronScrewdriver,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronScrewdriverTask {
             is_done: false
@@ -273,7 +278,8 @@ pub fn instance_ironphone() -> IronPhoneTaskBundle {
                 accepts_id: ItemId::IronPhone,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronPhoneTask {
             is_done: false

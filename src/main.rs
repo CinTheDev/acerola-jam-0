@@ -6,6 +6,9 @@ mod generate_colliders;
 mod timer;
 mod ui;
 
+#[derive(Component)]
+pub struct RaycastCursor;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
