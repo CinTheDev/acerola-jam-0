@@ -3,6 +3,7 @@ use bevy::window::{CursorGrabMode, PrimaryWindow};
 
 mod player;
 mod generate_colliders;
+mod timer;
 
 fn main() {
     App::new()
@@ -12,6 +13,7 @@ fn main() {
             cursor_grab,
             generate_colliders::generate_colliders,
             player::tasks::instance_tasks,
+            timer::setup_losetimer,
         ))
         .add_systems(Update, (
             player::move_player,
@@ -35,10 +37,17 @@ fn main() {
             player::tasks::particle_accelerator::rotate_button::rotate_buttons,
             player::tasks::particle_accelerator::check_buttons_solution,
         ))
+        .add_systems(Update, (
+            timer::check_losetimer,
+            timer::timer_runout,
+            timer::timer_stop,
+        ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
         .add_event::<player::items::DropEvent>()
         .add_event::<player::tasks::computer::SuccessEvent>()
+        .add_event::<timer::TimerRunout>()
+        .add_event::<timer::TimerStop>()
         .run();
 }
 
