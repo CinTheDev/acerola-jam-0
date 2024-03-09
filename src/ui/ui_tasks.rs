@@ -161,7 +161,7 @@ fn get_style_from_state(state: TaskTextState) -> TextStyle {
 
         TaskTextState::Finished => TextStyle {
             font_size: 18.0,
-            color: Color::rgb(0.0, 0.0, 1.0),
+            color: Color::rgb(0.0, 0.0, 0.7),
             ..default()
         }
     }
