@@ -1,14 +1,21 @@
 use bevy::prelude::*;
 
+use crate::timer::LoseTimer;
+
 #[derive(Component)]
 pub struct TimerText;
 
 pub fn update_timer_ui(
     mut query: Query<&mut Text, With<TimerText>>,
+    losetimer: Res<LoseTimer>,
 ) {
     let mut text = query.single_mut();
 
-    text.sections.first_mut().unwrap().value = "Hi".to_string();
+    let remaining_minutes = losetimer.timer.remaining_secs() as u32 / 60;
+    let remaining_seconds = losetimer.timer.remaining_secs() as u32 % 60;
+    let remaining_time_string = format!("{:02}:{:02}", remaining_minutes, remaining_seconds);
+
+    text.sections.first_mut().unwrap().value = remaining_time_string.to_string();
 }
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {

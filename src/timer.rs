@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 #[derive(Resource)]
 pub struct LoseTimer {
-    timer: Timer,
+    pub timer: Timer,
 }
 
 #[derive(Event)]
@@ -16,7 +16,7 @@ pub fn timer_runout(
 ) {
     for _ in ev_timer_runout.read() {
         info!("The game has been lost");
-        
+
         // TODO: Do things to indicate game over
     }
 }
