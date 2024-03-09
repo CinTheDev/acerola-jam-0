@@ -16,6 +16,7 @@ pub fn timer_runout(
 ) {
     for _ in ev_timer_runout.read() {
         info!("The game has been lost");
+        
         // TODO: Do things to indicate game over
     }
 }
@@ -26,12 +27,14 @@ pub fn timer_stop(
 ) {
     for _ in ev_timerstop.read() {
         lose_timer.timer.pause();
+
+        // TODO: Do things to indicate game won
     }
 }
 
 pub fn setup_losetimer(mut commands: Commands) {
     commands.insert_resource(LoseTimer {
-        timer: Timer::from_seconds(10.0, TimerMode::Once),
+        timer: Timer::from_seconds(100.0, TimerMode::Once),
     });
 }
 

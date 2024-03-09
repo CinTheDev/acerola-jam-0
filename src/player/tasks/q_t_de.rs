@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use crate::player::{collision::{raycast, SphereCollider}, items::{ItemDrop, ItemDropBundle, ItemId}, Player};
+use crate::timer::TimerStop;
 use super::computer;
 use super::alloy_machine;
 use super::particle_accelerator;
@@ -25,6 +26,7 @@ pub struct CleanDarkMatterTask {
 #[derive(Component)]
 pub struct FinalButtonTask {
     is_done: bool,
+    game_finished: bool,
 }
 
 pub fn check_all_tasks_finished(
@@ -32,13 +34,16 @@ pub fn check_all_tasks_finished(
     q_computer: Query<&computer::ComputerTask>,
     q_alloy: Query<&alloy_machine::MasterTask>,
     q_particle_accelerator: Query<&particle_accelerator::MasterTask>,
-    mut q_finalbutton: Query<(&FinalButtonTask, &mut SphereCollider)>
+    mut q_finalbutton: Query<(&mut FinalButtonTask, &mut SphereCollider)>,
+    mut ev_timerstop: EventWriter<TimerStop>,
 ) {
     let task_darkmatter = q_darkmatter.single();
     let task_computer = q_computer.single();
     let task_alloy = q_alloy.single();
     let task_particle_accelerator = q_particle_accelerator.single();
     let mut task_finalbutton = q_finalbutton.single_mut();
+
+    if task_finalbutton.0.game_finished { return }
 
     let tasks_done =
         task_darkmatter.is_done &&
@@ -52,7 +57,8 @@ pub fn check_all_tasks_finished(
 
     if ! task_finalbutton.0.is_done { return }
 
-    info!("Yay we did it")
+    task_finalbutton.0.game_finished = true;
+    ev_timerstop.send(TimerStop());
 }
 
 pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>) {
@@ -122,6 +128,7 @@ pub fn instance_finalbutton() -> FinalButtonTaskBundle {
         },
         task: FinalButtonTask {
             is_done: false,
+            game_finished: false,
         }
     }
 }
