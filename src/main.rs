@@ -13,6 +13,7 @@ fn main() {
             cursor_grab,
             generate_colliders::generate_colliders,
             player::tasks::instance_tasks,
+            timer::setup_losetimer,
         ))
         .add_systems(Update, (
             player::move_player,
@@ -35,6 +36,9 @@ fn main() {
             player::tasks::particle_accelerator::rotate_button::check_button_interaction,
             player::tasks::particle_accelerator::rotate_button::rotate_buttons,
             player::tasks::particle_accelerator::check_buttons_solution,
+        ))
+        .add_systems(Update, (
+            timer::check_losetimer,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
