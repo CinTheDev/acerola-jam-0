@@ -1,5 +1,15 @@
 use bevy::prelude::*;
 
+use crate::{
+    player::tasks::{
+        alloy_machine::{AlloyCreationFinshed, AlloyPlacementFinished},
+        computer::SuccessEvent,
+        particle_accelerator::ParticleAcceleratorFinished,
+        q_t_de::DarkMatterFinished
+    },
+    timer::TimerStop
+};
+
 const TASK_TEXTS: [&'static str; 6] = [
     "Clean Dark Matter from Experiment",
     "Create Exotic Alloy",
@@ -43,37 +53,37 @@ fn spawn_task_text(parent: &mut ChildBuilder, text: &str) {
 }
 
 pub fn check_task_darkmatter(
-
+    mut event: EventReader<DarkMatterFinished>,
 ) {
     todo!();
 }
 
 pub fn check_task_exoticalloy(
-
+    mut event: EventReader<AlloyCreationFinshed>,
 ) {
     todo!();
 }
 
 pub fn check_task_alloyplacement(
-
+    mut event: EventReader<AlloyPlacementFinished>,
 ) {
     todo!();
 }
 
 pub fn check_task_particleaccelerator(
-
+    mut event: EventReader<ParticleAcceleratorFinished>,
 ) {
     todo!();
 }
 
 pub fn check_task_computer(
-
+    mut event: EventReader<SuccessEvent>,
 ) {
     todo!();
 }
 
 pub fn check_task_finalbutton(
-
+    mut event: EventReader<TimerStop>,
 ) {
     todo!();
 }
