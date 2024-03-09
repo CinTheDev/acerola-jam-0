@@ -39,11 +39,15 @@ fn main() {
         ))
         .add_systems(Update, (
             timer::check_losetimer,
+            timer::timer_runout,
+            timer::timer_stop,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
         .add_event::<player::items::DropEvent>()
         .add_event::<player::tasks::computer::SuccessEvent>()
+        .add_event::<timer::TimerRunout>()
+        .add_event::<timer::TimerStop>()
         .run();
 }
 
