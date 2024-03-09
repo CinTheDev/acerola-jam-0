@@ -74,32 +74,52 @@ pub fn check_task_darkmatter(
 
 pub fn check_task_exoticalloy(
     mut event: EventReader<AlloyCreationFinshed>,
+    mut query: Query<(&TaskText, &mut Text)>,
 ) {
-    todo!();
+    for _ in event.read() {
+        let mut text = get_task(1, query.iter_mut());
+        cross_out_text(&mut text);
+    }
 }
 
 pub fn check_task_alloyplacement(
     mut event: EventReader<AlloyPlacementFinished>,
+    mut query: Query<(&TaskText, &mut Text)>,
 ) {
-    todo!();
+    for _ in event.read() {
+        let mut text = get_task(2, query.iter_mut());
+        cross_out_text(&mut text);
+    }
 }
 
 pub fn check_task_particleaccelerator(
     mut event: EventReader<ParticleAcceleratorFinished>,
+    mut query: Query<(&TaskText, &mut Text)>,
 ) {
-    todo!();
+    for _ in event.read() {
+        let mut text = get_task(3, query.iter_mut());
+        cross_out_text(&mut text);
+    }
 }
 
 pub fn check_task_computer(
     mut event: EventReader<SuccessEvent>,
+    mut query: Query<(&TaskText, &mut Text)>,
 ) {
-    todo!();
+    for _ in event.read() {
+        let mut text = get_task(4, query.iter_mut());
+        cross_out_text(&mut text);
+    }
 }
 
 pub fn check_task_finalbutton(
     mut event: EventReader<TimerStop>,
+    mut query: Query<(&TaskText, &mut Text)>,
 ) {
-    todo!();
+    for _ in event.read() {
+        let mut text = get_task(5, query.iter_mut());
+        cross_out_text(&mut text);
+    }
 }
 
 fn cross_out_text(text: &mut Text) {
