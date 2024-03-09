@@ -47,13 +47,15 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
         NodeBundle {
             style: Style {
                 width: Val::Px(400.0),
-                height: Val::Px(300.0),
+                height: Val::Px(200.0),
                 margin: UiRect::all(Val::Px(5.0)),
                 border: UiRect::all(Val::Px(5.0)),
                 display: Display::Grid,
+                align_items: AlignItems::Center,
+                justify_items: JustifyItems::Center,
                 ..default()
             },
-            background_color: Color::rgb(0.0, 0.0, 0.0).into(),
+            background_color: Color::rgba(0.0, 0.0, 0.0, 0.75).into(),
             ..default()
         },
     )).with_children(|task_root| {
