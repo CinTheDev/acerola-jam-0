@@ -46,10 +46,9 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         NodeBundle {
             style: Style {
-                width: Val::Px(400.0),
                 height: Val::Px(200.0),
                 margin: UiRect::all(Val::Px(5.0)),
-                border: UiRect::all(Val::Px(5.0)),
+                border: UiRect::axes(Val::Px(10.0), Val::Px(5.0)),
                 display: Display::Grid,
                 align_items: AlignItems::Center,
                 justify_items: JustifyItems::Center,
