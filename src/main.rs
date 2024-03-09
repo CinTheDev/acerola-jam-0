@@ -48,6 +48,12 @@ fn main() {
             timer::timer_stop,
             ui::ui_timer::update_timer_ui,
             ui::ui_cursor::check_cursor,
+            ui::ui_tasks::check_task_darkmatter,
+            ui::ui_tasks::check_task_exoticalloy,
+            ui::ui_tasks::check_task_alloyplacement,
+            ui::ui_tasks::check_task_particleaccelerator,
+            ui::ui_tasks::check_task_computer,
+            ui::ui_tasks::check_task_finalbutton,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
