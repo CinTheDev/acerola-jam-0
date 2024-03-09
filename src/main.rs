@@ -63,6 +63,7 @@ fn main() {
         .add_event::<player::tasks::particle_accelerator::ParticleAcceleratorFinished>()
         .add_event::<player::tasks::computer::SuccessEvent>()
         .add_event::<player::tasks::q_t_de::DarkMatterFinished>()
+        .add_event::<player::tasks::q_t_de::FinalButtonActivated>()
         .add_event::<timer::TimerRunout>()
         .add_event::<timer::TimerStop>()
         .run();

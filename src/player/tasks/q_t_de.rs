@@ -9,6 +9,9 @@ use super::particle_accelerator;
 #[derive(Event)]
 pub struct DarkMatterFinished();
 
+#[derive(Event)]
+pub struct FinalButtonActivated();
+
 #[derive(Bundle)]
 pub struct CleanDarkMatterBundle {
     pub item_drop: ItemDropBundle,
@@ -41,6 +44,7 @@ pub fn check_all_tasks_finished(
     q_particle_accelerator: Query<&particle_accelerator::MasterTask>,
     mut q_finalbutton: Query<(&mut FinalButtonTask, &mut SphereCollider)>,
     mut ev_timerstop: EventWriter<TimerStop>,
+    ev_finalbutton: EventWriter<FinalButtonActivated>,
 ) {
     let task_darkmatter = q_darkmatter.single();
     let task_computer = q_computer.single();
@@ -58,7 +62,7 @@ pub fn check_all_tasks_finished(
     
     if ! tasks_done { return }
 
-    activate_final_button(task_finalbutton.1.as_mut());
+    activate_final_button(task_finalbutton.1.as_mut(), ev_finalbutton);
 
     if ! task_finalbutton.0.is_done { return }
 
@@ -104,8 +108,13 @@ pub fn check_final_button_input(
     finalbutton.is_done = true;
 }
 
-fn activate_final_button(collider: &mut SphereCollider) {
+fn activate_final_button(
+    collider: &mut SphereCollider,
+    mut event: EventWriter<FinalButtonActivated>
+) {
     collider.enabled = true;
+    event.send(FinalButtonActivated());
+
 }
 
 pub fn instance_dark_matter() -> CleanDarkMatterBundle {

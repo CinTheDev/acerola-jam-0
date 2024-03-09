@@ -5,7 +5,7 @@ use crate::{
         alloy_machine::{AlloyCreationFinshed, AlloyPlacementFinished},
         computer::SuccessEvent,
         particle_accelerator::ParticleAcceleratorFinished,
-        q_t_de::DarkMatterFinished
+        q_t_de::{DarkMatterFinished, FinalButtonActivated}
     },
     timer::TimerStop
 };
@@ -130,10 +130,16 @@ pub fn check_task_computer(
 }
 
 pub fn check_task_finalbutton(
-    mut event: EventReader<TimerStop>,
+    mut event_timerstop: EventReader<TimerStop>,
+    mut event_finalbutton: EventReader<FinalButtonActivated>,
     mut query: Query<(&TaskText, &mut Text)>,
 ) {
-    for _ in event.read() {
+    for _ in event_finalbutton.read() {
+        let mut text = get_task(5, query.iter_mut());
+        update_text_style(&mut text, TaskTextState::Active);
+    }
+
+    for _ in event_timerstop.read() {
         let mut text = get_task(5, query.iter_mut());
         update_text_style(&mut text, TaskTextState::Finished);
     }
