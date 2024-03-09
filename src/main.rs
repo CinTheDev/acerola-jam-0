@@ -4,6 +4,7 @@ use bevy::window::{CursorGrabMode, PrimaryWindow};
 mod player;
 mod generate_colliders;
 mod timer;
+mod ui;
 
 fn main() {
     App::new()
