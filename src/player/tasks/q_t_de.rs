@@ -65,7 +65,10 @@ pub fn check_all_tasks_finished(
     ev_timerstop.send(TimerStop());
 }
 
-pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>) {
+pub fn check_dark_matter_finished(
+    mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>,
+    mut event: EventWriter<DarkMatterFinished>,
+) {
     let mut task_ref = q_task.single_mut();
     let task = task_ref.0.as_mut();
     let itemdrop = task_ref.1;
@@ -75,6 +78,7 @@ pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &
     if ! itemdrop.is_dropped { return }
 
     task.is_done = true;
+    event.send(DarkMatterFinished());
     info!("Dark matter task finished");
 }
 

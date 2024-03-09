@@ -46,6 +46,7 @@ pub fn check_buttons_solution(
     q_buttons: Query<&RotateButton>,
     mut q_task: Query<&mut RotateButtonsTask>,
     mut q_master: Query<&mut MasterTask>,
+    mut event: EventWriter<ParticleAcceleratorFinished>,
 ) {
     let mut task = q_task.single_mut();
     let mut master = q_master.single_mut();
@@ -61,6 +62,7 @@ pub fn check_buttons_solution(
 
     master.is_all_done = true;
 
+    event.send(ParticleAcceleratorFinished());
     info!("Particle accelerator task done");
 }
 

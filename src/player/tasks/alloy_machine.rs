@@ -102,6 +102,7 @@ fn output_alloy(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>)
 pub fn check_alloy_finished(
     mut q_task_master: Query<&mut MasterTask>,
     mut q_task: Query<(&mut AlloyTask, &ItemDrop)>,
+    mut event: EventWriter<AlloyPlacementFinished>,
 ) {
     let mut task_master = q_task_master.single_mut();
     let task = q_task.single_mut();
@@ -114,6 +115,7 @@ pub fn check_alloy_finished(
 
     task_prop.is_done = true;
     task_master.is_all_done = true;
+    event.send(AlloyPlacementFinished());
     info!("Finished alloy machine tasks");
 }
 
@@ -124,7 +126,8 @@ pub fn check_if_finished(
     q_task_hammer: Query<(&mut IronHammerTask, &ItemDrop)>,
     q_task_screwdriver: Query<(&mut IronScrewdriverTask, &ItemDrop)>,
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
-    q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>
+    q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>,
+    mut event: EventWriter<AlloyCreationFinshed>,
 ) {
     let mut task_master = q_task_master.single_mut();
 
@@ -141,6 +144,7 @@ pub fn check_if_finished(
 
     if all_tasks_finished {
         output_alloy(q_items);
+        event.send(AlloyCreationFinshed());
     }
 }
 
