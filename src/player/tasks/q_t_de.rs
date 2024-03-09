@@ -20,6 +20,7 @@ pub struct FinalButtonTaskBundle {
     transform: Transform,
     collider: SphereCollider,
     task: FinalButtonTask,
+    r_collider: RaycastCursor,
 }
 
 #[derive(Component)]
@@ -138,6 +139,7 @@ pub fn instance_finalbutton() -> FinalButtonTaskBundle {
         task: FinalButtonTask {
             is_done: false,
             game_finished: false,
-        }
+        },
+        r_collider: RaycastCursor,
     }
 }
