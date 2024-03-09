@@ -44,7 +44,6 @@ pub fn check_losetimer(
     mut ev_timer_runout: EventWriter<TimerRunout>,
 ) {
     lose_timer.timer.tick(time.delta());
-    info!("Remaining time: {}", lose_timer.timer.remaining_secs());
 
     if ! lose_timer.timer.finished() { return }
 
