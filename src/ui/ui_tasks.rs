@@ -15,6 +15,7 @@ pub struct TaskText {
     id: usize,
 }
 
+#[derive(Clone, Copy)]
 enum TaskTextState {
     Inactive,
     Active,
@@ -30,6 +31,15 @@ const TASK_TEXTS: [&'static str; TASK_COUNT] = [
     "Prepare Particle Accelerator",
     "Start Computer",
     "Start the Experiment",
+];
+
+const TASK_START_STATES: [TaskTextState; TASK_COUNT] = [
+    TaskTextState::Active,
+    TaskTextState::Active,
+    TaskTextState::Inactive,
+    TaskTextState::Active,
+    TaskTextState::Active,
+    TaskTextState::Inactive,
 ];
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
@@ -57,10 +67,7 @@ fn spawn_task_text(parent: &mut ChildBuilder, index: usize) {
     parent.spawn((
         TextBundle::from_section(
             TASK_TEXTS[index],
-            TextStyle {
-                font_size: 18.0,
-                ..default()
-            }
+            get_style_from_state(TASK_START_STATES[index])
         ),
         TaskText {
             id: index,
@@ -85,6 +92,10 @@ pub fn check_task_exoticalloy(
     for _ in event.read() {
         let mut text = get_task(1, query.iter_mut());
         update_text_style(&mut text, TaskTextState::Finished);
+        drop(text);
+
+        let mut text_next = get_task(2, query.iter_mut());
+        update_text_style(&mut text_next, TaskTextState::Active);
     }
 }
 
