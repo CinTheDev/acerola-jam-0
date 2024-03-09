@@ -4,6 +4,10 @@ use bevy::window::{CursorGrabMode, PrimaryWindow};
 mod player;
 mod generate_colliders;
 mod timer;
+mod ui;
+
+#[derive(Component)]
+pub struct RaycastCursor;
 
 fn main() {
     App::new()
@@ -14,6 +18,7 @@ fn main() {
             generate_colliders::generate_colliders,
             player::tasks::instance_tasks,
             timer::setup_losetimer,
+            ui::setup,
         ))
         .add_systems(Update, (
             player::move_player,
@@ -41,11 +46,24 @@ fn main() {
             timer::check_losetimer,
             timer::timer_runout,
             timer::timer_stop,
+            ui::ui_timer::update_timer_ui,
+            ui::ui_cursor::check_cursor,
+            ui::ui_tasks::check_task_darkmatter,
+            ui::ui_tasks::check_task_exoticalloy,
+            ui::ui_tasks::check_task_alloyplacement,
+            ui::ui_tasks::check_task_particleaccelerator,
+            ui::ui_tasks::check_task_computer,
+            ui::ui_tasks::check_task_finalbutton,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
         .add_event::<player::items::DropEvent>()
+        .add_event::<player::tasks::alloy_machine::AlloyCreationFinshed>()
+        .add_event::<player::tasks::alloy_machine::AlloyPlacementFinished>()
+        .add_event::<player::tasks::particle_accelerator::ParticleAcceleratorFinished>()
         .add_event::<player::tasks::computer::SuccessEvent>()
+        .add_event::<player::tasks::q_t_de::DarkMatterFinished>()
+        .add_event::<player::tasks::q_t_de::FinalButtonActivated>()
         .add_event::<timer::TimerRunout>()
         .add_event::<timer::TimerStop>()
         .run();

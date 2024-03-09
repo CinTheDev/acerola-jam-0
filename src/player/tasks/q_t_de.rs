@@ -1,9 +1,16 @@
 use bevy::prelude::*;
 use crate::player::{collision::{raycast, SphereCollider}, items::{ItemDrop, ItemDropBundle, ItemId}, Player};
+use crate::RaycastCursor;
 use crate::timer::TimerStop;
 use super::computer;
 use super::alloy_machine;
 use super::particle_accelerator;
+
+#[derive(Event)]
+pub struct DarkMatterFinished();
+
+#[derive(Event)]
+pub struct FinalButtonActivated();
 
 #[derive(Bundle)]
 pub struct CleanDarkMatterBundle {
@@ -16,6 +23,7 @@ pub struct FinalButtonTaskBundle {
     transform: Transform,
     collider: SphereCollider,
     task: FinalButtonTask,
+    r_collider: RaycastCursor,
 }
 
 #[derive(Component)]
@@ -36,6 +44,7 @@ pub fn check_all_tasks_finished(
     q_particle_accelerator: Query<&particle_accelerator::MasterTask>,
     mut q_finalbutton: Query<(&mut FinalButtonTask, &mut SphereCollider)>,
     mut ev_timerstop: EventWriter<TimerStop>,
+    ev_finalbutton: EventWriter<FinalButtonActivated>,
 ) {
     let task_darkmatter = q_darkmatter.single();
     let task_computer = q_computer.single();
@@ -53,7 +62,7 @@ pub fn check_all_tasks_finished(
     
     if ! tasks_done { return }
 
-    activate_final_button(task_finalbutton.1.as_mut());
+    activate_final_button(task_finalbutton.1.as_mut(), ev_finalbutton);
 
     if ! task_finalbutton.0.is_done { return }
 
@@ -61,7 +70,10 @@ pub fn check_all_tasks_finished(
     ev_timerstop.send(TimerStop());
 }
 
-pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>) {
+pub fn check_dark_matter_finished(
+    mut q_task: Query<(&mut CleanDarkMatterTask, &ItemDrop)>,
+    mut event: EventWriter<DarkMatterFinished>,
+) {
     let mut task_ref = q_task.single_mut();
     let task = task_ref.0.as_mut();
     let itemdrop = task_ref.1;
@@ -71,6 +83,7 @@ pub fn check_dark_matter_finished(mut q_task: Query<(&mut CleanDarkMatterTask, &
     if ! itemdrop.is_dropped { return }
 
     task.is_done = true;
+    event.send(DarkMatterFinished());
     info!("Dark matter task finished");
 }
 
@@ -95,8 +108,13 @@ pub fn check_final_button_input(
     finalbutton.is_done = true;
 }
 
-fn activate_final_button(collider: &mut SphereCollider) {
+fn activate_final_button(
+    collider: &mut SphereCollider,
+    mut event: EventWriter<FinalButtonActivated>
+) {
     collider.enabled = true;
+    event.send(FinalButtonActivated());
+
 }
 
 pub fn instance_dark_matter() -> CleanDarkMatterBundle {
@@ -112,6 +130,7 @@ pub fn instance_dark_matter() -> CleanDarkMatterBundle {
                 activates_id: ItemId::None,
                 is_dropped: false,
             },
+            r_cursor: RaycastCursor,
         },
         task: CleanDarkMatterTask {
             is_done: false,
@@ -129,6 +148,7 @@ pub fn instance_finalbutton() -> FinalButtonTaskBundle {
         task: FinalButtonTask {
             is_done: false,
             game_finished: false,
-        }
+        },
+        r_collider: RaycastCursor,
     }
 }

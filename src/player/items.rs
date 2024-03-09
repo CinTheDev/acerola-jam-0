@@ -1,5 +1,7 @@
 use bevy::prelude::*;
-use super::collision;
+use crate::RaycastCursor;
+
+use super::collision::{self, SphereCollider};
 use once_cell::sync::Lazy;
 
 pub mod spawn_items;
@@ -29,6 +31,7 @@ pub struct ItemBundle {
     pub scene: SceneBundle,
     pub collider: collision::SphereCollider,
     pub item: Item,
+    pub r_cursor: RaycastCursor,
 }
 
 #[derive(Component)]
@@ -44,6 +47,7 @@ pub struct ItemDropBundle {
     pub transform: Transform,
     pub collider: collision::SphereCollider,
     pub item_drop: ItemDrop,
+    pub r_cursor: RaycastCursor,
 }
 
 #[derive(Component)]
@@ -118,7 +122,7 @@ pub fn enable_itemdrops(
 pub fn pickup_item(
     mut ev_pickup: EventReader<PickupEvent>,
     mut q_player: Query<&mut super::Player>,
-    mut q_items: Query<&mut Item>,
+    mut q_items: Query<(&mut Item, &mut SphereCollider)>,
 ) { 
     for ev in ev_pickup.read() {
         let mut player = q_player.single_mut();
@@ -127,7 +131,7 @@ pub fn pickup_item(
         if player.item_id != ItemId::None { return; }
 
         // Search for item
-        for mut i in q_items.iter_mut() {
+        for (mut i, mut coll) in q_items.iter_mut() {
             if i.id != item_id { continue }
 
             if ! i.pickup { return } // Do not pick up item twice or something
@@ -135,6 +139,7 @@ pub fn pickup_item(
             i.pickup = false;
             i.lerp_active = false;
             player.item_id = i.id;
+            coll.enabled = false;
 
             info!("Pickup Event: {:?}", i.id);
 
@@ -146,7 +151,7 @@ pub fn pickup_item(
 pub fn cancel_itemdrop(
     mut ev_cancel: EventReader<DropCancelEvent>,
     mut q_player: Query<&mut super::Player>,
-    mut q_items: Query<&mut Item>,
+    mut q_items: Query<(&mut Item, &mut SphereCollider)>,
 ) {
     for _ev in ev_cancel.read() {
         let mut player = q_player.single_mut();
@@ -154,12 +159,13 @@ pub fn cancel_itemdrop(
 
         if player.item_id == ItemId::None { return }
 
-        for mut i in q_items.iter_mut() {
+        for (mut i, mut coll) in q_items.iter_mut() {
             if i.id != item_id { continue }
 
             i.pickup = true;
             i.lerp_active = true;
             player.item_id = ItemId::None;
+            coll.enabled = true;
 
             info!("Cancel event: {:?}", i.id);
 

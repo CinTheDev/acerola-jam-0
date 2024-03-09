@@ -46,7 +46,7 @@ pub struct Player {
     sensitivity: f32,
 
     rotation: Vec2,
-    item_id: ItemId,
+    pub item_id: ItemId,
 
     locked: bool,
 }

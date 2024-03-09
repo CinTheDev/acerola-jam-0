@@ -3,6 +3,7 @@ use std::f32::consts::PI;
 use rand;
 
 use crate::player::{collision::{raycast_mut, SphereCollider}, Player};
+use crate::RaycastCursor;
 
 const BUTTON_ROTATION: f32 = 28.252 * (PI / 180.0);
 const LERP_FACTOR: f32 = 0.25;
@@ -12,6 +13,7 @@ pub struct RotateButtonBundle {
     scene: SceneBundle,
     collider: SphereCollider,
     rotate_button: RotateButton,
+    r_cursor: RaycastCursor,
 }
 
 #[derive(Component)]
@@ -116,6 +118,7 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
                     position_x: x,
                     position_y: y,
                 },
+                r_cursor: RaycastCursor,
             });
         }
     }

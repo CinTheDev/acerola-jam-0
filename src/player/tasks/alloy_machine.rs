@@ -1,7 +1,13 @@
 use bevy::prelude::*;
 
-use crate::player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}};
+use crate::{player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}}, RaycastCursor};
 use super::ItemDropTask;
+
+#[derive(Event)]
+pub struct AlloyCreationFinshed();
+
+#[derive(Event)]
+pub struct AlloyPlacementFinished();
 
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
@@ -96,6 +102,7 @@ fn output_alloy(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>)
 pub fn check_alloy_finished(
     mut q_task_master: Query<&mut MasterTask>,
     mut q_task: Query<(&mut AlloyTask, &ItemDrop)>,
+    mut event: EventWriter<AlloyPlacementFinished>,
 ) {
     let mut task_master = q_task_master.single_mut();
     let task = q_task.single_mut();
@@ -108,6 +115,7 @@ pub fn check_alloy_finished(
 
     task_prop.is_done = true;
     task_master.is_all_done = true;
+    event.send(AlloyPlacementFinished());
     info!("Finished alloy machine tasks");
 }
 
@@ -118,7 +126,8 @@ pub fn check_if_finished(
     q_task_hammer: Query<(&mut IronHammerTask, &ItemDrop)>,
     q_task_screwdriver: Query<(&mut IronScrewdriverTask, &ItemDrop)>,
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
-    q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>
+    q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>,
+    mut event: EventWriter<AlloyCreationFinshed>,
 ) {
     let mut task_master = q_task_master.single_mut();
 
@@ -135,6 +144,7 @@ pub fn check_if_finished(
 
     if all_tasks_finished {
         output_alloy(q_items);
+        event.send(AlloyCreationFinshed());
     }
 }
 
@@ -174,6 +184,7 @@ pub fn instance_alloy() -> AlloyTaskBundle {
                 activates_id: ItemId::None,
                 is_dropped: false
             },
+            r_cursor: RaycastCursor,
         },
         task: AlloyTask {
             is_done: false,
@@ -193,7 +204,8 @@ pub fn instance_lead() -> LeadTaskBundle {
                 accepts_id: ItemId::Lead,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: LeadTask {
             is_done: false
@@ -213,7 +225,8 @@ pub fn instance_ironblock() -> IronBlockTaskBundle {
                 accepts_id: ItemId::IronBlock,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronBlockTask {
             is_done: false
@@ -233,7 +246,8 @@ pub fn instance_ironhammer() -> IronHammerTaskBundle {
                 accepts_id: ItemId::IronHammer,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronHammerTask {
             is_done: false
@@ -253,7 +267,8 @@ pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
                 accepts_id: ItemId::IronScrewdriver,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronScrewdriverTask {
             is_done: false
@@ -273,7 +288,8 @@ pub fn instance_ironphone() -> IronPhoneTaskBundle {
                 accepts_id: ItemId::IronPhone,
                 activates_id: ItemId::None,
                 is_dropped: false,
-            }
+            },
+            r_cursor: RaycastCursor,
         },
         task: IronPhoneTask {
             is_done: false
