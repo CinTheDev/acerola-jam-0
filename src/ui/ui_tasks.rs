@@ -1,5 +1,12 @@
 use bevy::prelude::*;
 
+const TASK_TEXTS: [&'static str; 4] = [
+    "Task 1",
+    "Task 2",
+    "Task 3",
+    "Task 4",
+];
+
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         NodeBundle {
