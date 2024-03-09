@@ -43,6 +43,7 @@ fn main() {
             timer::check_losetimer,
             timer::timer_runout,
             timer::timer_stop,
+            ui::ui_timer::update_timer_ui,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()

@@ -3,6 +3,14 @@ use bevy::prelude::*;
 #[derive(Component)]
 pub struct TimerText;
 
+pub fn update_timer_ui(
+    mut query: Query<&mut Text, With<TimerText>>,
+) {
+    let mut text = query.single_mut();
+
+    text.sections.first_mut().unwrap().value = "Hi".to_string();
+}
+
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn(NodeBundle {
         style: Style {

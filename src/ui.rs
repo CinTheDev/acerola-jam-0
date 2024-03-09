@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-mod ui_timer;
+pub mod ui_timer;
 
 pub fn setup(mut commands: Commands) {
     commands.spawn(NodeBundle {
