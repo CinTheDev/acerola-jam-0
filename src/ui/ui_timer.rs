@@ -21,8 +21,8 @@ pub fn update_timer_ui(
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn(NodeBundle {
         style: Style {
-            width: Val::Px(200.0),
-            height: Val::Px(100.0),
+            height: Val::Px(70.0),
+            aspect_ratio: Some(2.58),
             border: UiRect::all(Val::Px(2.0)),
             ..default()
         },
@@ -32,7 +32,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
             timer_background.spawn((TextBundle::from_section(
                 "Test",
                 TextStyle {
-                    font_size: 100.0,
+                    font_size: 70.0,
                     ..default()
                 },
             ),
