@@ -25,12 +25,12 @@ enum TaskTextState {
 const TASK_COUNT: usize = 6;
 
 const TASK_TEXTS: [&'static str; TASK_COUNT] = [
-    "Clean Dark Matter from Experiment",
-    "Create Exotic Alloy",
-    "Place Alloy in Experiment",
-    "Prepare Particle Accelerator",
-    "Start Computer",
-    "Start the Experiment",
+    "Clean the Quantum Tunnel Device",
+    "Create Exotic Alloy with Machine",
+    "Place Exotic Alloy in Experiment",
+    "Prepare the Particle Accelerator",
+    "Start and log in to the Computer",
+    "Start the Quantum Tunnel Device",
 ];
 
 const TASK_START_STATES: [TaskTextState; TASK_COUNT] = [
