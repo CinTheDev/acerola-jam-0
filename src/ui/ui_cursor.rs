@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::player::{collision::{raycast, SphereCollider}, items::{Item, ItemDrop, ItemId}, Player};
+use crate::player::{collision::{raycast, SphereCollider}, Player};
 use crate::RaycastCursor;
 
 #[derive(Component)]
@@ -10,47 +10,23 @@ pub struct CursorDefault;
 pub struct CursorSelect;
 
 pub fn check_cursor(
-    q_player: Query<(&Transform, &Player)>,
-    //q_items: Query<(&Transform, &SphereCollider, &Item)>,
-    //q_drops: Query<(&Transform, &SphereCollider, &ItemDrop)>,
+    q_player: Query<&Transform, With<Player>>,
     q_points: Query<(&Transform, &SphereCollider, &RaycastCursor)>,
     mut q_cursor_default: Query<&mut Style, (With<CursorDefault>, Without<CursorSelect>)>,
     mut q_cursor_select: Query<&mut Style, (With<CursorSelect>, Without<CursorDefault>)>,
 ) {
-    let (player_trans, player_prop) = q_player.single();
+    let player_trans = q_player.single();
 
-    /*
-    let raycast_items = raycast(
-        player_trans.translation,
-        player_trans.forward() * 5.0,
-        q_items.iter()
-    );
-    let raycast_drops = raycast(
-        player_trans.translation,
-        player_trans.forward() * 5.0,
-        q_drops.iter()
-    );
-    */
     let raycast = raycast(
         player_trans.translation,
         player_trans.forward() * 5.0,
         q_points.iter()
     );
 
-    //let player_holding_item = player_prop.item_id != ItemId::None;
     let mut cursor_default = q_cursor_default.single_mut();
     let mut cursor_select = q_cursor_select.single_mut();
 
     update_cursor(raycast.is_some(), &mut cursor_default, &mut cursor_select);
-
-    /*
-    if player_holding_item {
-        update_cursor(raycast_drops.is_some(), cursor_default.as_mut(), cursor_select.as_mut());
-    }
-    else {
-        update_cursor(raycast_items.is_some(), cursor_default.as_mut(), cursor_select.as_mut());
-    }
-    */
 }
 
 fn update_cursor(
