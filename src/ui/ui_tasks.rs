@@ -1,10 +1,12 @@
 use bevy::prelude::*;
 
-const TASK_TEXTS: [&'static str; 4] = [
-    "Task 1",
-    "Task 2",
-    "Task 3",
-    "Task 4",
+const TASK_TEXTS: [&'static str; 6] = [
+    "Clean Dark Matter from Experiment",
+    "Create Exotic Alloy",
+    "Place Alloy in Experiment",
+    "Prepare Particle Accelerator",
+    "Start Computer",
+    "Start the Experiment",
 ];
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
