@@ -22,14 +22,16 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
             ..default()
         },
     )).with_children(|task_root| {
-        spawn_task_text(task_root);
+        for text in TASK_TEXTS {
+            spawn_task_text(task_root, text);
+        }
     });
 }
 
-fn spawn_task_text(parent: &mut ChildBuilder) {
+fn spawn_task_text(parent: &mut ChildBuilder, text: &str) {
     parent.spawn(
         TextBundle::from_section(
-            "Test",
+            text,
             TextStyle {
                 font_size: 18.0,
                 ..default()
