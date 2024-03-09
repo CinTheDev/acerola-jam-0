@@ -10,7 +10,14 @@ use crate::{
     timer::TimerStop
 };
 
-const TASK_TEXTS: [&'static str; 6] = [
+#[derive(Component)]
+pub struct TaskText {
+    id: usize,
+}
+
+const TASK_COUNT: usize = 6;
+
+const TASK_TEXTS: [&'static str; TASK_COUNT] = [
     "Clean Dark Matter from Experiment",
     "Create Exotic Alloy",
     "Place Alloy in Experiment",
@@ -34,22 +41,25 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
             ..default()
         },
     )).with_children(|task_root| {
-        for text in TASK_TEXTS {
-            spawn_task_text(task_root, text);
+        for i in 0..TASK_COUNT {
+            spawn_task_text(task_root, i);
         }
     });
 }
 
-fn spawn_task_text(parent: &mut ChildBuilder, text: &str) {
-    parent.spawn(
+fn spawn_task_text(parent: &mut ChildBuilder, index: usize) {
+    parent.spawn((
         TextBundle::from_section(
-            text,
+            TASK_TEXTS[index],
             TextStyle {
                 font_size: 18.0,
                 ..default()
             }
-        )
-    );
+        ),
+        TaskText {
+            id: index,
+        }
+    ));
 }
 
 pub fn check_task_darkmatter(
@@ -86,4 +96,20 @@ pub fn check_task_finalbutton(
     mut event: EventReader<TimerStop>,
 ) {
     todo!();
+}
+
+fn get_task<'a, I>(
+    id: usize,
+    query: I
+) -> Mut<'a, Text>
+where
+    I: Iterator<Item = (&'a TaskText, Mut<'a, Text>)>
+{
+    for (properties, text) in query {
+        if properties.id == id {
+            return text;
+        }
+    }
+
+    panic!("Task Text not found");
 }
