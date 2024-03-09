@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+mod ui_timer;
+
 pub fn setup(mut commands: Commands) {
     commands.spawn(NodeBundle {
         style: Style {
@@ -11,23 +13,6 @@ pub fn setup(mut commands: Commands) {
         ..default()
     }).with_children(|parent| {
         // Timer
-        parent.spawn(NodeBundle {
-            style: Style {
-                width: Val::Px(200.0),
-                height: Val::Px(100.0),
-                border: UiRect::all(Val::Px(2.0)),
-                ..default()
-            },
-            background_color: Color::rgb(0.0, 0.0, 0.0).into(),
-            ..default()
-        }).with_children(|timer_background| {
-            timer_background.spawn(TextBundle::from_section(
-                "Test",
-                TextStyle {
-                    font_size: 100.0,
-                    ..default()
-                },
-            ));
-        });
+        ui_timer::spawn_ui(parent);
     });
 }
