@@ -15,6 +15,7 @@ fn main() {
             generate_colliders::generate_colliders,
             player::tasks::instance_tasks,
             timer::setup_losetimer,
+            ui::setup,
         ))
         .add_systems(Update, (
             player::move_player,
