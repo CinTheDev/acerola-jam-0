@@ -14,7 +14,8 @@ pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         },
         ..default()
     }).with_children(|parent| {
-        ui_timer::spawn_ui(parent);
         ui_cursor::spawn_ui(parent, asset_server);
+        ui_timer::spawn_ui(parent);
+        ui_tasks::spawn_ui(parent);
     });
 }
