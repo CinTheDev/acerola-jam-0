@@ -15,6 +15,12 @@ pub struct TaskText {
     id: usize,
 }
 
+enum TaskTextState {
+    Inactive,
+    Active,
+    Finished,
+}
+
 const TASK_COUNT: usize = 6;
 
 const TASK_TEXTS: [&'static str; TASK_COUNT] = [
@@ -68,7 +74,7 @@ pub fn check_task_darkmatter(
 ) {
     for _ in event.read() {
         let mut text = get_task(0, query.iter_mut());
-        cross_out_text(&mut text);
+        update_text_style(&mut text, TaskTextState::Finished);
     }
 }
 
@@ -78,7 +84,7 @@ pub fn check_task_exoticalloy(
 ) {
     for _ in event.read() {
         let mut text = get_task(1, query.iter_mut());
-        cross_out_text(&mut text);
+        update_text_style(&mut text, TaskTextState::Finished);
     }
 }
 
@@ -88,7 +94,7 @@ pub fn check_task_alloyplacement(
 ) {
     for _ in event.read() {
         let mut text = get_task(2, query.iter_mut());
-        cross_out_text(&mut text);
+        update_text_style(&mut text, TaskTextState::Finished);
     }
 }
 
@@ -98,7 +104,7 @@ pub fn check_task_particleaccelerator(
 ) {
     for _ in event.read() {
         let mut text = get_task(3, query.iter_mut());
-        cross_out_text(&mut text);
+        update_text_style(&mut text, TaskTextState::Finished);
     }
 }
 
@@ -108,7 +114,7 @@ pub fn check_task_computer(
 ) {
     for _ in event.read() {
         let mut text = get_task(4, query.iter_mut());
-        cross_out_text(&mut text);
+        update_text_style(&mut text, TaskTextState::Finished);
     }
 }
 
@@ -118,13 +124,35 @@ pub fn check_task_finalbutton(
 ) {
     for _ in event.read() {
         let mut text = get_task(5, query.iter_mut());
-        cross_out_text(&mut text);
+        update_text_style(&mut text, TaskTextState::Finished);
     }
 }
 
-fn cross_out_text(text: &mut Text) {
+fn get_style_from_state(state: TaskTextState) -> TextStyle {
+    match state {
+        TaskTextState::Active => TextStyle {
+            font_size: 18.0,
+            color: Color::rgb(1.0, 1.0, 1.0),
+            ..default()
+        },
+
+        TaskTextState::Inactive => TextStyle {
+            font_size: 18.0,
+            color: Color::rgb(0.2, 0.2, 0.2),
+            ..default()
+        },
+
+        TaskTextState::Finished => TextStyle {
+            font_size: 18.0,
+            color: Color::rgb(0.0, 0.0, 1.0),
+            ..default()
+        }
+    }
+}
+
+fn update_text_style(text: &mut Text, state: TaskTextState) {
     let section = text.sections.first_mut().unwrap();
-    section.style.color = Color::rgb(0.0, 0.0, 1.0);
+    section.style = get_style_from_state(state);
 }
 
 fn get_task<'a, I>(
