@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 pub mod ui_timer;
+pub mod ui_cursor;
 
 pub fn setup(mut commands: Commands) {
     commands.spawn(NodeBundle {
@@ -12,7 +13,7 @@ pub fn setup(mut commands: Commands) {
         },
         ..default()
     }).with_children(|parent| {
-        // Timer
         ui_timer::spawn_ui(parent);
+        ui_cursor::spawn_ui(parent);
     });
 }
