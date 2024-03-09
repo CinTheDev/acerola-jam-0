@@ -6,6 +6,9 @@ use super::computer;
 use super::alloy_machine;
 use super::particle_accelerator;
 
+#[derive(Event)]
+pub struct DarkMatterFinished();
+
 #[derive(Bundle)]
 pub struct CleanDarkMatterBundle {
     pub item_drop: ItemDropBundle,

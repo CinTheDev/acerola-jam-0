@@ -7,6 +7,9 @@ pub mod rotate_button;
 
 use rotate_button::{RotateButton, check_button_solution};
 
+#[derive(Event)]
+pub struct ParticleAcceleratorFinished();
+
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,

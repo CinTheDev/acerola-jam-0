@@ -3,6 +3,12 @@ use bevy::prelude::*;
 use crate::{player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}}, RaycastCursor};
 use super::ItemDropTask;
 
+#[derive(Event)]
+pub struct AlloyCreationFinshed();
+
+#[derive(Event)]
+pub struct AlloyPlacementFinished();
+
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,
