@@ -20,6 +20,14 @@ pub fn setup(mut commands: Commands) {
             },
             background_color: Color::rgb(0.0, 0.0, 0.0).into(),
             ..default()
+        }).with_children(|timer_background| {
+            timer_background.spawn(TextBundle::from_section(
+                "Test",
+                TextStyle {
+                    font_size: 100.0,
+                    ..default()
+                },
+            ));
         });
     });
 }
