@@ -22,7 +22,7 @@ pub fn pressed_button_restart(
 
         // Delete all objects marked for Respawn
         for entity_id in q_respawn.iter() {
-            commands.entity(entity_id).despawn();
+            commands.entity(entity_id).despawn_recursive();
         }
 
         // Regenerate items
