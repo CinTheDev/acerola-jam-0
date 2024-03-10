@@ -92,7 +92,7 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                 + first_transform.back() * dist_down * y as f32
             );
 
-            //let rotation = rand::random::<u8>() % 4;
+            let rotation = rand::random::<u8>() % 4;
 
             let scene_handle: Handle<Scene> = match BUTTON_TYPES[y][x] {
                 0 => asset_server.load("items/rotate_button_1.glb#Scene0"),
@@ -114,8 +114,7 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                     enabled: false,
                 },
                 rotate_button: RotateButton {
-                    //rotation,
-                    rotation: 0,
+                    rotation,
                     position_x: x,
                     position_y: y,
                 },
