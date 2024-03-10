@@ -9,6 +9,9 @@ mod ui;
 #[derive(Component)]
 pub struct RaycastCursor;
 
+#[derive(Component)]
+pub struct Respawn;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
