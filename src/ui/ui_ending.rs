@@ -3,6 +3,7 @@ use crate::{player::tasks::q_t_de::FinalButtonActivated, timer::TimerRunout};
 
 pub mod good_ending;
 pub mod bad_ending;
+pub mod buttons;
 
 #[derive(Component)]
 pub struct UIBackground {
