@@ -29,7 +29,10 @@ pub fn pressed_button_restart(
         crate::player::items::spawn_items::spawn_all_items(&mut commands, &asset_server);
 
         // Regenerate tasks
-        crate::player::tasks::instance_tasks(commands, asset_server);
+        crate::player::tasks::instance_tasks(&mut commands, &asset_server);
+
+        // Regenerate UI
+        crate::ui::setup(commands, asset_server);
 
         // Reset player position
 

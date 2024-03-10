@@ -6,6 +6,10 @@ pub mod ui_tasks;
 pub mod ui_ending;
 
 pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    instance_ui(&mut commands, &asset_server);
+}
+
+pub fn instance_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) {
     commands.spawn((
         NodeBundle {
             style: Style {

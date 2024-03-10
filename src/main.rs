@@ -19,7 +19,7 @@ fn main() {
             setup,
             cursor_grab,
             generate_colliders::generate_colliders,
-            player::tasks::instance_tasks,
+            player::tasks::setup,
             timer::setup_losetimer,
             ui::setup,
         ))

@@ -77,7 +77,7 @@ pub fn activate_buttons(mut query: Query<&mut SphereCollider, With<RotateButton>
     }
 }
 
-pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
     let first_transform = Transform::from_xyz(-0.609, 0.85, -8.736)
         .with_rotation(Quat::from_rotation_x(BUTTON_ROTATION));
 

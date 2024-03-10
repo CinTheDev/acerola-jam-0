@@ -44,7 +44,7 @@ fn update_cursor(
     }
 }
 
-pub fn spawn_ui(parent: &mut ChildBuilder, asset_server: Res<AssetServer>) {
+pub fn spawn_ui(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) {
     // Default cursor
     parent.spawn(NodeBundle {
         style: Style {

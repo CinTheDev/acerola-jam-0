@@ -6,7 +6,11 @@ pub mod alloy_machine;
 pub mod computer;
 pub mod particle_accelerator;
 
-pub fn instance_tasks(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    instance_tasks(&mut commands, &asset_server);
+}
+
+pub fn instance_tasks(commands: &mut Commands, asset_server: &Res<AssetServer>) {
     commands.spawn(q_t_de::instance_dark_matter());
 
     commands.spawn(alloy_machine::instance_master());
