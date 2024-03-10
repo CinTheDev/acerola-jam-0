@@ -65,7 +65,6 @@ fn main() {
             ui::ui_ending::buttons::check_button_restart,
             ui::ui_ending::buttons::check_button_quit,
             ui::ui_ending::buttons::pressed_button_restart,
-            ui::ui_ending::buttons::pressed_button_quit,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
@@ -79,7 +78,6 @@ fn main() {
         .add_event::<timer::TimerRunout>()
         .add_event::<timer::TimerStop>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
-        .add_event::<ui::ui_ending::buttons::QuitEvent>()
         .run();
 }
 

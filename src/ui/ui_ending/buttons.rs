@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{app::AppExit, prelude::*};
 
 #[derive(Component)]
 pub struct RestartButton;
@@ -9,22 +9,11 @@ pub struct QuitButton;
 #[derive(Event)]
 pub struct RestartEvent;
 
-#[derive(Event)]
-pub struct QuitEvent;
-
 pub fn pressed_button_restart(
     mut event: EventReader<RestartEvent>,
 ) {
     for _ in event.read() {
         info!("Restart button");
-    }
-}
-
-pub fn pressed_button_quit(
-    mut event: EventReader<QuitEvent>,
-) {
-    for _ in event.read() {
-        info!("Quit button");
     }
 }
 
@@ -58,7 +47,7 @@ pub fn check_button_quit(
         &mut BackgroundColor,
     ),
     (Changed<Interaction>, With<Button>, With<QuitButton>)>,
-    mut ev_quit: EventWriter<QuitEvent>,
+    mut ev_quit: EventWriter<AppExit>,
 ) {
     for (interaction, mut color) in q_interaction.iter_mut() {
         match *interaction {
@@ -70,7 +59,7 @@ pub fn check_button_quit(
             }
             Interaction::Pressed => {
                 *color = Color::rgb(0.1, 0.0, 0.0).into();
-                ev_quit.send(QuitEvent);
+                ev_quit.send(AppExit);
             }
         }
     }
