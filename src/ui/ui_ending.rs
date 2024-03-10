@@ -18,6 +18,9 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
         },
         background_color: Color::rgb(0.0, 0.0, 0.0).into(),
         ..default()
+    }).with_children(|root_node| {
+        good_ending::spawn_ui(root_node);
+        bad_ending::spawn_ui(root_node);
     });
 }
 
@@ -29,7 +32,7 @@ pub fn hide_ui(
     }
 }
 
-pub fn good_ending(
+pub fn check_good_ending(
     mut event: EventReader<FinalButtonActivated>,
 ) {
     for _ in event.read() {
@@ -37,7 +40,7 @@ pub fn good_ending(
     }
 }
 
-pub fn bad_ending(
+pub fn check_bad_ending(
     mut event: EventReader<TimerRunout>,
 ) {
     for _ in event.read() {
