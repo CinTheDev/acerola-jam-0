@@ -37,7 +37,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         get_ending_ui(),
         UIGoodEnding {
-            lerp_factor: 0.3,
+            lerp_factor: 0.05,
             lerp_active: false,
             percent: 100.0,
         },
@@ -48,7 +48,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         get_ending_ui(),
         UIBadEnding {
-            lerp_factor: 0.3,
+            lerp_factor: 0.05,
             lerp_active: false,
             percent: 100.0,
         },
