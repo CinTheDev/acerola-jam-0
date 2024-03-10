@@ -1,5 +1,5 @@
 use bevy::{prelude::*, window::{CursorGrabMode, PrimaryWindow}};
-use crate::{player::{tasks::q_t_de::FinalButtonActivated, Player}, timer::TimerRunout};
+use crate::{player::Player, timer::{TimerRunout, TimerStop}};
 
 pub mod good_ending;
 pub mod bad_ending;
@@ -129,7 +129,7 @@ pub fn swipe_text(
 }
 
 pub fn check_good_ending(
-    mut event: EventReader<FinalButtonActivated>,
+    mut event: EventReader<TimerStop>,
     mut q_background: Query<&mut UIBackground>,
     mut q_text: Query<&mut UIGoodEnding>,
     mut q_player: Query<&mut Player>,
