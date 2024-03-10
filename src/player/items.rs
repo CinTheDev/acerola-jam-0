@@ -55,7 +55,6 @@ pub struct ItemDropBundle {
 #[derive(Component)]
 pub struct ItemDrop {
     pub accepts_id: ItemId,
-    pub activates_id: ItemId,
     pub is_dropped: bool,
 }
 
@@ -204,7 +203,6 @@ pub fn drop_item(
 
         // TODO: Properly drop of item
         // Drop item
-        //item_properties.pickup = true; Activate next item pickup
         //item.desired_transform = [Itemdrop transform];
         player.item_id = ItemId::None;
 

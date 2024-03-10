@@ -134,7 +134,6 @@ pub fn instance_dark_matter() -> CleanDarkMatterBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::DarkMatter,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,

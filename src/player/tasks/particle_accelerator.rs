@@ -112,7 +112,6 @@ pub fn instance_copper() -> CopperTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::CopperFuel,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,

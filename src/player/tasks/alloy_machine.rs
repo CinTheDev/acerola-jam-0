@@ -181,7 +181,6 @@ pub fn instance_alloy() -> AlloyTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::ExoticAlloy,
-                activates_id: ItemId::None,
                 is_dropped: false
             },
             r_cursor: RaycastCursor,
@@ -203,7 +202,6 @@ pub fn instance_lead() -> LeadTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::Lead,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
@@ -225,7 +223,6 @@ pub fn instance_ironblock() -> IronBlockTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronBlock,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
@@ -247,7 +244,6 @@ pub fn instance_ironhammer() -> IronHammerTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronHammer,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
@@ -269,7 +265,6 @@ pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronScrewdriver,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
@@ -291,7 +286,6 @@ pub fn instance_ironphone() -> IronPhoneTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::IronPhone,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
