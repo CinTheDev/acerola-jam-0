@@ -3,7 +3,8 @@ use bevy::prelude::*;
 use crate::player::{collision::{raycast, SphereCollider}, Player};
 use crate::RaycastCursor;
 
-const PASSWORD: &str = "abc";
+// Ambiguous letters like l, I, 1, or O, 0 have been swapped with other letters
+const PASSWORD: &str = "tekMBtEYK4xXrULL7xY2NQILfu2cio";
 const LERP_FACTOR: f32 = 0.1;
 
 #[derive(Bundle)]
