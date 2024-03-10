@@ -1,6 +1,5 @@
 use bevy::{app::AppExit, prelude::*};
 
-use crate::player::{items::{Item, ItemDrop}, tasks::computer::ComputerTask};
 use crate::Respawn;
 
 #[derive(Component)]
