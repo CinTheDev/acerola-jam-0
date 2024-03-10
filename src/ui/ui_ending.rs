@@ -83,6 +83,7 @@ fn get_ending_ui() -> NodeBundle {
             justify_items: JustifyItems::Center,
             padding: UiRect::all(Val::Percent(10.0)),
             flex_direction: FlexDirection::Column,
+            row_gap: Val::Px(20.0),
             bottom: Val::Percent(100.0),
             ..default()
         },
