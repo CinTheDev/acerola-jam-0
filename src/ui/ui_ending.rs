@@ -37,7 +37,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         get_ending_ui(),
         UIGoodEnding {
-            lerp_factor: 0.05,
+            lerp_factor: 1.0,
             lerp_active: false,
             percent: 100.0,
         },
@@ -48,7 +48,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         get_ending_ui(),
         UIBadEnding {
-            lerp_factor: 0.05,
+            lerp_factor: 1.0,
             lerp_active: false,
             percent: 100.0,
         },
@@ -101,6 +101,7 @@ pub fn swipe_text(
     q_bg: Query<&UIBackground>,
     mut q_bad: Query<(&mut Style, &mut UIBadEnding), Without<UIGoodEnding>>,
     mut q_good: Query<(&mut Style, &mut UIGoodEnding), Without<UIBadEnding>>,
+    time: Res<Time>,
 ) {
     let prop_bg = q_bg.single();
     let (mut style_bad, mut prop_bad) = q_bad.single_mut();
@@ -109,12 +110,14 @@ pub fn swipe_text(
     if ! prop_bg.timer.finished() { return }
 
     if prop_bad.lerp_active {
-        prop_bad.percent = lerp(prop_bad.percent, 0.0, prop_bad.lerp_factor);
+        // Multiplying by delta time here is not making this truly framerate independent,
+        // but it's a good enough approximation
+        prop_bad.percent = lerp(prop_bad.percent, 0.0, prop_bad.lerp_factor * time.delta_seconds());
         style_bad.bottom = Val::Percent(prop_bad.percent);
     }
 
     if prop_good.lerp_active {
-        prop_good.percent = lerp(prop_good.percent, 0.0, prop_good.lerp_factor);
+        prop_good.percent = lerp(prop_good.percent, 0.0, prop_good.lerp_factor * time.delta_seconds());
         style_good.bottom = Val::Percent(prop_good.percent);
     }
 }
