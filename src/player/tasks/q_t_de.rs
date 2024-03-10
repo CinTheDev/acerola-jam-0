@@ -119,11 +119,17 @@ fn activate_final_button(
 }
 
 pub fn instance_dark_matter() -> CleanDarkMatterBundle {
+    let transform = Transform::from_xyz(-5.1, 1.0252, 9.2136)
+        .with_rotation(Quat::from_euler(
+            EulerRot::XYZ,
+            -167.85_f32.to_radians(), 92.72_f32.to_radians(), -14.162_f32.to_radians()
+    ));
+
     CleanDarkMatterBundle {
         item_drop: ItemDropBundle {
-            transform: Transform::from_xyz(-9.0, 0.75, 8.0),
+            transform,
             collider: SphereCollider {
-                radius: 1.0,
+                radius: 0.2,
                 enabled: true,
             },
             item_drop: ItemDrop {
