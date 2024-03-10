@@ -6,6 +6,18 @@ struct RestartButton;
 #[derive(Component)]
 struct QuitButton;
 
+pub fn check_button_restart(
+
+) {
+
+}
+
+pub fn check_button_quit(
+
+) {
+    
+}
+
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         get_button_background(Color::rgb(0.0, 0.2, 0.0)),
