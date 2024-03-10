@@ -25,8 +25,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
 fn get_button_background(bg: Color) -> ButtonBundle {
     ButtonBundle {
         style: Style {
-            width: Val::Px(300.0),
-            height: Val::Px(200.0),
+            height: Val::Px(100.0),
             border: UiRect::all(Val::Px(5.0)),
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
