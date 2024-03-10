@@ -18,7 +18,11 @@ fn main() {
             generate_colliders::generate_colliders,
             player::tasks::instance_tasks,
             timer::setup_losetimer,
-            ui::setup,
+            (
+                ui::setup,
+                //ui::ui_ending::hide_ui,
+            ).chain(),
+
         ))
         .add_systems(Update, (
             player::move_player,
@@ -54,6 +58,8 @@ fn main() {
             ui::ui_tasks::check_task_particleaccelerator,
             ui::ui_tasks::check_task_computer,
             ui::ui_tasks::check_task_finalbutton,
+            ui::ui_ending::check_good_ending,
+            ui::ui_ending::check_bad_ending,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
