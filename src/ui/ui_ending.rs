@@ -5,25 +5,59 @@ pub mod good_ending;
 pub mod bad_ending;
 
 #[derive(Component)]
-pub struct UIGoodEnding;
+pub struct UIBackground {
+
+}
 
 #[derive(Component)]
-pub struct UIBadEnding;
+pub struct UIGoodEnding {
+
+}
+
+#[derive(Component)]
+pub struct UIBadEnding {
+
+}
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
+        get_background_ui(),
+        UIBackground {
+
+        },
+    ));
+
+    parent.spawn((
         get_ending_ui(),
-        UIGoodEnding,
+        UIGoodEnding {
+
+        },
     )).with_children(|root_node| {
         good_ending::spawn_ui(root_node);
     });
 
     parent.spawn((
         get_ending_ui(),
-        UIBadEnding,
+        UIBadEnding {
+            
+        },
     )).with_children(|root_node| {
         bad_ending::spawn_ui(root_node);
     });
+}
+
+fn get_background_ui() -> NodeBundle {
+    NodeBundle {
+        style: Style {
+            width: Val::Percent(100.0),
+            height: Val::Percent(100.0),
+            display: Display::Grid,
+            position_type: PositionType::Absolute,
+            ..default()
+        },
+        background_color: Color::rgba(0.0, 0.0, 0.0, 0.0).into(),
+        ..default()
+    }
 }
 
 fn get_ending_ui() -> NodeBundle {
@@ -35,9 +69,9 @@ fn get_ending_ui() -> NodeBundle {
             position_type: PositionType::Absolute,
             padding: UiRect::all(Val::Percent(10.0)),
             justify_items: JustifyItems::Center,
+            bottom: Val::Percent(100.0),
             ..default()
         },
-        background_color: Color::rgb(0.0, 0.0, 0.0).into(),
         ..default()
     }
 }
