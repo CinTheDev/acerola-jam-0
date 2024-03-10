@@ -97,10 +97,13 @@ fn generate_cube(commands: &mut Commands, position: Vec2, rotation: f32, size: V
     });
 }
 
-const MANUAL_INFORMATION_BOXES: [(Vec2, f32, Vec2, bool); 3] = [
+const MANUAL_INFORMATION_BOXES: [(Vec2, f32, Vec2, bool); 6] = [
     (Vec2::new(0.0, 0.0), 0.0, Vec2::new(16.0, 20.0), true), // Walls
     (Vec2::new(0.0, 3.0), 0.0, Vec2::new(6.0, 6.0), false), // Table in middle
     (Vec2::new(3.0, -9.0), 0.0, Vec2::new(8.0, 2.0), false), // Controls
+    (Vec2::new(-5.0, 9.25), 0.0, Vec2::new(1.0, 1.0), false), // Trashcan
+    (Vec2::new(3.5, -4.5), 0.0, Vec2::new(13.0, 1.0), false), // Seperating Wall right
+    (Vec2::new(-8.25, -4.5), 0.0, Vec2::new(3.5, 1.0), false), // Seperating Wall left
 ];
 
 const MANUAL_INFORMATION_PLANES: [(Vec2, Vec2); 3] = [
