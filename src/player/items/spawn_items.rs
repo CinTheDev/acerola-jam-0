@@ -29,14 +29,15 @@ fn spawn_dark_matter(commands: &mut Commands, asset_server: &Res<AssetServer>) {
 }
 
 fn spawn_lead(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    let transform = Transform::from_xyz(8.5, 0.81, 4.75);
+    let transform = Transform::from_xyz(-8.3, 0.82, 9.0)
+        .with_rotation(Quat::from_rotation_y(10_f32.to_radians()));
 
     spawn_item(
         commands,
         asset_server,
         "items/lead.glb#Scene0".to_owned(),
         transform,
-        0.2,
+        0.1,
         ItemId::Lead,
         true,
     )
@@ -50,70 +51,75 @@ fn spawn_exotic_alloy(commands: &mut Commands, asset_server: &Res<AssetServer>) 
         asset_server,
         "items/lead.glb#Scene0".to_owned(),
         transform,
-        0.2,
+        0.1,
         ItemId::ExoticAlloy,
         false,
     )
 }
 
 fn spawn_ironblock(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    let transform = Transform::from_xyz(8.5, 0.81, 5.0);
+    let transform = Transform::from_xyz(8.0, 0.77, -1.0)
+        .with_rotation(Quat::from_rotation_y(150_f32.to_radians()));
 
     spawn_item(
         commands,
         asset_server,
         "items/iron_block.glb#Scene0".to_owned(),
         transform,
-        0.2,
+        0.1,
         ItemId::IronBlock,
         true,
     )
 }
 
 fn spawn_ironhammer(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    let transform = Transform::from_xyz(8.5, 0.81, 5.25);
+    let transform = Transform::from_xyz(7.4, 2.16, 3.2)
+        .with_rotation(Quat::from_rotation_y(159_f32.to_radians()));
 
     spawn_item(
         commands,
         asset_server,
         "items/iron_hammer.glb#Scene0".to_owned(),
         transform,
-        0.2,
+        0.1,
         ItemId::IronHammer,
         true,
     )
 }
 
 fn spawn_ironscrewdriver(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    let transform = Transform::from_xyz(8.5, 0.81, 5.5);
+    let transform = Transform::from_xyz(4.0, 1.005, -9.1)
+        .with_rotation(Quat::from_rotation_y(-80_f32.to_radians()));
 
     spawn_item(
         commands,
         asset_server,
         "items/iron_screwdriver.glb#Scene0".to_owned(),
         transform,
-        0.2,
+        0.1,
         ItemId::IronScrewdriver,
         true,
     )
 }
 
 fn spawn_ironphone(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    let transform = Transform::from_xyz(8.5, 0.81, 5.75);
+    let transform = Transform::from_xyz(0.8, 0.757, 5.4)
+        .with_rotation(Quat::from_rotation_y(-55_f32.to_radians()));
 
     spawn_item(
         commands,
         asset_server,
         "items/iron_phone.glb#Scene0".to_owned(),
         transform,
-        0.2,
+        0.1,
         ItemId::IronPhone,
         true,
     )
 }
 
 fn spawn_copperfuel(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    let transform = Transform::from_xyz(8.5, 0.95, -6.5);
+    let transform = Transform::from_xyz(-8.5, 0.275, -8.5)
+        .with_rotation(Quat::from_rotation_y(75_f32.to_radians()));
 
     spawn_item(
         commands,
