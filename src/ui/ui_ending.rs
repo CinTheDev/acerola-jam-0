@@ -44,6 +44,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
         },
     )).with_children(|root_node| {
         good_ending::spawn_ui(root_node);
+        buttons::spawn_ui(root_node);
     });
 
     parent.spawn((
@@ -55,6 +56,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
         },
     )).with_children(|root_node| {
         bad_ending::spawn_ui(root_node);
+        buttons::spawn_ui(root_node);
     });
 }
 
