@@ -36,6 +36,8 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
                 height: Val::Percent(100.0),
                 display: Display::None,
                 position_type: PositionType::Absolute,
+                padding: UiRect::all(Val::Percent(10.0)),
+                justify_items: JustifyItems::Center,
                 ..default()
             },
             background_color: Color::rgb(0.0, 0.0, 0.0).into(),
