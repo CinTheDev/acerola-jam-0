@@ -47,7 +47,7 @@ pub fn timer_reset(
 
 pub fn setup_losetimer(mut commands: Commands) {
     commands.insert_resource(LoseTimer {
-        timer: Timer::from_seconds(3.0, TimerMode::Once),
+        timer: Timer::from_seconds(300.0, TimerMode::Once),
     });
 }
 
