@@ -24,9 +24,11 @@ fn main() {
             ui::setup,
         ))
         .add_systems(Update, (
-            player::move_player,
+            (
+                player::move_player,
+                player::items::hold_item,
+            ).chain(),
             player::raycast_items,
-            player::items::hold_item,
             player::items::update_item_pos,
             player::items::enable_itemdrops,
             player::items::pickup_item,
