@@ -4,6 +4,7 @@ use rand;
 
 use crate::player::{collision::{raycast_mut, SphereCollider}, Player};
 use crate::RaycastCursor;
+use super::ParticleAcceleratorFinished;
 
 const BUTTON_ROTATION: f32 = 28.252 * (PI / 180.0);
 const LERP_FACTOR: f32 = 0.25;
@@ -93,6 +94,17 @@ pub fn rotate_buttons(
 pub fn activate_buttons(mut query: Query<(&mut SphereCollider, &RotateButton)>) {
     for (mut collider, button) in query.iter_mut() {
         collider.enabled = button.rotatable;
+    }
+}
+
+pub fn disable_buttons(
+    mut ev_finished: EventReader<ParticleAcceleratorFinished>,
+    mut q_buttons: Query<&mut SphereCollider, With<RotateButton>>,
+) {
+    for _ in ev_finished.read() {
+        for mut button in q_buttons.iter_mut() {
+            button.enabled = false;
+        }
     }
 }
 
