@@ -22,6 +22,7 @@ pub struct RotateButton {
     rotation: u8,
     position_x: usize,
     position_y: usize,
+    rotatable: bool,
 }
 
 pub fn check_button_solution(q_buttons: Query<&RotateButton>) -> bool {
@@ -89,9 +90,9 @@ pub fn rotate_buttons(
     }
 }
 
-pub fn activate_buttons(mut query: Query<&mut SphereCollider, With<RotateButton>>) {
-    for mut button in query.iter_mut() {
-        button.enabled = true;
+pub fn activate_buttons(mut query: Query<(&mut SphereCollider, &RotateButton)>) {
+    for (mut collider, button) in query.iter_mut() {
+        collider.enabled = button.rotatable;
     }
 }
 
@@ -110,7 +111,11 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                 + first_transform.back() * dist_down * y as f32
             );
 
-            let rotation = rand::random::<u8>() % 4;
+            let mut rotation = rand::random::<u8>() % 4;
+
+            if BUTTON_ENABLED[y][x] == 0 {
+                rotation = BUTTON_ROT_SOLUTION[y][x];
+            }
 
             let scene_handle: Handle<Scene> = match BUTTON_TYPES[y][x] {
                 0 => asset_server.load("items/rotate_button_1.glb#Scene0"),
@@ -118,7 +123,7 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                 2 => asset_server.load("items/rotate_button_corner.glb#Scene0"),
                 3 => asset_server.load("items/rotate_button_T.glb#Scene0"),
 
-                _ => panic!("Button type {} out of defined bounds", BUTTON_TYPES[x][y]),
+                _ => panic!("Button type {} out of defined bounds", BUTTON_TYPES[y][x]),
             };
 
             commands.spawn(RotateButtonBundle {
@@ -135,6 +140,7 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                     rotation,
                     position_x: x,
                     position_y: y,
+                    rotatable: BUTTON_ENABLED[y][x] == 1,
                 },
                 r_cursor: RaycastCursor,
                 respawn: crate::Respawn,
@@ -142,6 +148,13 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
         }
     }
 }
+
+const BUTTON_ENABLED: [[u8; 14]; 4] = [
+    [0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
+];
 
 const BUTTON_TYPES: [[u8; 14]; 4] = [
     [1, 1, 2, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 2],
