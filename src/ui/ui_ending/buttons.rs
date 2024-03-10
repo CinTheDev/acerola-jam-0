@@ -16,7 +16,7 @@ pub fn pressed_button_restart(
     mut event: EventReader<RestartEvent>,
 ) {
     for _ in event.read() {
-
+        info!("Restart button");
     }
 }
 
@@ -24,7 +24,7 @@ pub fn pressed_button_quit(
     mut event: EventReader<QuitEvent>,
 ) {
     for _ in event.read() {
-        
+        info!("Quit button");
     }
 }
 
@@ -34,6 +34,7 @@ pub fn check_button_restart(
         &mut BackgroundColor,
     ),
     (Changed<Interaction>, With<Button>, With<RestartButton>)>,
+    mut ev_restart: EventWriter<RestartEvent>,
 ) {
     for (interaction, mut color) in q_interaction.iter_mut() {
         match *interaction {
@@ -45,7 +46,7 @@ pub fn check_button_restart(
             }
             Interaction::Pressed => {
                 *color = Color::rgb(0.0, 0.1, 0.0).into();
-                // TODO: Implement restart
+                ev_restart.send(RestartEvent);
             }
         }
     }
@@ -57,6 +58,7 @@ pub fn check_button_quit(
         &mut BackgroundColor,
     ),
     (Changed<Interaction>, With<Button>, With<QuitButton>)>,
+    mut ev_quit: EventWriter<QuitEvent>,
 ) {
     for (interaction, mut color) in q_interaction.iter_mut() {
         match *interaction {
@@ -68,7 +70,7 @@ pub fn check_button_quit(
             }
             Interaction::Pressed => {
                 *color = Color::rgb(0.1, 0.0, 0.0).into();
-                // TODO: Implement quit
+                ev_quit.send(QuitEvent);
             }
         }
     }
