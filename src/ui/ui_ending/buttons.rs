@@ -1,4 +1,4 @@
-use bevy::{app::AppExit, prelude::*};
+use bevy::{app::AppExit, prelude::*, window::PrimaryWindow};
 
 use crate::Respawn;
 
@@ -16,6 +16,7 @@ pub fn pressed_button_restart(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     q_respawn: Query<Entity, With<Respawn>>,
+    q_window: Query<&mut Window, With<PrimaryWindow>>,
 ) {
     for _ in event.read() {
         info!("Restart button");
@@ -32,9 +33,13 @@ pub fn pressed_button_restart(
         crate::player::tasks::instance_tasks(&mut commands, &asset_server);
 
         // Regenerate UI
-        crate::ui::setup(commands, asset_server);
+        crate::ui::instance_ui(&mut commands, &asset_server);
 
         // Reset player position
+        crate::player::instance_player(&mut commands);
+
+        // Grab cursor again
+        crate::cursor_grab(q_window);
 
         return;
     }
