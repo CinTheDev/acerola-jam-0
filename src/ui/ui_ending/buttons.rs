@@ -1,5 +1,7 @@
 use bevy::{app::AppExit, prelude::*};
 
+use crate::player::items::Item;
+
 #[derive(Component)]
 pub struct RestartButton;
 
@@ -11,10 +13,33 @@ pub struct RestartEvent;
 
 pub fn pressed_button_restart(
     mut event: EventReader<RestartEvent>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    q_items: Query<Entity, With<Item>>
 ) {
     for _ in event.read() {
         info!("Restart button");
+
+        regenerate_items(&mut commands, &asset_server, q_items);
+
+        // Regenerate itemdrops
+        // Regenerate tasks
+        // Reset player position
+
+        return;
     }
+}
+
+fn regenerate_items(
+    mut commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+    q_items: Query<Entity, With<Item>>,
+) {
+    for entity_id in q_items.iter() {
+        commands.entity(entity_id).despawn();
+    }
+
+    crate::player::items::spawn_items::spawn_all_items(&mut commands, &asset_server);
 }
 
 pub fn check_button_restart(
