@@ -27,8 +27,12 @@ pub struct RotateButton {
 pub fn check_button_solution(q_buttons: Query<&RotateButton>) -> bool {
     for button in q_buttons.iter() {
         let correct_rotation = BUTTON_ROT_SOLUTION[button.position_y][button.position_x];
+        let button_type = BUTTON_TYPES[button.position_y][button.position_x];
 
-        if button.rotation % 4 != correct_rotation {
+        // Rotation doesn't matter
+        if button_type == 0 { continue }
+
+        if button.rotation != correct_rotation {
             return false;
         }
     }
@@ -54,7 +58,7 @@ pub fn check_button_interaction(
     if result.is_none() { return }
 
     let mut button = result.unwrap();
-    button.rotation += 1;
+    button.rotation = (button.rotation + 1) % 4;
 }
 
 pub fn rotate_buttons(
@@ -127,14 +131,14 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
 
 const BUTTON_TYPES: [[u8; 14]; 4] = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-    [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
 const BUTTON_ROT_SOLUTION: [[u8; 14]; 4] = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+    [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+    [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+    [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
 ];
