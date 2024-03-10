@@ -78,6 +78,8 @@ fn main() {
         .add_event::<player::tasks::q_t_de::FinalButtonActivated>()
         .add_event::<timer::TimerRunout>()
         .add_event::<timer::TimerStop>()
+        .add_event::<ui::ui_ending::buttons::RestartEvent>()
+        .add_event::<ui::ui_ending::buttons::QuitEvent>()
         .run();
 }
 
