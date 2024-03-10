@@ -179,7 +179,7 @@ pub fn drop_item(
     mut ev_itemdrop: EventReader<DropEvent>,
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
-    mut q_itemdrops: Query<&mut ItemDrop>,
+    mut q_itemdrops: Query<(&mut ItemDrop, &Transform)>,
 ) {
     for ev in ev_itemdrop.read() {
         let item_id = ev.0;
@@ -187,27 +187,38 @@ pub fn drop_item(
 
         if player.item_id == ItemId::None { return }
 
-        for mut i in q_items.iter_mut() {
-            if i.id != item_id { continue }
+        let mut item = get_item_from_id(item_id, &mut q_items);
+        let (mut drop, drop_transform) = get_drop_from_id(item_id, &mut q_itemdrops);
 
-            i.lerp_active = true;
-            break;
-        }
-
-        for mut d in q_itemdrops.iter_mut() {
-            if d.accepts_id != item_id { continue }
-
-            d.is_dropped = true;
-            break;
-        }
-
-        // TODO: Properly drop of item
         // Drop item
-        //item.desired_transform = [Itemdrop transform];
         player.item_id = ItemId::None;
+        item.lerp_active = true;
+        item.desired_transform = *drop_transform;
+        drop.is_dropped = true;
 
         info!("Drop Event: {:?}", item_id);
+        return;
     }
+}
+
+fn get_item_from_id<'a>(id: ItemId, query: &'a mut Query<&mut Item>) -> Mut<'a, Item> {
+    for item in query.iter_mut() {
+        if item.id == id {
+            return item;
+        }
+    }
+
+    panic!("Item ID not found");
+}
+
+fn get_drop_from_id<'a>(id: ItemId, query: &'a mut Query<(&mut ItemDrop, &Transform)>) -> (Mut<'a, ItemDrop>, &'a Transform) {
+    for drop in query.iter_mut() {
+        if drop.0.accepts_id == id {
+            return drop;
+        }
+    }
+
+    panic!("Drop with accepts_id not found");
 }
 
 fn lerp_item_towards(item_transform: &Transform, desired_transform: &Transform) -> Transform {
