@@ -12,6 +12,7 @@ pub struct AlloyPlacementFinished();
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,
+    respawn: crate::Respawn,
 }
 
 #[derive(Bundle)]
@@ -100,11 +101,11 @@ fn output_alloy(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>)
 }
 
 pub fn check_alloy_finished(
-    mut q_task_master: Query<&mut MasterTask>,
+    mut q_master: Query<&mut MasterTask>,
     mut q_task: Query<(&mut AlloyTask, &ItemDrop)>,
     mut event: EventWriter<AlloyPlacementFinished>,
 ) {
-    let mut task_master = q_task_master.single_mut();
+    let mut task_master = q_master.single_mut();
     let task = q_task.single_mut();
     let mut task_prop = task.0;
     let task_coll = task.1;
@@ -120,7 +121,7 @@ pub fn check_alloy_finished(
 }
 
 pub fn check_if_finished(
-    mut q_task_master: Query<&mut MasterTask>,
+    q_task_master: Query<&MasterTask>,
     q_task_lead: Query<(&mut LeadTask, &ItemDrop)>,
     q_task_block: Query<(&mut IronBlockTask, &ItemDrop)>,
     q_task_hammer: Query<(&mut IronHammerTask, &ItemDrop)>,
@@ -129,7 +130,7 @@ pub fn check_if_finished(
     q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>,
     mut event: EventWriter<AlloyCreationFinshed>,
 ) {
-    let mut task_master = q_task_master.single_mut();
+    let task_master = q_task_master.single();
 
     if task_master.is_all_done { return }
 
@@ -139,8 +140,6 @@ pub fn check_if_finished(
         check_task(q_task_hammer) &&
         check_task(q_task_screwdriver) &&
         check_task(q_task_phone);
-    
-    task_master.is_all_done = all_tasks_finished;
 
     if all_tasks_finished {
         output_alloy(q_items);
@@ -167,7 +166,8 @@ pub fn instance_master() -> MasterTaskBundle {
     MasterTaskBundle {
         task: MasterTask {
             is_all_done: false,
-        }
+        },
+        respawn: crate::Respawn,
     }
 }
 
@@ -185,6 +185,7 @@ pub fn instance_alloy() -> AlloyTaskBundle {
                 is_dropped: false
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: AlloyTask {
             is_done: false,
@@ -206,6 +207,7 @@ pub fn instance_lead() -> LeadTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: LeadTask {
             is_done: false
@@ -227,6 +229,7 @@ pub fn instance_ironblock() -> IronBlockTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronBlockTask {
             is_done: false
@@ -248,6 +251,7 @@ pub fn instance_ironhammer() -> IronHammerTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronHammerTask {
             is_done: false
@@ -269,6 +273,7 @@ pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronScrewdriverTask {
             is_done: false
@@ -290,6 +295,7 @@ pub fn instance_ironphone() -> IronPhoneTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronPhoneTask {
             is_done: false

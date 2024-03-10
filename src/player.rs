@@ -29,7 +29,8 @@ pub fn instance_player(commands: &mut Commands) {
         camera: Camera3dBundle {
             transform: Transform::from_xyz(3.0, 1.5, 0.0),
             ..default()
-        }
+        },
+        respawn: crate::Respawn,
     });
 }
 
@@ -38,6 +39,7 @@ struct PlayerBundle {
     player: Player,
     collider: SphereCollider,
     camera: Camera3dBundle,
+    respawn: crate::Respawn,
 }
 
 #[derive(Component)]
@@ -48,7 +50,7 @@ pub struct Player {
     rotation: Vec2,
     pub item_id: ItemId,
 
-    locked: bool,
+    pub locked: bool,
 }
 
 pub fn move_player(

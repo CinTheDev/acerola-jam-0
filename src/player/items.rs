@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::RaycastCursor;
+use crate::{RaycastCursor, Respawn};
 
 use super::collision::{self, SphereCollider};
 use once_cell::sync::Lazy;
@@ -32,6 +32,7 @@ pub struct ItemBundle {
     pub collider: collision::SphereCollider,
     pub item: Item,
     pub r_cursor: RaycastCursor,
+    pub respawn: Respawn,
 }
 
 #[derive(Component)]
@@ -48,6 +49,7 @@ pub struct ItemDropBundle {
     pub collider: collision::SphereCollider,
     pub item_drop: ItemDrop,
     pub r_cursor: RaycastCursor,
+    pub respawn: Respawn,
 }
 
 #[derive(Component)]

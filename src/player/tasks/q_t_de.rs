@@ -24,6 +24,7 @@ pub struct FinalButtonTaskBundle {
     collider: SphereCollider,
     task: FinalButtonTask,
     r_collider: RaycastCursor,
+    respawn: crate::Respawn,
 }
 
 #[derive(Component)]
@@ -131,6 +132,7 @@ pub fn instance_dark_matter() -> CleanDarkMatterBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: CleanDarkMatterTask {
             is_done: false,
@@ -150,5 +152,6 @@ pub fn instance_finalbutton() -> FinalButtonTaskBundle {
             game_finished: false,
         },
         r_collider: RaycastCursor,
+        respawn: crate::Respawn,
     }
 }

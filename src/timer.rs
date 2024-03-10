@@ -11,6 +11,9 @@ pub struct TimerRunout();
 #[derive(Event)]
 pub struct TimerStop();
 
+#[derive(Event)]
+pub struct ResetTimer;
+
 pub fn timer_runout(
     mut ev_timer_runout: EventReader<TimerRunout>,
 ) {
@@ -32,9 +35,19 @@ pub fn timer_stop(
     }
 }
 
+pub fn timer_reset(
+    mut ev_resettimer: EventReader<ResetTimer>,
+    mut lose_timer: ResMut<LoseTimer>,
+) {
+    for _ in ev_resettimer.read() {
+        lose_timer.timer.reset();
+        lose_timer.timer.unpause();
+    }
+}
+
 pub fn setup_losetimer(mut commands: Commands) {
     commands.insert_resource(LoseTimer {
-        timer: Timer::from_seconds(10.0, TimerMode::Once),
+        timer: Timer::from_seconds(300.0, TimerMode::Once),
     });
 }
 

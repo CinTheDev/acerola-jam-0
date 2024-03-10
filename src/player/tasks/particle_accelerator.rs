@@ -13,6 +13,7 @@ pub struct ParticleAcceleratorFinished();
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,
+    respawn: crate::Respawn,
 }
 
 #[derive(Bundle)]
@@ -24,6 +25,7 @@ pub struct CopperTaskBundle {
 #[derive(Bundle)]
 pub struct RotateButtonsTaskBundle {
     task: RotateButtonsTask,
+    respawn: crate::Respawn,
 }
 
 #[derive(Component)]
@@ -95,7 +97,8 @@ pub fn instance_master() -> MasterTaskBundle {
     MasterTaskBundle {
         task: MasterTask {
             is_all_done: false,
-        }
+        },
+        respawn: crate::Respawn,
     }
 }
 
@@ -113,6 +116,7 @@ pub fn instance_copper() -> CopperTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: CopperTask {
             is_done: false,
@@ -125,6 +129,7 @@ pub fn instance_buttons() -> RotateButtonsTaskBundle {
         task: RotateButtonsTask {
             is_active: false,
             is_done: false,
-        }
+        },
+        respawn: crate::Respawn,
     }
 }

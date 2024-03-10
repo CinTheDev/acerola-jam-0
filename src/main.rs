@@ -9,6 +9,9 @@ mod ui;
 #[derive(Component)]
 pub struct RaycastCursor;
 
+#[derive(Component)]
+pub struct Respawn;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
@@ -16,7 +19,7 @@ fn main() {
             setup,
             cursor_grab,
             generate_colliders::generate_colliders,
-            player::tasks::instance_tasks,
+            player::tasks::setup,
             timer::setup_losetimer,
             ui::setup,
         ))
@@ -46,6 +49,7 @@ fn main() {
             timer::check_losetimer,
             timer::timer_runout,
             timer::timer_stop,
+            timer::timer_reset,
             ui::ui_timer::update_timer_ui,
             ui::ui_cursor::check_cursor,
             ui::ui_tasks::check_task_darkmatter,
@@ -54,6 +58,13 @@ fn main() {
             ui::ui_tasks::check_task_particleaccelerator,
             ui::ui_tasks::check_task_computer,
             ui::ui_tasks::check_task_finalbutton,
+            ui::ui_ending::check_good_ending,
+            ui::ui_ending::check_bad_ending,
+            ui::ui_ending::fade_background,
+            ui::ui_ending::swipe_text,
+            ui::ui_ending::buttons::check_button_restart,
+            ui::ui_ending::buttons::check_button_quit,
+            ui::ui_ending::buttons::pressed_button_restart,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
@@ -66,6 +77,8 @@ fn main() {
         .add_event::<player::tasks::q_t_de::FinalButtonActivated>()
         .add_event::<timer::TimerRunout>()
         .add_event::<timer::TimerStop>()
+        .add_event::<timer::ResetTimer>()
+        .add_event::<ui::ui_ending::buttons::RestartEvent>()
         .run();
 }
 
