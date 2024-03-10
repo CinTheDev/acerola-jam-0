@@ -1,21 +1,55 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
-struct RestartButton;
+pub struct RestartButton;
 
 #[derive(Component)]
-struct QuitButton;
+pub struct QuitButton;
 
 pub fn check_button_restart(
-
+    mut q_interaction: Query<(
+        &Interaction,
+        &mut BackgroundColor,
+    ),
+    (Changed<Interaction>, With<Button>, With<RestartButton>)>,
 ) {
-
+    for (interaction, mut color) in q_interaction.iter_mut() {
+        match *interaction {
+            Interaction::None => {
+                *color = Color::rgb(0.0, 0.2, 0.0).into();
+            }
+            Interaction::Hovered => {
+                *color = Color::rgb(0.0, 0.4, 0.0).into();
+            }
+            Interaction::Pressed => {
+                *color = Color::rgb(0.0, 0.1, 0.0).into();
+                // TODO: Implement restart
+            }
+        }
+    }
 }
 
 pub fn check_button_quit(
-
+    mut q_interaction: Query<(
+        &Interaction,
+        &mut BackgroundColor,
+    ),
+    (Changed<Interaction>, With<Button>, With<QuitButton>)>,
 ) {
-    
+    for (interaction, mut color) in q_interaction.iter_mut() {
+        match *interaction {
+            Interaction::None => {
+                *color = Color::rgb(0.2, 0.0, 0.0).into();
+            }
+            Interaction::Hovered => {
+                *color = Color::rgb(0.4, 0.0, 0.0).into();
+            }
+            Interaction::Pressed => {
+                *color = Color::rgb(0.1, 0.0, 0.0).into();
+                // TODO: Implement quit
+            }
+        }
+    }
 }
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
