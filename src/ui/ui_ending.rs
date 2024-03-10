@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use crate::{player::tasks::q_t_de::FinalButtonActivated, timer::TimerRunout};
 
 pub mod good_ending;
 pub mod bad_ending;
@@ -25,5 +26,21 @@ pub fn hide_ui(
 ) {
     for mut style in query.iter_mut() {
         style.display = Display::None;
+    }
+}
+
+pub fn good_ending(
+    mut event: EventReader<FinalButtonActivated>,
+) {
+    for _ in event.read() {
+        info!("Good ending :3");
+    }
+}
+
+pub fn bad_ending(
+    mut event: EventReader<TimerRunout>,
+) {
+    for _ in event.read() {
+        info!("Bad ending :(");
     }
 }
