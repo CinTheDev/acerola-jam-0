@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{player::tasks::q_t_de::FinalButtonActivated, timer::TimerRunout};
+use crate::{player::{tasks::q_t_de::FinalButtonActivated, Player}, timer::TimerRunout};
 
 pub mod good_ending;
 pub mod bad_ending;
@@ -132,15 +132,18 @@ pub fn check_good_ending(
     mut event: EventReader<FinalButtonActivated>,
     mut q_background: Query<&mut UIBackground>,
     mut q_text: Query<&mut UIGoodEnding>,
+    mut q_player: Query<&mut Player>,
 ) {
     for _ in event.read() {
         info!("Good ending :3");
         let mut prop = q_background.single_mut();
         let mut text = q_text.single_mut();
+        let mut player = q_player.single_mut();
 
         prop.timer.reset();
         prop.timer.unpause();
         text.lerp_active = true;
+        player.locked = true;
     }
 }
 
@@ -148,15 +151,18 @@ pub fn check_bad_ending(
     mut event: EventReader<TimerRunout>,
     mut q_background: Query<&mut UIBackground>,
     mut q_text: Query<&mut UIBadEnding>,
+    mut q_player: Query<&mut Player>,
 ) {
     for _ in event.read() {
         info!("Bad ending :(");
         let mut prop = q_background.single_mut();
         let mut text = q_text.single_mut();
+        let mut player = q_player.single_mut();
 
         prop.timer.reset();
         prop.timer.unpause();
         text.lerp_active = true;
+        player.locked = true;
     }
 }
 

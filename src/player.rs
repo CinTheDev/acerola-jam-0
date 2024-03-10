@@ -48,7 +48,7 @@ pub struct Player {
     rotation: Vec2,
     pub item_id: ItemId,
 
-    locked: bool,
+    pub locked: bool,
 }
 
 pub fn move_player(
