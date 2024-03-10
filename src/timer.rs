@@ -34,7 +34,7 @@ pub fn timer_stop(
 
 pub fn setup_losetimer(mut commands: Commands) {
     commands.insert_resource(LoseTimer {
-        timer: Timer::from_seconds(10.0, TimerMode::Once),
+        timer: Timer::from_seconds(3.0, TimerMode::Once),
     });
 }
 

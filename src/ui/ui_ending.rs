@@ -25,7 +25,7 @@ pub struct UIBadEnding {
 }
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
-    let mut bg_timer = Timer::from_seconds(5.0, TimerMode::Once);
+    let mut bg_timer = Timer::from_seconds(1.0, TimerMode::Once);
     bg_timer.pause();
 
     parent.spawn((
@@ -78,9 +78,11 @@ fn get_ending_ui() -> NodeBundle {
         style: Style {
             width: Val::Percent(100.0),
             height: Val::Percent(100.0),
+            display: Display::Flex,
             position_type: PositionType::Absolute,
-            padding: UiRect::all(Val::Percent(10.0)),
             justify_items: JustifyItems::Center,
+            padding: UiRect::all(Val::Percent(10.0)),
+            flex_direction: FlexDirection::Column,
             bottom: Val::Percent(100.0),
             ..default()
         },
