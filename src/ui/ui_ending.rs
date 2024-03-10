@@ -1,5 +1,8 @@
 use bevy::prelude::*;
 
+pub mod good_ending;
+pub mod bad_ending;
+
 #[derive(Component)]
 pub struct EndingUI;
 
