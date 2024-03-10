@@ -8,14 +8,14 @@ struct QuitButton;
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
-        get_button_background(Color::rgb(0.0, 1.0, 0.0)),
+        get_button_background(Color::rgb(0.0, 0.2, 0.0)),
         RestartButton,
     )).with_children(|bg| {
         bg.spawn(get_button_text("Restart"));
     });
 
     parent.spawn((
-        get_button_background(Color::rgb(1.0, 0.0, 0.0)),
+        get_button_background(Color::rgb(0.2, 0.0, 0.0)),
         QuitButton,
     )).with_children(|bg| {
         bg.spawn(get_button_text("Quit"));
@@ -41,7 +41,7 @@ fn get_button_text(text: &str) -> TextBundle {
         text,
         TextStyle {
             font_size: 30.0,
-            color: Color::rgb(1.0, 1.0, 1.0),
+            color: Color::rgb(0.8, 0.8, 0.8),
             ..default()
         }
     )
