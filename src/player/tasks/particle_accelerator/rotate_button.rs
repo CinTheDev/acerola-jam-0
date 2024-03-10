@@ -4,6 +4,7 @@ use rand;
 
 use crate::player::{collision::{raycast_mut, SphereCollider}, Player};
 use crate::RaycastCursor;
+use super::ParticleAcceleratorFinished;
 
 const BUTTON_ROTATION: f32 = 28.252 * (PI / 180.0);
 const LERP_FACTOR: f32 = 0.25;
@@ -22,14 +23,33 @@ pub struct RotateButton {
     rotation: u8,
     position_x: usize,
     position_y: usize,
+    rotatable: bool,
 }
 
 pub fn check_button_solution(q_buttons: Query<&RotateButton>) -> bool {
     for button in q_buttons.iter() {
         let correct_rotation = BUTTON_ROT_SOLUTION[button.position_y][button.position_x];
+        let button_type = BUTTON_TYPES[button.position_y][button.position_x];
+        
+        match button_type {
+            // Rotation doesn't matter
+            0 => { continue }
 
-        if button.rotation % 4 != correct_rotation {
-            return false;
+            // Straight pipe has rotational symmetries, requires special handling
+            1 => {
+                if button.rotation % 2 != correct_rotation {
+                    return false;
+                }
+            }
+
+            // No rotational symmetries
+            2 | 3 => {
+                if button.rotation != correct_rotation {
+                    return false;
+                }
+            }
+
+            _ => { panic!("Invalid type in solution"); }
         }
     }
 
@@ -54,7 +74,7 @@ pub fn check_button_interaction(
     if result.is_none() { return }
 
     let mut button = result.unwrap();
-    button.rotation += 1;
+    button.rotation = (button.rotation + 1) % 4;
 }
 
 pub fn rotate_buttons(
@@ -71,14 +91,25 @@ pub fn rotate_buttons(
     }
 }
 
-pub fn activate_buttons(mut query: Query<&mut SphereCollider, With<RotateButton>>) {
-    for mut button in query.iter_mut() {
-        button.enabled = true;
+pub fn activate_buttons(mut query: Query<(&mut SphereCollider, &RotateButton)>) {
+    for (mut collider, button) in query.iter_mut() {
+        collider.enabled = button.rotatable;
+    }
+}
+
+pub fn disable_buttons(
+    mut ev_finished: EventReader<ParticleAcceleratorFinished>,
+    mut q_buttons: Query<&mut SphereCollider, With<RotateButton>>,
+) {
+    for _ in ev_finished.read() {
+        for mut button in q_buttons.iter_mut() {
+            button.enabled = false;
+        }
     }
 }
 
 pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    let first_transform = Transform::from_xyz(-0.609, 0.85, -8.736)
+    let first_transform = Transform::from_xyz(-0.65, 0.85, -8.8)
         .with_rotation(Quat::from_rotation_x(BUTTON_ROTATION));
 
     let dist_right: f32 = 0.228 * 1.14;
@@ -92,7 +123,11 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                 + first_transform.back() * dist_down * y as f32
             );
 
-            //let rotation = rand::random::<u8>() % 4;
+            let mut rotation = rand::random::<u8>() % 4;
+
+            if BUTTON_ENABLED[y][x] == 0 {
+                rotation = BUTTON_ROT_SOLUTION[y][x];
+            }
 
             let scene_handle: Handle<Scene> = match BUTTON_TYPES[y][x] {
                 0 => asset_server.load("items/rotate_button_1.glb#Scene0"),
@@ -100,7 +135,7 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                 2 => asset_server.load("items/rotate_button_corner.glb#Scene0"),
                 3 => asset_server.load("items/rotate_button_T.glb#Scene0"),
 
-                _ => panic!("Button type {} out of defined bounds", BUTTON_TYPES[x][y]),
+                _ => panic!("Button type {} out of defined bounds", BUTTON_TYPES[y][x]),
             };
 
             commands.spawn(RotateButtonBundle {
@@ -114,10 +149,10 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                     enabled: false,
                 },
                 rotate_button: RotateButton {
-                    //rotation,
-                    rotation: 0,
+                    rotation,
                     position_x: x,
                     position_y: y,
+                    rotatable: BUTTON_ENABLED[y][x] == 1,
                 },
                 r_cursor: RaycastCursor,
                 respawn: crate::Respawn,
@@ -126,16 +161,23 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
     }
 }
 
+const BUTTON_ENABLED: [[u8; 14]; 4] = [
+    [0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+];
+
 const BUTTON_TYPES: [[u8; 14]; 4] = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-    [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 1, 2, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 2],
+    [1, 2, 2, 1, 1, 3, 1, 3, 1, 3, 2, 2, 3, 1],
+    [2, 3, 1, 2, 0, 3, 2, 2, 1, 3, 3, 2, 1, 3],
+    [3, 2, 0, 2, 1, 2, 2, 1, 1, 3, 1, 1, 3, 3],
 ];
 
 const BUTTON_ROT_SOLUTION: [[u8; 14]; 4] = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 3, 9, 9, 9, 9, 9, 9, 0, 0, 0, 3, 0],
+    [0, 3, 1, 0, 0, 3, 0, 3, 0, 1, 3, 0, 2, 1],
+    [3, 0, 0, 3, 9, 0, 3, 1, 0, 3, 1, 2, 1, 0],
+    [1, 2, 9, 1, 0, 2, 1, 0, 0, 1, 0, 0, 1, 1],
 ];

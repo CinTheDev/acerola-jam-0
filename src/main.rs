@@ -24,14 +24,18 @@ fn main() {
             ui::setup,
         ))
         .add_systems(Update, (
-            player::move_player,
+            (
+                player::move_player,
+                player::items::hold_item,
+            ).chain(),
             player::raycast_items,
-            player::items::hold_item,
             player::items::update_item_pos,
             player::items::enable_itemdrops,
             player::items::pickup_item,
             player::items::drop_item,
             player::items::cancel_itemdrop,
+        ))
+        .add_systems(Update, (
             player::tasks::q_t_de::check_all_tasks_finished,
             player::tasks::q_t_de::check_final_button_input,
             player::tasks::q_t_de::check_dark_matter_finished,
@@ -43,6 +47,7 @@ fn main() {
             player::tasks::particle_accelerator::check_coppertask,
             player::tasks::particle_accelerator::rotate_button::check_button_interaction,
             player::tasks::particle_accelerator::rotate_button::rotate_buttons,
+            player::tasks::particle_accelerator::rotate_button::disable_buttons,
             player::tasks::particle_accelerator::check_buttons_solution,
         ))
         .add_systems(Update, (

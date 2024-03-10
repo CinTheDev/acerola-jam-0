@@ -6,7 +6,7 @@ use once_cell::sync::Lazy;
 
 pub mod spawn_items;
 
-const ITEM_LERP_FACTOR: f32 = 0.5;
+const ITEM_LERP_FACTOR: f32 = 0.2 * 60.0;
 
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
     Transform::from_xyz(0.15, -0.15, -0.3)
@@ -55,7 +55,6 @@ pub struct ItemDropBundle {
 #[derive(Component)]
 pub struct ItemDrop {
     pub accepts_id: ItemId,
-    pub activates_id: ItemId,
     pub is_dropped: bool,
 }
 
@@ -68,7 +67,10 @@ pub struct DropCancelEvent();
 #[derive(Event)]
 pub struct DropEvent(pub ItemId);
 
-pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
+pub fn update_item_pos(
+    mut query: Query<(&mut Transform, &Item)>,
+    time: Res<Time>,
+) {
     for mut item in query.iter_mut() {
         let item_trans = item.0.as_mut();
         let item_properties = item.1;
@@ -78,13 +80,18 @@ pub fn update_item_pos(mut query: Query<(&mut Transform, &Item)>) {
         }
 
         // Lerp to desired transform
-        *item_trans = lerp_item_towards(&item_trans, &item_properties.desired_transform);
+        *item_trans = lerp_item_towards(
+            &item_trans,
+            &item_properties.desired_transform,
+            ITEM_LERP_FACTOR * time.delta_seconds()
+        );
     }
 }
 
 pub fn hold_item(
     mut q_item: Query<(&Item, &mut Transform), Without<super::Player>>,
-    q_player: Query<(&super::Player, &Transform), Without<Item>>
+    q_player: Query<(&super::Player, &Transform), Without<Item>>,
+    time: Res<Time>,
 ) {
     let player = q_player.single();
     let player_properties = player.0;
@@ -101,7 +108,11 @@ pub fn hold_item(
 
         // If yes, do some transformation magix
         let desired_transform = *player_transform * *ITEM_HOLD_TRANSFORM;
-        *item_trans = lerp_item_towards(item_trans, &desired_transform);
+        *item_trans = lerp_item_towards(
+            item_trans,
+            &desired_transform,
+            ITEM_LERP_FACTOR * time.delta_seconds()
+        );
     }
 }
 
@@ -180,7 +191,7 @@ pub fn drop_item(
     mut ev_itemdrop: EventReader<DropEvent>,
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<&mut Item>,
-    mut q_itemdrops: Query<&mut ItemDrop>,
+    mut q_itemdrops: Query<(&mut ItemDrop, &Transform)>,
 ) {
     for ev in ev_itemdrop.read() {
         let item_id = ev.0;
@@ -188,39 +199,49 @@ pub fn drop_item(
 
         if player.item_id == ItemId::None { return }
 
-        for mut i in q_items.iter_mut() {
-            if i.id != item_id { continue }
+        let mut item = get_item_from_id(item_id, &mut q_items);
+        let (mut drop, drop_transform) = get_drop_from_id(item_id, &mut q_itemdrops);
 
-            i.lerp_active = true;
-            break;
-        }
-
-        for mut d in q_itemdrops.iter_mut() {
-            if d.accepts_id != item_id { continue }
-
-            d.is_dropped = true;
-            break;
-        }
-
-        // TODO: Properly drop of item
         // Drop item
-        //item_properties.pickup = true; Activate next item pickup
-        //item.desired_transform = [Itemdrop transform];
         player.item_id = ItemId::None;
+        item.lerp_active = true;
+        item.desired_transform = *drop_transform;
+        drop.is_dropped = true;
 
         info!("Drop Event: {:?}", item_id);
+        return;
     }
 }
 
-fn lerp_item_towards(item_transform: &Transform, desired_transform: &Transform) -> Transform {
+fn get_item_from_id<'a>(id: ItemId, query: &'a mut Query<&mut Item>) -> Mut<'a, Item> {
+    for item in query.iter_mut() {
+        if item.id == id {
+            return item;
+        }
+    }
+
+    panic!("Item ID not found");
+}
+
+fn get_drop_from_id<'a>(id: ItemId, query: &'a mut Query<(&mut ItemDrop, &Transform)>) -> (Mut<'a, ItemDrop>, &'a Transform) {
+    for drop in query.iter_mut() {
+        if drop.0.accepts_id == id {
+            return drop;
+        }
+    }
+
+    panic!("Drop with accepts_id not found");
+}
+
+fn lerp_item_towards(item_transform: &Transform, desired_transform: &Transform, lerp_factor: f32) -> Transform {
     let new_translation = item_transform.translation.lerp(
-        desired_transform.translation, ITEM_LERP_FACTOR
+        desired_transform.translation, lerp_factor
     );
     let new_rotation = item_transform.rotation.slerp(
-        desired_transform.rotation, ITEM_LERP_FACTOR
+        desired_transform.rotation, lerp_factor
     );
     let new_scale = item_transform.scale.lerp(
-        desired_transform.scale, ITEM_LERP_FACTOR
+        desired_transform.scale, lerp_factor
     );
 
     return Transform {

@@ -68,7 +68,7 @@ pub fn check_buttons_solution(
     info!("Particle accelerator task done");
 }
 
-fn enable_buttons(query: Query<&mut SphereCollider, With<RotateButton>>, task: &mut RotateButtonsTask) {
+fn enable_buttons(query: Query<(&mut SphereCollider, &RotateButton)>, task: &mut RotateButtonsTask) {
     rotate_button::activate_buttons(query);
     task.is_active = true;
 }
@@ -76,7 +76,7 @@ fn enable_buttons(query: Query<&mut SphereCollider, With<RotateButton>>, task: &
 pub fn check_coppertask(
     mut q_coppertask: Query<(&mut CopperTask, &ItemDrop)>,
     mut q_buttontask: Query<&mut RotateButtonsTask>,
-    q_buttons: Query<&mut SphereCollider, With<RotateButton>>,
+    q_buttons: Query<(&mut SphereCollider, &RotateButton)>,
 ) {
     let mut coppertask = q_coppertask.single_mut();
     let mut buttontask = q_buttontask.single_mut();
@@ -112,7 +112,6 @@ pub fn instance_copper() -> CopperTaskBundle {
             },
             item_drop: ItemDrop {
                 accepts_id: ItemId::CopperFuel,
-                activates_id: ItemId::None,
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
