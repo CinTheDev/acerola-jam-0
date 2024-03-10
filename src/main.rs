@@ -49,6 +49,7 @@ fn main() {
             timer::check_losetimer,
             timer::timer_runout,
             timer::timer_stop,
+            timer::timer_reset,
             ui::ui_timer::update_timer_ui,
             ui::ui_cursor::check_cursor,
             ui::ui_tasks::check_task_darkmatter,
@@ -76,6 +77,7 @@ fn main() {
         .add_event::<player::tasks::q_t_de::FinalButtonActivated>()
         .add_event::<timer::TimerRunout>()
         .add_event::<timer::TimerStop>()
+        .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
         .run();
 }

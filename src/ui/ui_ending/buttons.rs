@@ -1,6 +1,6 @@
 use bevy::{app::AppExit, prelude::*, window::PrimaryWindow};
 
-use crate::Respawn;
+use crate::{timer::ResetTimer, Respawn};
 
 #[derive(Component)]
 pub struct RestartButton;
@@ -17,6 +17,7 @@ pub fn pressed_button_restart(
     asset_server: Res<AssetServer>,
     q_respawn: Query<Entity, With<Respawn>>,
     q_window: Query<&mut Window, With<PrimaryWindow>>,
+    mut ev_timerreset: EventWriter<ResetTimer>
 ) {
     for _ in event.read() {
         info!("Restart button");
@@ -40,6 +41,9 @@ pub fn pressed_button_restart(
 
         // Grab cursor again
         crate::cursor_grab(q_window);
+
+        // Restart timer
+        ev_timerreset.send(ResetTimer);
 
         return;
     }

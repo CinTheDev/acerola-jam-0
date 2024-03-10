@@ -11,6 +11,9 @@ pub struct TimerRunout();
 #[derive(Event)]
 pub struct TimerStop();
 
+#[derive(Event)]
+pub struct ResetTimer;
+
 pub fn timer_runout(
     mut ev_timer_runout: EventReader<TimerRunout>,
 ) {
@@ -29,6 +32,16 @@ pub fn timer_stop(
         lose_timer.timer.pause();
 
         // TODO: Do things to indicate game won
+    }
+}
+
+pub fn timer_reset(
+    mut ev_resettimer: EventReader<ResetTimer>,
+    mut lose_timer: ResMut<LoseTimer>,
+) {
+    for _ in ev_resettimer.read() {
+        lose_timer.timer.reset();
+        lose_timer.timer.unpause();
     }
 }
 
