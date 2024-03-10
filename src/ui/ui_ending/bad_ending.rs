@@ -1,8 +1,15 @@
 use bevy::prelude::*;
 
 const ENDING_TEXT: &str = "
-This is some other text
-Yeah
+You were too slow.
+
+The false Vacuum reached Venus and altered the effective gravity on Earth, effectively destroying
+all infrastructure and hopes of reverting this entire chain reaction.
+
+In a few minutes the false Vacuum will reach the Sun and destroy every bit of life on Earth from insane
+gravitational forces.
+
+The laws of Physics have been changed, the universe will never be the same again.
 ";
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
