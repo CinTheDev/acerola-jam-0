@@ -24,6 +24,7 @@ pub struct FinalButtonTaskBundle {
     collider: SphereCollider,
     task: FinalButtonTask,
     r_collider: RaycastCursor,
+    respawn: crate::Respawn,
 }
 
 #[derive(Component)]
@@ -151,5 +152,6 @@ pub fn instance_finalbutton() -> FinalButtonTaskBundle {
             game_finished: false,
         },
         r_collider: RaycastCursor,
+        respawn: crate::Respawn,
     }
 }

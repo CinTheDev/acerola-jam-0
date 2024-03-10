@@ -12,6 +12,7 @@ pub struct ComputerTaskBundle {
     collider: SphereCollider,
     task: ComputerTask,
     r_cursor: RaycastCursor,
+    respawn: crate::Respawn,
 }
 
 #[derive(Component)]
@@ -156,5 +157,6 @@ pub fn instance_computer() -> ComputerTaskBundle {
             player_position: Transform::IDENTITY,
         },
         r_cursor: RaycastCursor,
+        respawn: crate::Respawn,
     }
 }

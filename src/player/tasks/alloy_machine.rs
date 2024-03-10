@@ -12,6 +12,7 @@ pub struct AlloyPlacementFinished();
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,
+    respawn: crate::Respawn,
 }
 
 #[derive(Bundle)]
@@ -167,7 +168,8 @@ pub fn instance_master() -> MasterTaskBundle {
     MasterTaskBundle {
         task: MasterTask {
             is_all_done: false,
-        }
+        },
+        respawn: crate::Respawn,
     }
 }
 

@@ -14,6 +14,7 @@ pub struct RotateButtonBundle {
     collider: SphereCollider,
     rotate_button: RotateButton,
     r_cursor: RaycastCursor,
+    respawn: crate::Respawn,
 }
 
 #[derive(Component)]
@@ -119,6 +120,7 @@ pub fn spawn_buttons(mut commands: Commands, asset_server: Res<AssetServer>) {
                     position_y: y,
                 },
                 r_cursor: RaycastCursor,
+                respawn: crate::Respawn,
             });
         }
     }
