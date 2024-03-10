@@ -60,6 +60,7 @@ fn main() {
             ui::ui_tasks::check_task_finalbutton,
             ui::ui_ending::check_good_ending,
             ui::ui_ending::check_bad_ending,
+            ui::ui_ending::fade_background,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()

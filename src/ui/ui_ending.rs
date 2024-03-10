@@ -22,10 +22,13 @@ pub struct UIBadEnding {
 }
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
+    let mut bg_timer = Timer::from_seconds(5.0, TimerMode::Once);
+    bg_timer.pause();
+
     parent.spawn((
         get_background_ui(),
         UIBackground {
-            timer: Timer::from_seconds(5.0, TimerMode::Once),
+            timer: bg_timer,
         },
     ));
 
@@ -78,24 +81,38 @@ fn get_ending_ui() -> NodeBundle {
     }
 }
 
+pub fn fade_background(
+    mut query: Query<(&mut BackgroundColor, &mut UIBackground)>,
+    time: Res<Time>,
+) {
+    let (mut color, mut prop) = query.single_mut();
+
+    prop.timer.tick(time.delta());
+    let factor = prop.timer.percent();
+
+    color.0.set_a(factor);
+}
+
 pub fn check_good_ending(
     mut event: EventReader<FinalButtonActivated>,
-    mut query: Query<&mut Style, With<UIGoodEnding>>,
+    mut q_background: Query<&mut UIBackground>,
 ) {
     for _ in event.read() {
         info!("Good ending :3");
-        let mut style = query.single_mut();
-        style.display = Display::Grid;
+        let mut prop = q_background.single_mut();
+        prop.timer.reset();
+        prop.timer.unpause();
     }
 }
 
 pub fn check_bad_ending(
     mut event: EventReader<TimerRunout>,
-    mut query: Query<&mut Style, With<UIBadEnding>>,
+    mut q_background: Query<&mut UIBackground>,
 ) {
     for _ in event.read() {
         info!("Bad ending :(");
-        let mut style = query.single_mut();
-        style.display = Display::Grid;
+        let mut prop = q_background.single_mut();
+        prop.timer.reset();
+        prop.timer.unpause();
     }
 }
