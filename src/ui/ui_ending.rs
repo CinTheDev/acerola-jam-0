@@ -6,31 +6,34 @@ pub mod bad_ending;
 
 #[derive(Component)]
 pub struct UIBackground {
-
+    timer: Timer,
 }
 
 #[derive(Component)]
 pub struct UIGoodEnding {
-
+    lerp_factor: f32,
+    lerp_active: bool,
 }
 
 #[derive(Component)]
 pub struct UIBadEnding {
-
+    lerp_factor: f32,
+    lerp_active: bool,
 }
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         get_background_ui(),
         UIBackground {
-
+            timer: Timer::from_seconds(5.0, TimerMode::Once),
         },
     ));
 
     parent.spawn((
         get_ending_ui(),
         UIGoodEnding {
-
+            lerp_factor: 0.3,
+            lerp_active: false,
         },
     )).with_children(|root_node| {
         good_ending::spawn_ui(root_node);
@@ -39,7 +42,8 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
         get_ending_ui(),
         UIBadEnding {
-            
+            lerp_factor: 0.3,
+            lerp_active: false,
         },
     )).with_children(|root_node| {
         bad_ending::spawn_ui(root_node);
@@ -51,7 +55,6 @@ fn get_background_ui() -> NodeBundle {
         style: Style {
             width: Val::Percent(100.0),
             height: Val::Percent(100.0),
-            display: Display::Grid,
             position_type: PositionType::Absolute,
             ..default()
         },
@@ -65,7 +68,6 @@ fn get_ending_ui() -> NodeBundle {
         style: Style {
             width: Val::Percent(100.0),
             height: Val::Percent(100.0),
-            display: Display::None,
             position_type: PositionType::Absolute,
             padding: UiRect::all(Val::Percent(10.0)),
             justify_items: JustifyItems::Center,
