@@ -61,6 +61,7 @@ fn main() {
             ui::ui_ending::check_good_ending,
             ui::ui_ending::check_bad_ending,
             ui::ui_ending::fade_background,
+            ui::ui_ending::swipe_text,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
