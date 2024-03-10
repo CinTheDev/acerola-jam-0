@@ -64,6 +64,8 @@ fn main() {
             ui::ui_ending::swipe_text,
             ui::ui_ending::buttons::check_button_restart,
             ui::ui_ending::buttons::check_button_quit,
+            ui::ui_ending::buttons::pressed_button_restart,
+            ui::ui_ending::buttons::pressed_button_quit,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()

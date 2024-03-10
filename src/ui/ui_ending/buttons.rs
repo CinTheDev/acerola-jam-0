@@ -6,6 +6,28 @@ pub struct RestartButton;
 #[derive(Component)]
 pub struct QuitButton;
 
+#[derive(Event)]
+pub struct RestartEvent;
+
+#[derive(Event)]
+pub struct QuitEvent;
+
+pub fn pressed_button_restart(
+    mut event: EventReader<RestartEvent>,
+) {
+    for _ in event.read() {
+
+    }
+}
+
+pub fn pressed_button_quit(
+    mut event: EventReader<QuitEvent>,
+) {
+    for _ in event.read() {
+        
+    }
+}
+
 pub fn check_button_restart(
     mut q_interaction: Query<(
         &Interaction,
