@@ -12,44 +12,34 @@ pub struct UIBadEnding;
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn((
-        NodeBundle {
-            style: Style {
-                width: Val::Percent(100.0),
-                height: Val::Percent(100.0),
-                display: Display::None,
-                position_type: PositionType::Absolute,
-                padding: UiRect::all(Val::Percent(10.0)),
-                justify_items: JustifyItems::Center,
-                ..default()
-            },
-            background_color: Color::rgb(0.0, 0.0, 0.0).into(),
-            ..default()
-        },
+        get_ending_ui(),
         UIGoodEnding,
     )).with_children(|root_node| {
         good_ending::spawn_ui(root_node);
-        //bad_ending::spawn_ui(root_node);
     });
 
     parent.spawn((
-        NodeBundle {
-            style: Style {
-                width: Val::Percent(100.0),
-                height: Val::Percent(100.0),
-                display: Display::None,
-                position_type: PositionType::Absolute,
-                padding: UiRect::all(Val::Percent(10.0)),
-                justify_items: JustifyItems::Center,
-                ..default()
-            },
-            background_color: Color::rgb(0.0, 0.0, 0.0).into(),
-            ..default()
-        },
+        get_ending_ui(),
         UIBadEnding,
     )).with_children(|root_node| {
-        //good_ending::spawn_ui(root_node);
         bad_ending::spawn_ui(root_node);
     });
+}
+
+fn get_ending_ui() -> NodeBundle {
+    NodeBundle {
+        style: Style {
+            width: Val::Percent(100.0),
+            height: Val::Percent(100.0),
+            display: Display::None,
+            position_type: PositionType::Absolute,
+            padding: UiRect::all(Val::Percent(10.0)),
+            justify_items: JustifyItems::Center,
+            ..default()
+        },
+        background_color: Color::rgb(0.0, 0.0, 0.0).into(),
+        ..default()
+    }
 }
 
 pub fn check_good_ending(
