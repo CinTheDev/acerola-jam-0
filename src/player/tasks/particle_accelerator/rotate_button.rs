@@ -28,12 +28,26 @@ pub fn check_button_solution(q_buttons: Query<&RotateButton>) -> bool {
     for button in q_buttons.iter() {
         let correct_rotation = BUTTON_ROT_SOLUTION[button.position_y][button.position_x];
         let button_type = BUTTON_TYPES[button.position_y][button.position_x];
+        
+        match button_type {
+            // Rotation doesn't matter
+            0 => { continue }
 
-        // Rotation doesn't matter
-        if button_type == 0 { continue }
+            // Straight pipe has rotational symmetries, requires special handling
+            1 => {
+                if button.rotation % 2 != correct_rotation {
+                    return false;
+                }
+            }
 
-        if button.rotation != correct_rotation {
-            return false;
+            // No rotational symmetries
+            2 | 3 => {
+                if button.rotation != correct_rotation {
+                    return false;
+                }
+            }
+
+            _ => { panic!("Invalid type in solution"); }
         }
     }
 
@@ -130,15 +144,15 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
 }
 
 const BUTTON_TYPES: [[u8; 14]; 4] = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 2, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 2],
+    [1, 2, 2, 1, 1, 3, 1, 3, 1, 3, 2, 2, 3, 1],
+    [2, 3, 1, 2, 0, 3, 2, 2, 1, 3, 3, 2, 1, 3],
+    [3, 2, 0, 2, 1, 2, 2, 1, 1, 3, 1, 1, 3, 3],
 ];
 
 const BUTTON_ROT_SOLUTION: [[u8; 14]; 4] = [
-    [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+    [0, 0, 3, 9, 9, 9, 9, 9, 9, 0, 0, 0, 3, 0],
+    [0, 3, 1, 0, 0, 3, 0, 3, 0, 1, 3, 0, 2, 1],
+    [3, 0, 0, 3, 9, 0, 3, 1, 0, 3, 1, 2, 1, 0],
+    [1, 2, 9, 1, 0, 2, 1, 0, 0, 1, 0, 0, 1, 1],
 ];
