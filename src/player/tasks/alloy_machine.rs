@@ -185,6 +185,7 @@ pub fn instance_alloy() -> AlloyTaskBundle {
                 is_dropped: false
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: AlloyTask {
             is_done: false,
@@ -206,6 +207,7 @@ pub fn instance_lead() -> LeadTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: LeadTask {
             is_done: false
@@ -227,6 +229,7 @@ pub fn instance_ironblock() -> IronBlockTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronBlockTask {
             is_done: false
@@ -248,6 +251,7 @@ pub fn instance_ironhammer() -> IronHammerTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronHammerTask {
             is_done: false
@@ -269,6 +273,7 @@ pub fn instance_ironscrewdriver() -> IronScrewdriverTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronScrewdriverTask {
             is_done: false
@@ -290,6 +295,7 @@ pub fn instance_ironphone() -> IronPhoneTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: IronPhoneTask {
             is_done: false

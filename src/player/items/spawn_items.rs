@@ -158,5 +158,6 @@ fn spawn_item(
             lerp_active: true,
         },
         r_cursor: RaycastCursor,
+        respawn: crate::Respawn,
     });
 }

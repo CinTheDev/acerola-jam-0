@@ -113,6 +113,7 @@ pub fn instance_copper() -> CopperTaskBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: CopperTask {
             is_done: false,

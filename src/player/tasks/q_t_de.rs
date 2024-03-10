@@ -131,6 +131,7 @@ pub fn instance_dark_matter() -> CleanDarkMatterBundle {
                 is_dropped: false,
             },
             r_cursor: RaycastCursor,
+            respawn: crate::Respawn,
         },
         task: CleanDarkMatterTask {
             is_done: false,
