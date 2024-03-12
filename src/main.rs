@@ -94,7 +94,7 @@ fn main() {
         .run();
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_startmusic: EventWriter<music::StartMusicEvent>) {
     commands.spawn(SceneBundle {
         scene: asset_server.load("lab.glb#Scene0"),
         transform: Transform::from_xyz(0.0, 0.0, 0.0),
@@ -103,6 +103,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     player::items::spawn_items::spawn_all_items(&mut commands, &asset_server);
     player::instance_player(&mut commands);
+
+    ev_startmusic.send(music::StartMusicEvent);
 }
 
 fn cursor_grab(mut query: Query<&mut Window, With<PrimaryWindow>>) {
