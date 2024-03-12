@@ -24,6 +24,7 @@ fn main() {
             timer::setup_losetimer,
             ui::setup,
             sound::instance_music,
+            sound::load_sounds,
         ))
         .add_systems(Update, (
             (

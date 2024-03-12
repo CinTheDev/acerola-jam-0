@@ -7,8 +7,19 @@ pub struct MusicBundle {
     music: Music,
 }
 
+#[derive(Bundle)]
+pub struct PlayableSoundBundle {
+    sound: PlayableSound,
+}
+
 #[derive(Component)]
 pub struct Music;
+
+#[derive(Component)]
+pub struct PlayableSound {
+    sound: AudioBundle,
+    id: SoundID,
+}
 
 #[derive(Event)]
 pub struct StartMusicEvent;
@@ -40,6 +51,10 @@ pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
     });
 }
 
+pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn(get_sound(&asset_server, "sound/AlloyMachine.ogg".to_owned(), SoundID::AlloyMachine));
+}
+
 pub fn start_music(
     mut ev_startmusic: EventReader<StartMusicEvent>,
     mut q_music: Query<&mut PlaybackSettings, With<Music>>,
@@ -56,5 +71,25 @@ pub fn play_sound(
 ) {
     for ev in ev_sound.read() {
         info!("Playing sound: {:?}", ev.0);
+    }
+}
+
+fn get_sound(
+    asset_server: &Res<AssetServer>,
+    source: String,
+    id: SoundID,
+) -> PlayableSoundBundle {
+    PlayableSoundBundle {
+        sound: PlayableSound {
+            sound: AudioBundle {
+                source: asset_server.load(source),
+                settings: PlaybackSettings {
+                    paused: true,
+                    mode: PlaybackMode::Once,
+                    ..default()
+                }
+            },
+            id,
+        }
     }
 }
