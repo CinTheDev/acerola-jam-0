@@ -118,6 +118,7 @@ pub fn check_alloy_finished(
     task_master.is_all_done = true;
     event.send(AlloyPlacementFinished());
     info!("Finished alloy machine tasks");
+    // TODO: Play sound
 }
 
 pub fn check_if_finished(

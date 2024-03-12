@@ -5,7 +5,7 @@ mod player;
 mod generate_colliders;
 mod timer;
 mod ui;
-mod music;
+mod sound;
 
 #[derive(Component)]
 pub struct RaycastCursor;
@@ -23,7 +23,7 @@ fn main() {
             player::tasks::setup,
             timer::setup_losetimer,
             ui::setup,
-            music::instance_music,
+            sound::instance_music,
         ))
         .add_systems(Update, (
             (
@@ -74,7 +74,7 @@ fn main() {
             ui::ui_ending::buttons::pressed_button_restart,
         ))
         .add_systems(Update, (
-            music::start_music,
+            sound::start_music,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
@@ -89,12 +89,12 @@ fn main() {
         .add_event::<timer::TimerStop>()
         .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
-        .add_event::<music::StartMusicEvent>()
-        .add_event::<music::StopMusicEvent>()
+        .add_event::<sound::StartMusicEvent>()
+        .add_event::<sound::StopMusicEvent>()
         .run();
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_startmusic: EventWriter<music::StartMusicEvent>) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_startmusic: EventWriter<sound::StartMusicEvent>) {
     commands.spawn(SceneBundle {
         scene: asset_server.load("lab.glb#Scene0"),
         transform: Transform::from_xyz(0.0, 0.0, 0.0),
@@ -104,7 +104,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_startmus
     player::items::spawn_items::spawn_all_items(&mut commands, &asset_server);
     player::instance_player(&mut commands);
 
-    ev_startmusic.send(music::StartMusicEvent);
+    ev_startmusic.send(sound::StartMusicEvent);
 }
 
 fn cursor_grab(mut query: Query<&mut Window, With<PrimaryWindow>>) {
