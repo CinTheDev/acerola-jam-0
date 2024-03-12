@@ -75,6 +75,7 @@ fn main() {
         ))
         .add_systems(Update, (
             sound::start_music,
+            sound::play_sound,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
@@ -91,6 +92,7 @@ fn main() {
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
         .add_event::<sound::StartMusicEvent>()
         .add_event::<sound::StopMusicEvent>()
+        .add_event::<sound::PlaySoundEvent>()
         .run();
 }
 

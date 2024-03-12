@@ -16,6 +16,15 @@ pub struct StartMusicEvent;
 #[derive(Event)]
 pub struct StopMusicEvent;
 
+#[derive(Event)]
+pub struct PlaySoundEvent(SoundID);
+
+pub enum SoundID {
+    AlloyMachine,
+    ParticleAccelerator,
+    // TODO: Continue this list
+}
+
 pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(MusicBundle {
         audio: AudioBundle {
@@ -38,5 +47,13 @@ pub fn start_music(
         let mut music = q_music.single_mut();
 
         music.paused = false;
+    }
+}
+
+pub fn play_sound(
+    mut ev_sound: EventReader<PlaySoundEvent>,
+) {
+    for ev in ev_sound.read() {
+
     }
 }
