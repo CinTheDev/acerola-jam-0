@@ -30,7 +30,7 @@ pub struct StopMusicEvent;
 #[derive(Event)]
 pub struct PlaySoundEvent(pub SoundID);
 
-#[derive(Debug)]
+#[derive(PartialEq, Clone, Copy, Debug)]
 pub enum SoundID {
     AlloyMachine,
     ParticleAccelerator,
@@ -68,9 +68,18 @@ pub fn start_music(
 
 pub fn play_sound(
     mut ev_sound: EventReader<PlaySoundEvent>,
+    mut q_soundplayer: Query<&mut PlayableSound>,
 ) {
     for ev in ev_sound.read() {
-        info!("Playing sound: {:?}", ev.0);
+        let id = ev.0;
+        
+        for mut sound in q_soundplayer.iter_mut() {
+            if sound.id != id { continue }
+            
+            // Play sound
+            sound.sound.settings.paused = false;
+            info!("Playing sound: {:?}", id);
+        }
     }
 }
 
