@@ -73,6 +73,9 @@ fn main() {
             ui::ui_ending::buttons::check_button_quit,
             ui::ui_ending::buttons::pressed_button_restart,
         ))
+        .add_systems(Update, (
+            music::start_music,
+        ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
         .add_event::<player::items::DropEvent>()
@@ -86,6 +89,8 @@ fn main() {
         .add_event::<timer::TimerStop>()
         .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
+        .add_event::<music::StartMusicEvent>()
+        .add_event::<music::StopMusicEvent>()
         .run();
 }
 
