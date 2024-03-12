@@ -5,6 +5,7 @@ mod player;
 mod generate_colliders;
 mod timer;
 mod ui;
+mod music;
 
 #[derive(Component)]
 pub struct RaycastCursor;
