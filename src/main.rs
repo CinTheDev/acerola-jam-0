@@ -23,6 +23,7 @@ fn main() {
             player::tasks::setup,
             timer::setup_losetimer,
             ui::setup,
+            music::instance_music,
         ))
         .add_systems(Update, (
             (
