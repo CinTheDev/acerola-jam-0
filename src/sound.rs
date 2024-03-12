@@ -17,8 +17,9 @@ pub struct StartMusicEvent;
 pub struct StopMusicEvent;
 
 #[derive(Event)]
-pub struct PlaySoundEvent(SoundID);
+pub struct PlaySoundEvent(pub SoundID);
 
+#[derive(Debug)]
 pub enum SoundID {
     AlloyMachine,
     ParticleAccelerator,
@@ -54,6 +55,6 @@ pub fn play_sound(
     mut ev_sound: EventReader<PlaySoundEvent>,
 ) {
     for ev in ev_sound.read() {
-
+        info!("Playing sound: {:?}", ev.0);
     }
 }
