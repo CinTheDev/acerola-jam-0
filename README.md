@@ -1,8 +1,10 @@
-# Acerola jam game
+# False Vacuum Decay
 
 This is a game dedicated to the Acerola Jam 0.
 
 The theme is ABERRATION.
+
+This README is probably not very useful lol. I've mainly used it to write out and develop my game idea at the beginning, but now it's kinda useless. Proper game description is on the Itch.io page.
 
 ## Additional info
 
