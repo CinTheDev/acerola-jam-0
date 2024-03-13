@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::audio::{PlaybackMode, Volume, VolumeLevel};
+use bevy::audio::{PlaybackMode, Volume};
 use rand;
 
 use crate::ui::ui_ending::buttons::RestartEvent;
@@ -182,7 +182,7 @@ fn get_volume_from_id(id: SoundID) -> Volume {
         SoundID::ItemGrab => 1.0,
     };
 
-    Volume::Relative(VolumeLevel::new(percent))
+    Volume::new_relative(percent)
 }
 
 fn get_random_index(upper_bound: usize) -> usize {
