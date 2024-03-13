@@ -6,6 +6,12 @@ The theme is ABERRATION.
 
 This README is probably not very useful lol. I've mainly used it to write out and develop my game idea at the beginning, but now it's kinda useless. Proper game description is on the Itch.io page.
 
+## Note on assets
+
+I've decided to not add the assets to the version control. This is to avoid making the git repository unnecessarily large. If you want to compile the game from source, you can download and manually add the "Dev_Assets.zip" from the Itch page.
+
+Code is fully versioned, so feel free to jump to any commit to explore the game's state at any point in time.
+
 ## Additional info
 
 ### Color palette
