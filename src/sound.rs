@@ -16,6 +16,7 @@ pub struct PlaySpatialSoundEvent(pub SoundID, pub Vec3);
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum SoundID {
+    Music,
     TaskComplete,
     AlloyMachine,
     ParticleAccelerator,
@@ -51,7 +52,7 @@ pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 */
 
-pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_sound: EventWriter<PlaySoundEvent>) {
     commands.insert_resource(SoundHandles {
         music: asset_server.load("sound/Vacuum_Decay.ogg"),
         task_complete: asset_server.load("sound/Task_Complete.ogg"),
@@ -67,6 +68,8 @@ pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
             asset_server.load(format!("sound/item/grab{}.ogg", i+1))
         }),
     });
+
+    ev_sound.send(PlaySoundEvent(SoundID::Music));
 }
 
 /*
@@ -130,6 +133,7 @@ pub fn play_spatial_sound(
 
 fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioSource> {
     match id {
+        SoundID::Music => handles.music.clone(),
         SoundID::TaskComplete => handles.task_complete.clone(),
         SoundID::AlloyMachine => handles.alloy_machine.clone(),
         SoundID::ParticleAccelerator => handles.particle_accelerator.clone(),
