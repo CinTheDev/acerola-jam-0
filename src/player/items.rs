@@ -10,8 +10,7 @@ pub mod spawn_items;
 const ITEM_LERP_FACTOR: f32 = 0.2 * 60.0;
 
 static ITEM_HOLD_TRANSFORM: Lazy<Transform> = Lazy::new(|| {
-    Transform::from_xyz(0.15, -0.15, -0.3)
-        .with_rotation(Quat::from_euler(EulerRot::YXZ, 0.0, 0.0, 0.0))
+    Transform::from_xyz(0.0, -0.1, -1.0)
 });
 
 #[derive(PartialEq, Debug, Clone, Copy)]
