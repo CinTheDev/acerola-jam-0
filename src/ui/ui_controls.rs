@@ -4,6 +4,9 @@ use bevy::prelude::*;
 pub struct ShowControls(pub bool);
 
 #[derive(Component)]
+pub struct ControlsUI;
+
+#[derive(Component)]
 pub struct ControlsText;
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
@@ -19,16 +22,27 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
                 margin: UiRect::all(Val::Px(2.0)),
                 ..default()
             },
-            background_color: Color::RED.into(),
             ..default()
         },
-        ControlsText,
-    ));
+        ControlsUI,
+    )).with_children(|bg| {
+        bg.spawn((
+            TextBundle::from_section(
+                "Default text",
+                TextStyle {
+                    font_size: 18.0,
+                    color: Color::WHITE,
+                    ..default()
+                }
+            ),
+            ControlsText,
+        ));
+    });
 }
 
 pub fn show_controls(
     mut ev_show: EventReader<ShowControls>,
-    mut q_ctrls: Query<&mut Style, With<ControlsText>>,
+    mut q_ctrls: Query<&mut Style, With<ControlsUI>>,
 ) {
     for show in ev_show.read() {
         let mut style = q_ctrls.single_mut();
