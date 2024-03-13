@@ -19,7 +19,7 @@ fn main() {
         .add_systems(Startup, (
             setup,
             cursor_grab,
-            maximize_window,
+            //maximize_window,
             generate_colliders::generate_colliders,
             player::tasks::setup,
             timer::setup_losetimer,
