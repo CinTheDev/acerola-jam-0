@@ -84,6 +84,7 @@ fn main() {
             ui::ui_intro::slide_slide,
             ui::ui_intro::slide_input,
             ui::ui_intro::finish_slides,
+            ui::ui_controls::show_controls,
         ))
         .add_systems(Update, (
             sound::play_sound,
@@ -107,6 +108,7 @@ fn main() {
         .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
         .add_event::<ui::ui_intro::SlidesFinishedEvent>()
+        .add_event::<ui::ui_controls::ShowControls>()
         .add_event::<sound::PlaySoundEvent>()
         .add_event::<sound::PlaySpatialSoundEvent>()
         .run();
