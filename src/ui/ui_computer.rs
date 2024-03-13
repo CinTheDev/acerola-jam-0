@@ -5,8 +5,14 @@ use crate::player::tasks::computer::ComputerTask;
 #[derive(Component)]
 pub struct ComputerScreenText;
 
+#[derive(Component)]
+pub struct ComputerScreenUI {
+    lerp_factor: f32,
+    value: f32,
+}
+
 pub fn spawn_ui(parent: &mut ChildBuilder) {
-    parent.spawn(
+    parent.spawn((
         NodeBundle {
             style: Style {
                 width: Val::Percent(70.0),
@@ -17,8 +23,12 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
             },
             background_color: Color::BEIGE.into(),
             ..default()
+        },
+        ComputerScreenUI {
+            lerp_factor: 0.5,
+            value: 0.0,
         }
-    ).with_children(|bg| {
+    )).with_children(|bg| {
         bg.spawn(NodeBundle {
             style: Style {
                 width: Val::Percent(90.0),
