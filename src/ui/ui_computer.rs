@@ -25,8 +25,8 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
             ..default()
         },
         ComputerScreenUI {
-            lerp_factor: 0.5,
-            value: 0.0,
+            lerp_factor: 5.0,
+            value: 100.0,
         }
     )).with_children(|bg| {
         bg.spawn(NodeBundle {
@@ -76,18 +76,19 @@ pub fn computer_screen_text(
 
 pub fn lerp_computer_screen(
     q_computer_task: Query<&ComputerTask>,
-    mut q_screen: Query<(&mut Style, &mut ComputerScreenUI)>
+    mut q_screen: Query<(&mut Style, &mut ComputerScreenUI)>,
+    time: Res<Time>,
 ) {
     let computer_task = q_computer_task.single();
     let (mut screen, mut lerp_prop) = q_screen.single_mut();
 
-    let mut desired_top = 200.0;
+    let mut desired_top = 100.0;
 
     if computer_task.is_active {
         desired_top = 0.0;
     }
 
-    lerp_prop.value = lerp(lerp_prop.value, desired_top, lerp_prop.lerp_factor);
+    lerp_prop.value = lerp(lerp_prop.value, desired_top, lerp_prop.lerp_factor * time.delta_seconds());
     screen.top = Val::Percent(lerp_prop.value);
 }
 
