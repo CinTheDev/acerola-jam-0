@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::window::{CursorGrabMode, PrimaryWindow};
+use bevy::window::{CursorGrabMode, PrimaryWindow, WindowMode};
 
 mod player;
 mod generate_colliders;
@@ -19,6 +19,7 @@ fn main() {
         .add_systems(Startup, (
             setup,
             cursor_grab,
+            maximize_window,
             generate_colliders::generate_colliders,
             player::tasks::setup,
             timer::setup_losetimer,
@@ -122,4 +123,10 @@ fn cursor_grab(mut query: Query<&mut Window, With<PrimaryWindow>>) {
 
     primary_window.cursor.grab_mode = CursorGrabMode::Locked;
     primary_window.cursor.visible = false;
+}
+
+fn maximize_window(mut query: Query<&mut Window, With<PrimaryWindow>>) {
+    let mut window = query.single_mut();
+
+    window.mode = WindowMode::BorderlessFullscreen;
 }
