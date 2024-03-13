@@ -5,6 +5,7 @@ pub mod ui_timer;
 pub mod ui_tasks;
 pub mod ui_ending;
 pub mod ui_computer;
+pub mod ui_intro;
 
 pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     instance_ui(&mut commands, &asset_server);
