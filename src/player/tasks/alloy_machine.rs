@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}}, RaycastCursor};
 use super::ItemDropTask;
-use crate::sound::{PlaySoundEvent, SoundID};
+use crate::sound::{PlaySpatialSoundEvent, SoundID};
 
 #[derive(Event)]
 pub struct AlloyCreationFinshed();
@@ -127,7 +127,7 @@ pub fn check_if_finished(
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
     q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>,
     mut event: EventWriter<AlloyCreationFinshed>,
-    mut ev_sound: EventWriter<PlaySoundEvent>,
+    mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
 ) {
     let mut alloy_task = q_task_alloy.single_mut();
 
@@ -144,7 +144,7 @@ pub fn check_if_finished(
         output_alloy(q_items);
         alloy_task.is_done = true;
         event.send(AlloyCreationFinshed());
-        ev_sound.send(PlaySoundEvent(SoundID::AlloyMachine));
+        ev_sound.send(PlaySpatialSoundEvent(SoundID::AlloyMachine, Vec3::new(8.5, 1.5, 1.5)));
     }
 }
 

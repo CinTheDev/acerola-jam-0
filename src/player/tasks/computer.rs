@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::player::{collision::{raycast, SphereCollider}, Player};
 use crate::RaycastCursor;
-use crate::sound::{PlaySoundEvent, SoundID};
+use crate::sound::{PlaySpatialSoundEvent, SoundID};
 
 // Ambiguous letters like l, I, 1, or O, 0 have been swapped with other letters
 const PASSWORD: &str = "tekMBtEYK4xXrULL7xY2NQILfu2cio";
@@ -70,7 +70,7 @@ pub fn input_from_keyboard(
     mut ev_success: EventWriter<SuccessEvent>,
     mut q_task: Query<&mut ComputerTask>,
     input: Res<Input<KeyCode>>,
-    mut ev_sound: EventWriter<PlaySoundEvent>,
+    mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
 ) {
     let mut task = q_task.single_mut();
     if ! task.is_active {
@@ -84,7 +84,7 @@ pub fn input_from_keyboard(
         }
         else {
             clear_input(task.as_mut());
-            ev_sound.send(PlaySoundEvent(SoundID::ComputerDenied));
+            ev_sound.send(PlaySpatialSoundEvent(SoundID::ComputerDenied, Vec3::new(1.25, 1.0, 5.5)));
         }
     }
 
