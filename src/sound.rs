@@ -28,7 +28,8 @@ pub enum SoundID {
     AlloyMachine,
     ParticleAccelerator,
     ComputerDenied,
-    // TODO: Continue this list
+    Keyboard,
+    ItemGrab,
 }
 
 #[derive(Resource)]
@@ -37,7 +38,8 @@ pub struct SoundHandles {
     alloy_machine: Handle<AudioSource>,
     particle_accelerator: Handle<AudioSource>,
     computer_denied: Handle<AudioSource>,
-    // TODO: Continue this list
+    keyboard: [Handle<AudioSource>; 5],
+    item_grab: [Handle<AudioSource>; 5],
 }
 
 pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -60,6 +62,14 @@ pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
         alloy_machine: asset_server.load("sound/AlloyMachine.ogg"),
         particle_accelerator: asset_server.load("sound/Particle_Accelerator.ogg"),
         computer_denied: asset_server.load("sound/Computer_Denied.ogg"),
+
+        keyboard: core::array::from_fn(|i| {
+            asset_server.load(format!("sound/keyboard/Keyboard{}.ogg", i+1))
+        }),
+
+        item_grab: core::array::from_fn(|i| {
+            asset_server.load(format!("sound/items/grab{}.ogg", i+1))
+        }),
     });
 }
 
@@ -127,5 +137,11 @@ fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioS
         SoundID::AlloyMachine => handles.alloy_machine.clone(),
         SoundID::ParticleAccelerator => handles.particle_accelerator.clone(),
         SoundID::ComputerDenied => handles.computer_denied.clone(),
+        SoundID::Keyboard => handles.keyboard[get_random_index(5)].clone(),
+        SoundID::ItemGrab => handles.item_grab[get_random_index(5)].clone(),
     }
+}
+
+fn get_random_index(upper_bound: usize) -> usize {
+    todo!();
 }
