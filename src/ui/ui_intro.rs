@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-const LERP_FACTOR: f32 = 0.5;
+const LERP_FACTOR: f32 = 0.1;
 
 #[derive(Component)]
 pub struct IntroSlide {
