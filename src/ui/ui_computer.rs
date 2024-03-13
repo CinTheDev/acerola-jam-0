@@ -19,17 +19,30 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
             ..default()
         }
     ).with_children(|bg| {
-        bg.spawn((
-            TextBundle::from_section(
-                "",
-                TextStyle {
-                    font_size: 30.0,
-                    color: Color::BLACK,
-                    ..default()
-                }
-            ),
-            ComputerScreenText,
-        ));
+        bg.spawn(NodeBundle {
+            style: Style {
+                width: Val::Percent(90.0),
+                height: Val::Percent(10.0),
+                margin: UiRect::all(Val::Auto),
+                border: UiRect::all(Val::Px(1.0)),
+                ..default()
+            },
+            background_color: Color::WHITE.into(),
+            border_color: Color::BLACK.into(),
+            ..default()
+        }).with_children(|input_field| {
+            input_field.spawn((
+                TextBundle::from_section(
+                    "",
+                    TextStyle {
+                        font_size: 30.0,
+                        color: Color::BLACK,
+                        ..default()
+                    }
+                ),
+                ComputerScreenText,
+            ));
+        });
     });
 }
 
