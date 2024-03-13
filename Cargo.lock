@@ -72,15 +72,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "acerola_jam"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "once_cell",
- "rand",
-]
-
-[[package]]
 name = "addr2line"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1597,6 +1588,15 @@ checksum = "feedafcaa9b749175d5ac357452a9d41ea2911da598fde46ce1fe02c37751291"
 dependencies = [
  "event-listener 5.2.0",
  "pin-project-lite",
+]
+
+[[package]]
+name = "false_vacuum_decay"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "once_cell",
+ "rand",
 ]
 
 [[package]]
