@@ -29,6 +29,7 @@ pub enum SoundID {
 #[derive(Resource)]
 pub struct SoundHandles {
     alloy_machine: Handle<AudioSource>,
+    particle_accelerator: Handle<AudioSource>,
     // TODO: Continue this list
 }
 
@@ -48,7 +49,8 @@ pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(SoundHandles {
-        alloy_machine: asset_server.load("sound/AlloyMachine.ogg")
+        alloy_machine: asset_server.load("sound/AlloyMachine.ogg"),
+        particle_accelerator: asset_server.load("sound/Particle_Accelerator.ogg"),
     });
 }
 
@@ -87,6 +89,6 @@ pub fn play_sound(
 fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioSource> {
     match id {
         SoundID::AlloyMachine => handles.alloy_machine.clone(),
-        SoundID::ParticleAccelerator => todo!(),
+        SoundID::ParticleAccelerator => handles.particle_accelerator.clone(),
     }
 }
