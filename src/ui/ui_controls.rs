@@ -18,7 +18,6 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
                 bottom: Val::ZERO,
                 left: Val::ZERO,
                 position_type: PositionType::Absolute,
-                display: Display::None,
                 margin: UiRect::all(Val::Px(2.0)),
                 ..default()
             },
