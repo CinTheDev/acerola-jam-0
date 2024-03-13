@@ -78,8 +78,11 @@ fn main() {
             ui::ui_computer::computer_screen_text,
             ui::ui_computer::lerp_computer_screen,
             ui::ui_computer::check_err,
+        ))
+        .add_systems(Update, (
             ui::ui_intro::slide_slide,
             ui::ui_intro::slide_input,
+            ui::ui_intro::finish_slides,
         ))
         .add_systems(Update, (
             sound::play_sound,
@@ -101,6 +104,7 @@ fn main() {
         .add_event::<timer::TimerStop>()
         .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
+        .add_event::<ui::ui_intro::SlidesFinishedEvent>()
         .add_event::<sound::StartMusicEvent>()
         .add_event::<sound::PlaySoundEvent>()
         .add_event::<sound::PlaySpatialSoundEvent>()

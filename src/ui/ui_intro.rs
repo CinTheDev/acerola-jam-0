@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::{player::Player, sound::StartMusicEvent};
+
 const LERP_FACTOR: f32 = 0.1;
 
 #[derive(Component)]
@@ -8,6 +10,9 @@ pub struct IntroSlide {
     dist_to_top: f32,
     all_slides_done: bool,
 }
+
+#[derive(Event)]
+pub struct SlidesFinishedEvent;
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
     parent.spawn(NodeBundle {
@@ -62,6 +67,21 @@ pub fn slide_slide(
         prop.dist_to_top = lerp(prop.dist_to_top, desired_pos, LERP_FACTOR);
 
         style.top = Val::Percent(prop.dist_to_top);
+    }
+}
+
+pub fn finish_slides(
+    mut ev_finished: EventReader<SlidesFinishedEvent>,
+    mut q_player: Query<&mut Player>,
+    mut ev_startmusic: EventWriter<StartMusicEvent>,
+) {
+    for _ in ev_finished.read() {
+        // Unlock Player
+        let mut player = q_player.single_mut();
+        player.locked = false;
+
+        // Start music
+        ev_startmusic.send(StartMusicEvent);
     }
 }
 
