@@ -21,8 +21,6 @@ pub fn pressed_button_restart(
     mut ev_showctrls: EventWriter<ShowControls>,
 ) {
     for _ in event.read() {
-        info!("Restart button");
-
         // Delete all objects marked for Respawn
         for entity_id in q_respawn.iter() {
             commands.entity(entity_id).despawn_recursive();

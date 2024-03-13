@@ -156,7 +156,6 @@ pub fn pickup_item(
             coll.enabled = false;
 
             ev_sound.send(PlaySoundEvent(SoundID::ItemGrab));
-            info!("Pickup Event: {:?}", i.id);
 
             return;
         }
@@ -181,8 +180,6 @@ pub fn cancel_itemdrop(
             i.lerp_active = true;
             player.item_id = ItemId::None;
             coll.enabled = true;
-
-            info!("Cancel event: {:?}", i.id);
 
             return;
         }
@@ -210,7 +207,6 @@ pub fn drop_item(
         item.desired_transform = *drop_transform;
         drop.is_dropped = true;
 
-        info!("Drop Event: {:?}", item_id);
         return;
     }
 }

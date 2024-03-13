@@ -59,7 +59,6 @@ pub fn slide_input(
 
     if slides_done {
         ev_finished.send(SlidesFinishedEvent);
-        info!("Slides are done");
 
         for mut slide in q_slides.iter_mut() {
             slide.position = -2; // Move them far away from the screen

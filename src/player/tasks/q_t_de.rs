@@ -85,7 +85,6 @@ pub fn check_dark_matter_finished(
 
     task.is_done = true;
     event.send(DarkMatterFinished());
-    info!("Dark matter task finished");
 }
 
 pub fn check_final_button_input(

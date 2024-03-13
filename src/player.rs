@@ -171,9 +171,6 @@ pub fn raycast_items(
     let ray = player_trans.forward() * 5.0;
     let raycast_item = collision::raycast(player_trans.translation, ray, q_items.iter());
     let raycast_drop = collision::raycast(player_trans.translation, ray, q_drops.iter());
-
-    //info!("Raycast item result: {}", raycast_item.is_some());
-    //info!("Raycast drop result: {}", raycast_drop.is_some());
     
     check_drop_item(&input, ev_cancel);
     check_raycast_item(raycast_item, &input, ev_pickup);

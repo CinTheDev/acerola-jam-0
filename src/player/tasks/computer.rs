@@ -63,7 +63,6 @@ pub fn check_activation(
     
     if ! interaction { return }
     
-    info!("Computer has been activated");
     task.2.as_mut().is_active = true;
     lock_player(player_prop, player_coll, *player_trans, task.2.as_mut());
 }
@@ -107,7 +106,6 @@ pub fn input_from_keyboard(
         task.input.push(c.char);
 
         ev_sound.send(PlaySpatialSoundEvent(SoundID::Keyboard, sound_pos));
-        info!("Appended char. Now is: {}", task.input);
     }
 }
 
@@ -124,7 +122,6 @@ pub fn task_success(
         task.is_active = false;
 
         unlock_player(player.0.as_mut(), player.1.as_mut(), player.2.as_mut(), task.as_mut());
-        info!("Computer task finished");
     }
 }
 

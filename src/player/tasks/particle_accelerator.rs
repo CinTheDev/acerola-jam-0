@@ -70,7 +70,6 @@ pub fn check_buttons_solution(
 
     event.send(ParticleAcceleratorFinished());
     ev_sound.send(PlaySpatialSoundEvent(SoundID::ParticleAccelerator, Vec3::new(0.0, 2.0, 21.0)));
-    info!("Particle accelerator task done");
 }
 
 fn enable_buttons(query: Query<(&mut SphereCollider, &mut RotateButton)>, task: &mut RotateButtonsTask) {

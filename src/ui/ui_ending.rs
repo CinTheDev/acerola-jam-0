@@ -139,7 +139,6 @@ pub fn check_good_ending(
     mut ev_hidectrls: EventWriter<ShowControls>,
 ) {
     for _ in event.read() {
-        info!("Good ending :3");
         let mut prop = q_background.single_mut();
         let mut text = q_text.single_mut();
         let mut player = q_player.single_mut();
@@ -166,7 +165,6 @@ pub fn check_bad_ending(
     mut ev_hidectrls: EventWriter<ShowControls>,
 ) {
     for _ in event.read() {
-        info!("Bad ending :(");
         let mut prop = q_background.single_mut();
         let mut text = q_text.single_mut();
         let mut player = q_player.single_mut();

@@ -120,7 +120,6 @@ pub fn check_alloy_finished(
 
     task_master.is_all_done = true;
     event.send(AlloyPlacementFinished());
-    info!("Finished alloy machine tasks");
 }
 
 pub fn check_if_finished(
@@ -175,7 +174,6 @@ fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Que
     if ! itemdrop.is_dropped { return false }
 
     task.set_done(true);
-    info!("Generic task done");
 
     return true;
 }

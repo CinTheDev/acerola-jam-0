@@ -113,8 +113,6 @@ pub fn play_sound(
             source: handle,
             settings: get_playback_settings(false, ev.0)
         });
-
-        info!("Playing sound: {:?}", ev.0);
     }
 }
 
