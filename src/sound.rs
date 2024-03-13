@@ -62,8 +62,11 @@ pub fn load_sounds(
         }),
     });
 
+    let mut fade_timer = Timer::from_seconds(3.0, TimerMode::Once);
+    fade_timer.pause();
+
     commands.insert_resource(SoundFadeout {
-        fade_timer: Timer::from_seconds(3.0, TimerMode::Once),
+        fade_timer,
     });
 
     ev_sound.send(PlaySoundEvent(SoundID::Music));
@@ -80,6 +83,15 @@ pub fn handle_sound_restart(
 
     for sound in q_sound.iter() {
         sound.set_volume(vol);
+    }
+}
+
+pub fn stop_music(
+    mut ev_stop: EventReader<StopMusicEvent>,
+    mut fade_timer: ResMut<SoundFadeout>,
+) {
+    for _ in ev_stop.read() {
+        fade_timer.fade_timer.unpause();
     }
 }
 

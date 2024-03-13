@@ -77,6 +77,7 @@ fn main() {
             sound::play_sound,
             sound::play_spatial_sound,
             sound::handle_sound_restart,
+            sound::stop_music,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
