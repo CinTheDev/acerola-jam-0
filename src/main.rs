@@ -56,7 +56,6 @@ fn main() {
         ))
         .add_systems(Update, (
             timer::check_losetimer,
-            timer::timer_runout,
             timer::timer_stop,
             timer::timer_reset,
         ))
