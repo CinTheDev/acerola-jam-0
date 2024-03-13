@@ -69,7 +69,7 @@ pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
         }),
 
         item_grab: core::array::from_fn(|i| {
-            asset_server.load(format!("sound/items/grab{}.ogg", i+1))
+            asset_server.load(format!("sound/item/grab{}.ogg", i+1))
         }),
     });
 }
