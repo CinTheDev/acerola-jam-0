@@ -68,11 +68,20 @@ pub fn start_music(
 pub fn play_sound(
     mut commands: Commands,
     mut ev_sound: EventReader<PlaySoundEvent>,
-    //mut q_soundplayer: Query<(&mut PlaybackSettings, &PlayableSound)>,
     sound_handles: Res<SoundHandles>,
 ) {
     for ev in ev_sound.read() {
         let handle = get_handle_from_id(ev.0, &sound_handles);
+
+        commands.spawn(AudioBundle {
+            source: handle,
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Despawn,
+                ..default()
+            }
+        });
+
+        info!("Playing sound: {:?}", ev.0);
     }
 }
 
