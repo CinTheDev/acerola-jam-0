@@ -113,7 +113,10 @@ pub fn play_spatial_sound(
                     ..default()
                 }
             },
-            Transform::from_translation(position),
+            SpatialBundle {
+                transform: Transform::from_translation(position),
+                ..default()
+            }
         ));
     }
 }

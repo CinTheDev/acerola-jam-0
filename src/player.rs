@@ -30,7 +30,7 @@ pub fn instance_player(commands: &mut Commands) {
             transform: Transform::from_xyz(3.0, 1.5, 0.0),
             ..default()
         },
-        audio_listener: SpatialListener::new(1.0),
+        audio_listener: SpatialListener::new(2.0),
         respawn: crate::Respawn,
     });
 }

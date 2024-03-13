@@ -125,6 +125,6 @@ fn debug_spatial_sound(
     input: Res<Input<KeyCode>>,
 ) {
     if input.just_pressed(KeyCode::G) {
-        ev_sound.send(sound::PlaySpatialSoundEvent(sound::SoundID::TaskComplete, Vec3::new(0.0, 0.0, 0.0)));
+        ev_sound.send(sound::PlaySpatialSoundEvent(sound::SoundID::TaskComplete, Vec3::new(3.0, 1.5, 0.0)));
     }
 }
