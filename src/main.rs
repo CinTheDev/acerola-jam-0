@@ -78,7 +78,6 @@ fn main() {
             sound::start_music,
             sound::play_sound,
             sound::play_spatial_sound,
-            debug_random_sound,
         ))
         .add_event::<player::items::PickupEvent>()
         .add_event::<player::items::DropCancelEvent>()
@@ -118,13 +117,4 @@ fn cursor_grab(mut query: Query<&mut Window, With<PrimaryWindow>>) {
 
     primary_window.cursor.grab_mode = CursorGrabMode::Locked;
     primary_window.cursor.visible = false;
-}
-
-fn debug_random_sound(
-    mut ev_sound: EventWriter<sound::PlaySoundEvent>,
-    input: Res<Input<KeyCode>>,
-) {
-    if input.just_pressed(KeyCode::G) {
-        ev_sound.send(sound::PlaySoundEvent(sound::SoundID::Keyboard));
-    }
 }
