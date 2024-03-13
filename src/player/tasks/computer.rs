@@ -70,8 +70,11 @@ pub fn input_from_keyboard(
     mut ev_success: EventWriter<SuccessEvent>,
     mut q_task: Query<&mut ComputerTask>,
     input: Res<Input<KeyCode>>,
-    mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
+    mut ev_err_sound: EventWriter<PlaySpatialSoundEvent>,
+    mut ev_key_sound: EventWriter<PlaySpatialSoundEvent>,
 ) {
+    let sound_pos = Vec3::new(1.25, 1.0, 5.5);
+
     let mut task = q_task.single_mut();
     if ! task.is_active {
         ev_char.clear();
@@ -80,16 +83,18 @@ pub fn input_from_keyboard(
 
     if input.just_pressed(KeyCode::Return) {
         if task.input == PASSWORD {
+            ev_key_sound.send(PlaySpatialSoundEvent(SoundID::Keyboard, sound_pos));
             ev_success.send(SuccessEvent());
         }
         else {
             clear_input(task.as_mut());
-            ev_sound.send(PlaySpatialSoundEvent(SoundID::ComputerDenied, Vec3::new(1.25, 1.0, 5.5)));
+            ev_err_sound.send(PlaySpatialSoundEvent(SoundID::ComputerDenied, sound_pos));
         }
     }
 
     if input.just_pressed(KeyCode::Back) {
         task.input.pop();
+        ev_key_sound.send(PlaySpatialSoundEvent(SoundID::Keyboard, sound_pos));
     }
 
     for c in ev_char.read() {
@@ -97,6 +102,7 @@ pub fn input_from_keyboard(
 
         task.input.push(c.char);
 
+        ev_key_sound.send(PlaySpatialSoundEvent(SoundID::Keyboard, sound_pos));
         info!("Appended char. Now is: {}", task.input);
     }
 }
