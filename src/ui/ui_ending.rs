@@ -1,6 +1,8 @@
 use bevy::{prelude::*, window::{CursorGrabMode, PrimaryWindow}};
 use crate::{player::Player, timer::{TimerRunout, TimerStop}};
 
+use super::ui_controls::ShowControls;
+
 pub mod good_ending;
 pub mod bad_ending;
 pub mod buttons;
@@ -134,6 +136,7 @@ pub fn check_good_ending(
     mut q_text: Query<&mut UIGoodEnding>,
     mut q_player: Query<&mut Player>,
     mut q_window: Query<&mut Window, With<PrimaryWindow>>,
+    mut ev_hidectrls: EventWriter<ShowControls>,
 ) {
     for _ in event.read() {
         info!("Good ending :3");
@@ -149,6 +152,8 @@ pub fn check_good_ending(
         player.locked = true;
         window.cursor.grab_mode = CursorGrabMode::None;
         window.cursor.visible = true;
+        
+        ev_hidectrls.send(ShowControls(false));
     }
 }
 
@@ -158,6 +163,7 @@ pub fn check_bad_ending(
     mut q_text: Query<&mut UIBadEnding>,
     mut q_player: Query<&mut Player>,
     mut q_window: Query<&mut Window, With<PrimaryWindow>>,
+    mut ev_hidectrls: EventWriter<ShowControls>,
 ) {
     for _ in event.read() {
         info!("Bad ending :(");
@@ -173,6 +179,8 @@ pub fn check_bad_ending(
         player.locked = true;
         window.cursor.grab_mode = CursorGrabMode::None;
         window.cursor.visible = true;
+
+        ev_hidectrls.send(ShowControls(false));
     }
 }
 
