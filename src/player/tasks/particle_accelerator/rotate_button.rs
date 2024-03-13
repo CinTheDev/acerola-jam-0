@@ -20,6 +20,9 @@ pub struct RotateButtonBundle {
 
 #[derive(Component)]
 pub struct RotateButton {
+    active_position: Vec3,
+    passive_position: Vec3,
+    is_active: bool,
     rotation: u8,
     position_x: usize,
     position_y: usize,
@@ -88,22 +91,33 @@ pub fn rotate_buttons(
             * Quat::from_rotation_y(0.5 * PI * button_prop.rotation as f32);
 
         button_trans.rotation = button_trans.rotation.slerp(button_total_rotation, LERP_FACTOR);
+
+        // Position
+        let mut button_desired_pos = button_prop.passive_position;
+
+        if button_prop.is_active {
+            button_desired_pos = button_prop.active_position;
+        }
+
+        button_trans.translation = button_trans.translation.lerp(button_desired_pos, LERP_FACTOR);
     }
 }
 
-pub fn activate_buttons(mut query: Query<(&mut SphereCollider, &RotateButton)>) {
-    for (mut collider, button) in query.iter_mut() {
+pub fn activate_buttons(mut query: Query<(&mut SphereCollider, &mut RotateButton)>) {
+    for (mut collider, mut button) in query.iter_mut() {
         collider.enabled = button.rotatable;
+        button.is_active = true;
     }
 }
 
 pub fn disable_buttons(
     mut ev_finished: EventReader<ParticleAcceleratorFinished>,
-    mut q_buttons: Query<&mut SphereCollider, With<RotateButton>>,
+    mut q_buttons: Query<(&mut SphereCollider, &mut RotateButton)>,
 ) {
     for _ in ev_finished.read() {
-        for mut button in q_buttons.iter_mut() {
-            button.enabled = false;
+        for (mut coll, mut button) in q_buttons.iter_mut() {
+            coll.enabled = false;
+            button.is_active = false;
         }
     }
 }
@@ -117,10 +131,14 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
 
     for x in 0..14 {
         for y in 0..4 {
-            let trans = first_transform.with_translation(
+            let active_trans = first_transform.with_translation(
                 first_transform.translation
                 + first_transform.right() * dist_right * x as f32
                 + first_transform.back() * dist_down * y as f32
+            );
+
+            let start_trans = active_trans.with_translation(
+                active_trans.translation + first_transform.down() * 0.05
             );
 
             let mut rotation = rand::random::<u8>() % 4;
@@ -141,7 +159,7 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
             commands.spawn(RotateButtonBundle {
                 scene: SceneBundle {
                     scene: scene_handle,
-                    transform: trans,
+                    transform: start_trans,
                     ..default()
                 },
                 collider: SphereCollider {
@@ -149,6 +167,9 @@ pub fn spawn_buttons(commands: &mut Commands, asset_server: &Res<AssetServer>) {
                     enabled: false,
                 },
                 rotate_button: RotateButton {
+                    active_position: active_trans.translation,
+                    passive_position: start_trans.translation,
+                    is_active: false,
                     rotation,
                     position_x: x,
                     position_y: y,
