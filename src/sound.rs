@@ -69,6 +69,7 @@ pub fn load_sounds(
     });
 
     ev_sound.send(PlaySoundEvent(SoundID::Music));
+    // TODO: Start music from UI
 }
 
 // For handling sound/music fadeout and restart on replay
