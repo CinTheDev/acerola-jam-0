@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{player::Player, sound::{PlaySoundEvent, SoundID}, timer::LoseTimer};
+use super::ui_controls::ShowControls;
 
 const LERP_FACTOR: f32 = 0.1;
 
@@ -81,8 +82,9 @@ pub fn slide_slide(
 
 pub fn finish_slides(
     mut ev_finished: EventReader<SlidesFinishedEvent>,
-    mut q_player: Query<&mut Player>,
     mut ev_startmusic: EventWriter<PlaySoundEvent>,
+    mut ev_showctrls: EventWriter<ShowControls>,
+    mut q_player: Query<&mut Player>,
     mut lose_timer: ResMut<LoseTimer>,
 ) {
     for _ in ev_finished.read() {
@@ -95,6 +97,9 @@ pub fn finish_slides(
 
         // Start timer
         lose_timer.timer.unpause();
+
+        // Show controls
+        ev_showctrls.send(ShowControls(true));
     }
 }
 

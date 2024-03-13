@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 #[derive(Event)]
-pub struct ShowControls(bool);
+pub struct ShowControls(pub bool);
 
 #[derive(Component)]
 pub struct ControlsText;
