@@ -21,15 +21,19 @@ pub struct PlaySoundEvent(pub SoundID);
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum SoundID {
+    TaskComplete,
     AlloyMachine,
     ParticleAccelerator,
+    ComputerDenied,
     // TODO: Continue this list
 }
 
 #[derive(Resource)]
 pub struct SoundHandles {
+    task_complete: Handle<AudioSource>,
     alloy_machine: Handle<AudioSource>,
     particle_accelerator: Handle<AudioSource>,
+    computer_denied: Handle<AudioSource>,
     // TODO: Continue this list
 }
 
@@ -49,8 +53,10 @@ pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(SoundHandles {
+        task_complete: asset_server.load("sound/Task_Complete.ogg"),
         alloy_machine: asset_server.load("sound/AlloyMachine.ogg"),
         particle_accelerator: asset_server.load("sound/Particle_Accelerator.ogg"),
+        computer_denied: asset_server.load("sound/Computer_Denied.ogg"),
     });
 }
 
@@ -88,7 +94,9 @@ pub fn play_sound(
 
 fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioSource> {
     match id {
+        SoundID::TaskComplete => handles.task_complete.clone(),
         SoundID::AlloyMachine => handles.alloy_machine.clone(),
         SoundID::ParticleAccelerator => handles.particle_accelerator.clone(),
+        SoundID::ComputerDenied => handles.computer_denied.clone(),
     }
 }
