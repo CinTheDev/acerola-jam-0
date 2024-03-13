@@ -7,19 +7,8 @@ pub struct MusicBundle {
     music: Music,
 }
 
-#[derive(Bundle)]
-pub struct PlayableSoundBundle {
-    source: AudioBundle,
-    properties: PlayableSound,
-}
-
 #[derive(Component)]
 pub struct Music;
-
-#[derive(Component)]
-pub struct PlayableSound {
-    id: SoundID,
-}
 
 #[derive(Event)]
 pub struct StartMusicEvent;
@@ -34,6 +23,12 @@ pub struct PlaySoundEvent(pub SoundID);
 pub enum SoundID {
     AlloyMachine,
     ParticleAccelerator,
+    // TODO: Continue this list
+}
+
+#[derive(Resource)]
+pub struct SoundHandles {
+    alloy_machine: Handle<AudioSource>,
     // TODO: Continue this list
 }
 
@@ -52,7 +47,10 @@ pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(get_sound(&asset_server, "sound/AlloyMachine.ogg".to_owned(), SoundID::AlloyMachine));
+    //commands.spawn(get_sound(&asset_server, "sound/AlloyMachine.ogg".to_owned(), SoundID::AlloyMachine));
+    commands.insert_resource(SoundHandles {
+        alloy_machine: asset_server.load("sound/AlloyMachine.ogg")
+    });
 }
 
 pub fn start_music(
@@ -84,6 +82,7 @@ pub fn play_sound(
     }
 }
 
+/*
 fn get_sound(
     asset_server: &Res<AssetServer>,
     source: String,
@@ -103,3 +102,4 @@ fn get_sound(
         }
     }
 }
+*/
