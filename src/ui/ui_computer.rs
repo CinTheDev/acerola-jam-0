@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::player::tasks::computer::ComputerTask;
+use crate::player::tasks::computer::{ComputerTask, ErrorEvent};
 
 #[derive(Component)]
 pub struct ComputerScreenText;
@@ -9,9 +9,14 @@ pub struct ComputerScreenText;
 pub struct ComputerScreenUI {
     lerp_factor: f32,
     value: f32,
+
+    err_timer: Timer,
 }
 
 pub fn spawn_ui(parent: &mut ChildBuilder) {
+    let mut err_timer = Timer::from_seconds(0.5, TimerMode::Once);
+    err_timer.pause();
+
     parent.spawn((
         NodeBundle {
             style: Style {
@@ -27,6 +32,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
         ComputerScreenUI {
             lerp_factor: 5.0,
             value: 100.0,
+            err_timer,
         }
     )).with_children(|bg| {
         bg.spawn(NodeBundle {
@@ -90,6 +96,30 @@ pub fn lerp_computer_screen(
 
     lerp_prop.value = lerp(lerp_prop.value, desired_top, lerp_prop.lerp_factor * time.delta_seconds());
     screen.top = Val::Percent(lerp_prop.value);
+}
+
+pub fn check_err(
+    mut q_screen: Query<(&mut BackgroundColor, &mut ComputerScreenUI)>,
+    mut ev_error: EventReader<ErrorEvent>,
+    time: Res<Time>,
+) {
+    let (mut bg, mut prop) = q_screen.single_mut();
+
+    prop.err_timer.tick(time.delta());
+
+    for _ in ev_error.read() {
+        prop.err_timer.unpause();
+    }
+
+    if prop.err_timer.paused() { return }
+
+    bg.0 = Color::RED;
+
+    if ! prop.err_timer.finished() { return }
+
+    bg.0 = Color::BEIGE;
+    prop.err_timer.reset();
+    prop.err_timer.pause();
 }
 
 fn lerp(a: f32, b: f32, factor: f32) -> f32 {

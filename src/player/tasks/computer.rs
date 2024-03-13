@@ -30,6 +30,9 @@ pub struct ComputerTask {
 #[derive(Event)]
 pub struct SuccessEvent();
 
+#[derive(Event)]
+pub struct ErrorEvent;
+
 pub fn check_activation(
     mut q_player: Query<(&mut Player, &mut SphereCollider, &mut Transform)>,
     mut q_task: Query<(&Transform, &SphereCollider, &mut ComputerTask), Without<Player>>,
@@ -68,6 +71,7 @@ pub fn check_activation(
 pub fn input_from_keyboard(
     mut ev_char: EventReader<ReceivedCharacter>,
     mut ev_success: EventWriter<SuccessEvent>,
+    mut ev_failure: EventWriter<ErrorEvent>,
     mut q_task: Query<&mut ComputerTask>,
     input: Res<Input<KeyCode>>,
     mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
@@ -87,6 +91,7 @@ pub fn input_from_keyboard(
         }
         else {
             clear_input(task.as_mut());
+            ev_failure.send(ErrorEvent);
             ev_sound.send(PlaySpatialSoundEvent(SoundID::ComputerDenied, sound_pos));
         }
     }
