@@ -93,7 +93,6 @@ fn main() {
         .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
         .add_event::<sound::StartMusicEvent>()
-        .add_event::<sound::StopMusicEvent>()
         .add_event::<sound::PlaySoundEvent>()
         .add_event::<sound::PlaySpatialSoundEvent>()
         .run();

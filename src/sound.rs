@@ -2,11 +2,10 @@ use bevy::prelude::*;
 use bevy::audio::PlaybackMode;
 use rand;
 
-#[derive(Event)]
-pub struct StartMusicEvent;
+use crate::ui::ui_ending::buttons::RestartEvent;
 
 #[derive(Event)]
-pub struct StopMusicEvent;
+pub struct StartMusicEvent;
 
 #[derive(Event)]
 pub struct PlaySoundEvent(pub SoundID);
@@ -97,7 +96,7 @@ pub fn handle_sound_restart(
 }
 
 pub fn stop_music(
-    mut ev_stop: EventReader<StopMusicEvent>,
+    mut ev_stop: EventReader<RestartEvent>,
     mut fade_timer: ResMut<SoundFadeout>,
 ) {
     for _ in ev_stop.read() {
