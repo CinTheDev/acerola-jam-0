@@ -74,7 +74,6 @@ fn main() {
             ui::ui_ending::buttons::pressed_button_restart,
         ))
         .add_systems(Update, (
-            //sound::start_music,
             sound::play_sound,
             sound::play_spatial_sound,
         ))
