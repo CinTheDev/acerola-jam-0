@@ -41,7 +41,7 @@ pub fn timer_reset(
 ) {
     for _ in ev_resettimer.read() {
         lose_timer.timer.reset();
-        lose_timer.timer.unpause();
+        lose_timer.timer.pause();
     }
 }
 
