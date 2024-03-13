@@ -21,6 +21,8 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
         ..default()
     }).with_children(|bg| {
         spawn_slide(bg, 0, "Hi what's up");
+        spawn_slide(bg, 1, "What's going on");
+        spawn_slide(bg, 2, "Goodbye world");
     });
 }
 
