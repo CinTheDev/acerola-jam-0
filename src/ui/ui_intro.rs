@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{player::Player, sound::{PlaySoundEvent, SoundID}};
+use crate::{player::Player, sound::{PlaySoundEvent, SoundID}, timer::LoseTimer};
 
 const LERP_FACTOR: f32 = 0.1;
 
@@ -83,6 +83,7 @@ pub fn finish_slides(
     mut ev_finished: EventReader<SlidesFinishedEvent>,
     mut q_player: Query<&mut Player>,
     mut ev_startmusic: EventWriter<PlaySoundEvent>,
+    mut lose_timer: ResMut<LoseTimer>,
 ) {
     for _ in ev_finished.read() {
         // Unlock Player
@@ -91,6 +92,9 @@ pub fn finish_slides(
 
         // Start music
         ev_startmusic.send(PlaySoundEvent(SoundID::Music));
+
+        // Start timer
+        lose_timer.timer.unpause();
     }
 }
 
