@@ -173,13 +173,13 @@ fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioS
 
 fn get_volume_from_id(id: SoundID) -> Volume {
     let percent = match id {
-        SoundID::Music => 1.0,
-        SoundID::TaskComplete => 1.0,
-        SoundID::AlloyMachine => 1.0,
-        SoundID::ParticleAccelerator => 1.0,
-        SoundID::ComputerDenied => 1.0,
-        SoundID::Keyboard => 1.0,
-        SoundID::ItemGrab => 1.0,
+        SoundID::Music => 0.4,
+        SoundID::TaskComplete => 0.8,
+        SoundID::AlloyMachine => 10.0,
+        SoundID::ParticleAccelerator => 150.0,
+        SoundID::ComputerDenied => 0.3,
+        SoundID::Keyboard => 0.5,
+        SoundID::ItemGrab => 1.5,
     };
 
     Volume::new_relative(percent)
