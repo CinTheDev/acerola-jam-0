@@ -44,6 +44,7 @@ fn main() {
             player::tasks::q_t_de::check_dark_matter_finished,
             player::tasks::alloy_machine::check_if_finished,
             player::tasks::alloy_machine::check_alloy_finished,
+            player::tasks::alloy_machine::hide_input_items,
             player::tasks::computer::check_activation,
             player::tasks::computer::input_from_keyboard,
             player::tasks::computer::task_success,
@@ -95,6 +96,7 @@ fn main() {
         .add_event::<player::items::DropEvent>()
         .add_event::<player::tasks::alloy_machine::AlloyCreationFinshed>()
         .add_event::<player::tasks::alloy_machine::AlloyPlacementFinished>()
+        .add_event::<player::tasks::alloy_machine::MachineStarted>()
         .add_event::<player::tasks::particle_accelerator::ParticleAcceleratorFinished>()
         .add_event::<player::tasks::computer::SuccessEvent>()
         .add_event::<player::tasks::computer::ErrorEvent>()

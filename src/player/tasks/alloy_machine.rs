@@ -10,6 +10,9 @@ pub struct AlloyCreationFinshed();
 #[derive(Event)]
 pub struct AlloyPlacementFinished();
 
+#[derive(Event)]
+pub struct MachineStarted;
+
 #[derive(Bundle)]
 pub struct MasterTaskBundle {
     task: MasterTask,
@@ -130,6 +133,7 @@ pub fn check_if_finished(
     q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>,
     mut event: EventWriter<AlloyCreationFinshed>,
     mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
+    mut ev_machine: EventWriter<MachineStarted>,
     time: Res<Time>,
 ) {
     let mut alloy_task = q_task_alloy.single_mut();
@@ -157,6 +161,7 @@ pub fn check_if_finished(
         alloy_task.machine_timer.unpause();
         ev_sound.send(PlaySpatialSoundEvent(SoundID::AlloyMachine, Vec3::new(8.5, 1.5, 1.5)));
         alloy_task.is_done = true;
+        ev_machine.send(MachineStarted);
     }
 }
 
@@ -173,6 +178,23 @@ fn check_task<T: bevy::prelude::Component + super::ItemDropTask>(mut q_task: Que
     info!("Generic task done");
 
     return true;
+}
+
+pub fn hide_input_items(
+    mut q_items: Query<(&mut Visibility, &Item)>,
+    mut ev_machine: EventReader<MachineStarted>,
+) {
+    for _ in ev_machine.read() {
+        for (mut visibility, item) in q_items.iter_mut() {
+            if item.id == ItemId::Lead ||
+               item.id == ItemId::IronBlock ||
+               item.id == ItemId::IronHammer ||
+               item.id == ItemId::IronScrewdriver ||
+               item.id == ItemId::IronPhone {
+                *visibility = Visibility::Hidden;
+            }
+        }
+    }
 }
 
 pub fn instance_master() -> MasterTaskBundle {
