@@ -8,7 +8,7 @@ const LERP_FACTOR: f32 = 0.1;
 pub struct IntroSlide {
     position: i8,
     dist_to_top: f32,
-    all_slides_done: bool,
+    pub all_slides_done: bool,
 }
 
 #[derive(Event)]
@@ -59,7 +59,6 @@ pub fn slide_input(
 
     if slides_done {
         ev_finished.send(SlidesFinishedEvent);
-        info!("Slides are done");
 
         for mut slide in q_slides.iter_mut() {
             slide.position = -2; // Move them far away from the screen
@@ -81,8 +80,8 @@ pub fn slide_slide(
 
 pub fn finish_slides(
     mut ev_finished: EventReader<SlidesFinishedEvent>,
-    mut q_player: Query<&mut Player>,
     mut ev_startmusic: EventWriter<PlaySoundEvent>,
+    mut q_player: Query<&mut Player>,
     mut lose_timer: ResMut<LoseTimer>,
 ) {
     for _ in ev_finished.read() {

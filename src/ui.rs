@@ -6,6 +6,7 @@ pub mod ui_tasks;
 pub mod ui_ending;
 pub mod ui_computer;
 pub mod ui_intro;
+pub mod ui_controls;
 
 pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     instance_ui(&mut commands, &asset_server);
@@ -30,5 +31,6 @@ pub fn instance_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) {
         ui_ending::spawn_ui(parent);
         ui_computer::spawn_ui(parent);
         ui_intro::spawn_ui(parent);
+        ui_controls::spawn_ui(parent);
     });
 }

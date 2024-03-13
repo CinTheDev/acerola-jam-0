@@ -44,6 +44,7 @@ fn main() {
             player::tasks::q_t_de::check_dark_matter_finished,
             player::tasks::alloy_machine::check_if_finished,
             player::tasks::alloy_machine::check_alloy_finished,
+            player::tasks::alloy_machine::hide_input_items,
             player::tasks::computer::check_activation,
             player::tasks::computer::input_from_keyboard,
             player::tasks::computer::task_success,
@@ -55,7 +56,6 @@ fn main() {
         ))
         .add_systems(Update, (
             timer::check_losetimer,
-            timer::timer_runout,
             timer::timer_stop,
             timer::timer_reset,
         ))
@@ -83,6 +83,8 @@ fn main() {
             ui::ui_intro::slide_slide,
             ui::ui_intro::slide_input,
             ui::ui_intro::finish_slides,
+            ui::ui_controls::show_controls,
+            ui::ui_controls::change_controls_text,
         ))
         .add_systems(Update, (
             sound::play_sound,
@@ -95,6 +97,7 @@ fn main() {
         .add_event::<player::items::DropEvent>()
         .add_event::<player::tasks::alloy_machine::AlloyCreationFinshed>()
         .add_event::<player::tasks::alloy_machine::AlloyPlacementFinished>()
+        .add_event::<player::tasks::alloy_machine::MachineStarted>()
         .add_event::<player::tasks::particle_accelerator::ParticleAcceleratorFinished>()
         .add_event::<player::tasks::computer::SuccessEvent>()
         .add_event::<player::tasks::computer::ErrorEvent>()
@@ -105,6 +108,7 @@ fn main() {
         .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
         .add_event::<ui::ui_intro::SlidesFinishedEvent>()
+        .add_event::<ui::ui_controls::ShowControls>()
         .add_event::<sound::PlaySoundEvent>()
         .add_event::<sound::PlaySpatialSoundEvent>()
         .run();

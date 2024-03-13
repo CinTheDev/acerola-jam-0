@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use bevy::prelude::*;
 
 use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
@@ -68,7 +70,6 @@ pub fn check_buttons_solution(
 
     event.send(ParticleAcceleratorFinished());
     ev_sound.send(PlaySpatialSoundEvent(SoundID::ParticleAccelerator, Vec3::new(0.0, 2.0, 21.0)));
-    info!("Particle accelerator task done");
 }
 
 fn enable_buttons(query: Query<(&mut SphereCollider, &mut RotateButton)>, task: &mut RotateButtonsTask) {
@@ -108,7 +109,8 @@ pub fn instance_master() -> MasterTaskBundle {
 pub fn instance_copper() -> CopperTaskBundle {
     CopperTaskBundle {
         item_drop: ItemDropBundle {
-            transform: Transform::from_xyz(-0.6, 0.45, -9.45),
+            transform: Transform::from_xyz(-0.6, 0.5, -9.4281)
+                .with_rotation(Quat::from_rotation_y(PI / -2.0)),
             collider: SphereCollider {
                 radius: 0.3,
                 enabled: true,
