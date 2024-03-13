@@ -66,19 +66,20 @@ pub fn start_music(
 }
 
 pub fn play_sound(
+    mut commands: Commands,
     mut ev_sound: EventReader<PlaySoundEvent>,
-    mut q_soundplayer: Query<(&mut PlaybackSettings, &PlayableSound)>,
+    //mut q_soundplayer: Query<(&mut PlaybackSettings, &PlayableSound)>,
+    sound_handles: Res<SoundHandles>,
 ) {
     for ev in ev_sound.read() {
-        let id = ev.0;
-        
-        for (mut sound, properties) in q_soundplayer.iter_mut() {
-            if properties.id != id { continue }
-            
-            // Play sound
-            sound.paused = false;
-            info!("Playing sound: {:?}", id);
-        }
+        let handle = get_handle_from_id(ev.0, &sound_handles);
+    }
+}
+
+fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioSource> {
+    match id {
+        SoundID::AlloyMachine => handles.alloy_machine.clone(),
+        SoundID::ParticleAccelerator => todo!(),
     }
 }
 
