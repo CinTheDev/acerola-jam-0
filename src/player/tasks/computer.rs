@@ -22,7 +22,7 @@ pub struct ComputerTask {
     is_active: bool,
     pub is_finished: bool,
 
-    input: String,
+    pub input: String,
 
     player_position: Transform,
 }
