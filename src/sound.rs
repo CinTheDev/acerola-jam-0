@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::audio::PlaybackMode;
+use bevy::audio::{PlaybackMode, Volume, VolumeLevel};
 use rand;
 
 use crate::ui::ui_ending::buttons::RestartEvent;
@@ -118,10 +118,7 @@ pub fn play_sound(
 
         commands.spawn(AudioBundle {
             source: handle,
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Despawn,
-                ..default()
-            }
+            settings: get_playback_settings(false, ev.0)
         });
 
         info!("Playing sound: {:?}", ev.0);
@@ -140,17 +137,25 @@ pub fn play_spatial_sound(
         commands.spawn((
             AudioBundle {
                 source: handle,
-                settings: PlaybackSettings {
-                    mode: PlaybackMode::Despawn,
-                    spatial: true,
-                    ..default()
-                }
+                settings: get_playback_settings(true, ev.0)
             },
             SpatialBundle {
                 transform: Transform::from_translation(position),
                 ..default()
             }
         ));
+    }
+}
+
+fn get_playback_settings(
+    spatial: bool,
+    id: SoundID,
+) -> PlaybackSettings {
+    PlaybackSettings {
+        mode: PlaybackMode::Despawn,
+        spatial,
+        volume: get_volume_from_id(id),
+        ..default()
     }
 }
 
@@ -164,6 +169,20 @@ fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioS
         SoundID::Keyboard => handles.keyboard[get_random_index(5)].clone(),
         SoundID::ItemGrab => handles.item_grab[get_random_index(5)].clone(),
     }
+}
+
+fn get_volume_from_id(id: SoundID) -> Volume {
+    let percent = match id {
+        SoundID::Music => 1.0,
+        SoundID::TaskComplete => 1.0,
+        SoundID::AlloyMachine => 1.0,
+        SoundID::ParticleAccelerator => 1.0,
+        SoundID::ComputerDenied => 1.0,
+        SoundID::Keyboard => 1.0,
+        SoundID::ItemGrab => 1.0,
+    };
+
+    Volume::Relative(VolumeLevel::new(percent))
 }
 
 fn get_random_index(upper_bound: usize) -> usize {
