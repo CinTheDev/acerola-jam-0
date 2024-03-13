@@ -78,6 +78,7 @@ fn main() {
             ui::ui_computer::computer_screen_text,
             ui::ui_computer::lerp_computer_screen,
             ui::ui_computer::check_err,
+            ui::ui_intro::slide_slide,
         ))
         .add_systems(Update, (
             sound::play_sound,

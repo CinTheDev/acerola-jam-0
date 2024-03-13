@@ -23,6 +23,17 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
     });
 }
 
+pub fn slide_slide(
+    mut q_slides: Query<(&mut Style, &mut IntroSlide)>,
+) {
+    for (mut style, mut prop) in q_slides.iter_mut() {
+        let desired_pos = prop.id as f32 * 100.0;
+        prop.dist_to_top = lerp(prop.dist_to_top, desired_pos, LERP_FACTOR);
+
+        style.top = Val::Percent(prop.dist_to_top);
+    }
+}
+
 fn spawn_slide(parent: &mut ChildBuilder, id: u8, text: &str) {
     parent.spawn((
         NodeBundle {
@@ -49,4 +60,8 @@ fn spawn_slide(parent: &mut ChildBuilder, id: u8, text: &str) {
             }
         ));
     });
+}
+
+fn lerp(a: f32, b: f32, factor: f32) -> f32 {
+    a * (1.0 - factor) + b * factor
 }
