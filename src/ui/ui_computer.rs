@@ -73,3 +73,11 @@ pub fn computer_screen_text(
 
     screen_text.sections.first_mut().unwrap().value = display_text;
 }
+
+pub fn lerp_computer_screen(
+    q_computer_task: Query<&ComputerTask>,
+    mut q_screen: Query<(&mut Style, &ComputerScreenUI)>
+) {
+    let computer_task = q_computer_task.single();
+    let (mut screen, lerp_prop) = q_screen.single_mut();
+}

@@ -57,6 +57,8 @@ fn main() {
             timer::timer_runout,
             timer::timer_stop,
             timer::timer_reset,
+        ))
+        .add_systems(Update, (
             ui::ui_timer::update_timer_ui,
             ui::ui_cursor::check_cursor,
             ui::ui_tasks::check_task_darkmatter,
@@ -73,6 +75,7 @@ fn main() {
             ui::ui_ending::buttons::check_button_quit,
             ui::ui_ending::buttons::pressed_button_restart,
             ui::ui_computer::computer_screen_text,
+            ui::ui_computer::lerp_computer_screen,
         ))
         .add_systems(Update, (
             sound::play_sound,
