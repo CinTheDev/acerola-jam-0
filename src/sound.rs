@@ -2,15 +2,6 @@ use bevy::prelude::*;
 use bevy::audio::PlaybackMode;
 use rand;
 
-#[derive(Bundle)]
-pub struct MusicBundle {
-    audio: AudioBundle,
-    music: Music,
-}
-
-#[derive(Component)]
-pub struct Music;
-
 #[derive(Event)]
 pub struct StartMusicEvent;
 
@@ -35,6 +26,7 @@ pub enum SoundID {
 
 #[derive(Resource)]
 pub struct SoundHandles {
+    music: Handle<AudioSource>,
     task_complete: Handle<AudioSource>,
     alloy_machine: Handle<AudioSource>,
     particle_accelerator: Handle<AudioSource>,
@@ -43,6 +35,7 @@ pub struct SoundHandles {
     item_grab: [Handle<AudioSource>; 5],
 }
 
+/*
 pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(MusicBundle {
         audio: AudioBundle {
@@ -56,9 +49,11 @@ pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
         music: Music,
     });
 }
+*/
 
 pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(SoundHandles {
+        music: asset_server.load("sound/Vacuum_Decay.ogg"),
         task_complete: asset_server.load("sound/Task_Complete.ogg"),
         alloy_machine: asset_server.load("sound/AlloyMachine.ogg"),
         particle_accelerator: asset_server.load("sound/Particle_Accelerator.ogg"),
@@ -74,6 +69,7 @@ pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
     });
 }
 
+/*
 pub fn start_music(
     mut ev_startmusic: EventReader<StartMusicEvent>,
     mut q_music: Query<&mut PlaybackSettings, With<Music>>,
@@ -84,6 +80,7 @@ pub fn start_music(
         music.paused = false;
     }
 }
+*/
 
 pub fn play_sound(
     mut commands: Commands,

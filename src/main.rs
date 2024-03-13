@@ -23,7 +23,6 @@ fn main() {
             player::tasks::setup,
             timer::setup_losetimer,
             ui::setup,
-            sound::instance_music,
             sound::load_sounds,
         ))
         .add_systems(Update, (
@@ -75,7 +74,7 @@ fn main() {
             ui::ui_ending::buttons::pressed_button_restart,
         ))
         .add_systems(Update, (
-            sound::start_music,
+            //sound::start_music,
             sound::play_sound,
             sound::play_spatial_sound,
         ))
