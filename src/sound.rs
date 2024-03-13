@@ -56,6 +56,13 @@ pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>, mut e
     ev_sound.send(PlaySoundEvent(SoundID::Music));
 }
 
+// For handling sound/music fadeout and restart on replay
+pub fn handle_sound_restart(
+    q_sound: Query<&AudioSink>,
+) {
+
+}
+
 pub fn play_sound(
     mut commands: Commands,
     mut ev_sound: EventReader<PlaySoundEvent>,
