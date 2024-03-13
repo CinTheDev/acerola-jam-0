@@ -60,6 +60,8 @@ pub struct MasterTask {
 #[derive(Component)]
 pub struct AlloyTask {
     is_done: bool,
+    alloy_outputted: bool,
+    machine_timer: Timer,
 }
 
 #[derive(Component)]
@@ -128,8 +130,19 @@ pub fn check_if_finished(
     q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>,
     mut event: EventWriter<AlloyCreationFinshed>,
     mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
+    time: Res<Time>,
 ) {
     let mut alloy_task = q_task_alloy.single_mut();
+
+    if alloy_task.alloy_outputted { return }
+
+    alloy_task.machine_timer.tick(time.delta());
+
+    if alloy_task.machine_timer.finished() {
+        output_alloy(q_items);
+        alloy_task.alloy_outputted = true;
+        event.send(AlloyCreationFinshed());
+    }
 
     if alloy_task.is_done { return }
 
@@ -141,10 +154,9 @@ pub fn check_if_finished(
         check_task(q_task_phone);
 
     if all_tasks_finished {
-        output_alloy(q_items);
-        alloy_task.is_done = true;
-        event.send(AlloyCreationFinshed());
+        alloy_task.machine_timer.unpause();
         ev_sound.send(PlaySpatialSoundEvent(SoundID::AlloyMachine, Vec3::new(8.5, 1.5, 1.5)));
+        alloy_task.is_done = true;
     }
 }
 
@@ -173,6 +185,9 @@ pub fn instance_master() -> MasterTaskBundle {
 }
 
 pub fn instance_alloy() -> AlloyTaskBundle {
+    let mut timer = Timer::from_seconds(5.0, TimerMode::Once);
+    timer.pause();
+
     AlloyTaskBundle {
         item_drop: ItemDropBundle {
             transform: Transform::from_xyz(-2.691, 1.108, 0.761),
@@ -189,6 +204,8 @@ pub fn instance_alloy() -> AlloyTaskBundle {
         },
         task: AlloyTask {
             is_done: false,
+            alloy_outputted: false,
+            machine_timer: timer,
         },
     }
 }
