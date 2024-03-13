@@ -3,6 +3,7 @@ use crate::{RaycastCursor, Respawn};
 
 use super::collision::{self, SphereCollider};
 use once_cell::sync::Lazy;
+use crate::sound::{PlaySoundEvent, SoundID};
 
 pub mod spawn_items;
 
@@ -136,6 +137,7 @@ pub fn pickup_item(
     mut ev_pickup: EventReader<PickupEvent>,
     mut q_player: Query<&mut super::Player>,
     mut q_items: Query<(&mut Item, &mut SphereCollider)>,
+    mut ev_sound: EventWriter<PlaySoundEvent>,
 ) { 
     for ev in ev_pickup.read() {
         let mut player = q_player.single_mut();
@@ -154,6 +156,7 @@ pub fn pickup_item(
             player.item_id = i.id;
             coll.enabled = false;
 
+            ev_sound.send(PlaySoundEvent(SoundID::ItemGrab));
             info!("Pickup Event: {:?}", i.id);
 
             return;

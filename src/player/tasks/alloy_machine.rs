@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::{player::{collision::SphereCollider, items::{Item, ItemDrop, ItemDropBundle, ItemId}}, RaycastCursor};
 use super::ItemDropTask;
+use crate::sound::{PlaySpatialSoundEvent, SoundID};
 
 #[derive(Event)]
 pub struct AlloyCreationFinshed();
@@ -102,26 +103,23 @@ fn output_alloy(mut items: Query<(&mut Visibility, &Item, &mut SphereCollider)>)
 
 pub fn check_alloy_finished(
     mut q_master: Query<&mut MasterTask>,
-    mut q_task: Query<(&mut AlloyTask, &ItemDrop)>,
+    q_task: Query<&ItemDrop, With<AlloyTask>>,
     mut event: EventWriter<AlloyPlacementFinished>,
 ) {
     let mut task_master = q_master.single_mut();
-    let task = q_task.single_mut();
-    let mut task_prop = task.0;
-    let task_coll = task.1;
+    let task = q_task.single();
 
-    if task_prop.is_done { return }
+    if task_master.is_all_done { return }
 
-    if ! task_coll.is_dropped { return }
+    if ! task.is_dropped { return }
 
-    task_prop.is_done = true;
     task_master.is_all_done = true;
     event.send(AlloyPlacementFinished());
     info!("Finished alloy machine tasks");
 }
 
 pub fn check_if_finished(
-    q_task_master: Query<&MasterTask>,
+    mut q_task_alloy: Query<&mut AlloyTask>,
     q_task_lead: Query<(&mut LeadTask, &ItemDrop)>,
     q_task_block: Query<(&mut IronBlockTask, &ItemDrop)>,
     q_task_hammer: Query<(&mut IronHammerTask, &ItemDrop)>,
@@ -129,10 +127,11 @@ pub fn check_if_finished(
     q_task_phone: Query<(&mut IronPhoneTask, &ItemDrop)>,
     q_items: Query<(&mut Visibility, &Item, &mut SphereCollider)>,
     mut event: EventWriter<AlloyCreationFinshed>,
+    mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
 ) {
-    let task_master = q_task_master.single();
+    let mut alloy_task = q_task_alloy.single_mut();
 
-    if task_master.is_all_done { return }
+    if alloy_task.is_done { return }
 
     let all_tasks_finished = 
         check_task(q_task_lead) &&
@@ -143,7 +142,9 @@ pub fn check_if_finished(
 
     if all_tasks_finished {
         output_alloy(q_items);
+        alloy_task.is_done = true;
         event.send(AlloyCreationFinshed());
+        ev_sound.send(PlaySpatialSoundEvent(SoundID::AlloyMachine, Vec3::new(8.5, 1.5, 1.5)));
     }
 }
 

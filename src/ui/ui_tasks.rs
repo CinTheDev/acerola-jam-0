@@ -7,7 +7,8 @@ use crate::{
         particle_accelerator::ParticleAcceleratorFinished,
         q_t_de::{DarkMatterFinished, FinalButtonActivated}
     },
-    timer::TimerStop
+    timer::TimerStop,
+    sound::{PlaySoundEvent, SoundID},
 };
 
 #[derive(Component)]
@@ -15,7 +16,7 @@ pub struct TaskText {
     id: usize,
 }
 
-#[derive(Clone, Copy)]
+#[derive(PartialEq, Clone, Copy)]
 enum TaskTextState {
     Inactive,
     Active,
@@ -79,54 +80,59 @@ fn spawn_task_text(parent: &mut ChildBuilder, index: usize) {
 pub fn check_task_darkmatter(
     mut event: EventReader<DarkMatterFinished>,
     mut query: Query<(&TaskText, &mut Text)>,
+    mut ev_sound: EventWriter<PlaySoundEvent>,
 ) {
     for _ in event.read() {
         let mut text = get_task(0, query.iter_mut());
-        update_text_style(&mut text, TaskTextState::Finished);
+        update_text_style(&mut text, TaskTextState::Finished, &mut ev_sound);
     }
 }
 
 pub fn check_task_exoticalloy(
     mut event: EventReader<AlloyCreationFinshed>,
     mut query: Query<(&TaskText, &mut Text)>,
+    mut ev_sound: EventWriter<PlaySoundEvent>,
 ) {
     for _ in event.read() {
         let mut text = get_task(1, query.iter_mut());
-        update_text_style(&mut text, TaskTextState::Finished);
+        update_text_style(&mut text, TaskTextState::Finished, &mut ev_sound);
         drop(text);
 
         let mut text_next = get_task(2, query.iter_mut());
-        update_text_style(&mut text_next, TaskTextState::Active);
+        update_text_style(&mut text_next, TaskTextState::Active, &mut ev_sound);
     }
 }
 
 pub fn check_task_alloyplacement(
     mut event: EventReader<AlloyPlacementFinished>,
     mut query: Query<(&TaskText, &mut Text)>,
+    mut ev_sound: EventWriter<PlaySoundEvent>,
 ) {
     for _ in event.read() {
         let mut text = get_task(2, query.iter_mut());
-        update_text_style(&mut text, TaskTextState::Finished);
+        update_text_style(&mut text, TaskTextState::Finished, &mut ev_sound);
     }
 }
 
 pub fn check_task_particleaccelerator(
     mut event: EventReader<ParticleAcceleratorFinished>,
     mut query: Query<(&TaskText, &mut Text)>,
+    mut ev_sound: EventWriter<PlaySoundEvent>,
 ) {
     for _ in event.read() {
         let mut text = get_task(3, query.iter_mut());
-        update_text_style(&mut text, TaskTextState::Finished);
+        update_text_style(&mut text, TaskTextState::Finished, &mut ev_sound);
     }
 }
 
 pub fn check_task_computer(
     mut event: EventReader<SuccessEvent>,
     mut query: Query<(&TaskText, &mut Text)>,
+    mut ev_sound: EventWriter<PlaySoundEvent>,
 ) {
     for _ in event.read() {
         let mut text = get_task(4, query.iter_mut());
-        update_text_style(&mut text, TaskTextState::Finished);
+        update_text_style(&mut text, TaskTextState::Finished, &mut ev_sound);
     }
 }
 
@@ -134,15 +140,16 @@ pub fn check_task_finalbutton(
     mut event_timerstop: EventReader<TimerStop>,
     mut event_finalbutton: EventReader<FinalButtonActivated>,
     mut query: Query<(&TaskText, &mut Text)>,
+    mut ev_sound: EventWriter<PlaySoundEvent>,
 ) {
     for _ in event_finalbutton.read() {
         let mut text = get_task(5, query.iter_mut());
-        update_text_style(&mut text, TaskTextState::Active);
+        update_text_style(&mut text, TaskTextState::Active, &mut ev_sound);
     }
 
     for _ in event_timerstop.read() {
         let mut text = get_task(5, query.iter_mut());
-        update_text_style(&mut text, TaskTextState::Finished);
+        update_text_style(&mut text, TaskTextState::Finished, &mut ev_sound);
     }
 }
 
@@ -168,9 +175,13 @@ fn get_style_from_state(state: TaskTextState) -> TextStyle {
     }
 }
 
-fn update_text_style(text: &mut Text, state: TaskTextState) {
+fn update_text_style(text: &mut Text, state: TaskTextState, ev_sound: &mut EventWriter<PlaySoundEvent>) {
     let section = text.sections.first_mut().unwrap();
     section.style = get_style_from_state(state);
+
+    if state == TaskTextState::Finished {
+        ev_sound.send(PlaySoundEvent(SoundID::TaskComplete));
+    }
 }
 
 fn get_task<'a, I>(

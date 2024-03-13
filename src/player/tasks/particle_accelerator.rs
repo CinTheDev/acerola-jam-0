@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::player::{collision::SphereCollider, items::{ItemDrop, ItemDropBundle, ItemId}};
 use crate::RaycastCursor;
+use crate::sound::{PlaySpatialSoundEvent, SoundID};
 
 pub mod rotate_button;
 
@@ -49,6 +50,7 @@ pub fn check_buttons_solution(
     mut q_task: Query<&mut RotateButtonsTask>,
     mut q_master: Query<&mut MasterTask>,
     mut event: EventWriter<ParticleAcceleratorFinished>,
+    mut ev_sound: EventWriter<PlaySpatialSoundEvent>,
 ) {
     let mut task = q_task.single_mut();
     let mut master = q_master.single_mut();
@@ -65,6 +67,7 @@ pub fn check_buttons_solution(
     master.is_all_done = true;
 
     event.send(ParticleAcceleratorFinished());
+    ev_sound.send(PlaySpatialSoundEvent(SoundID::ParticleAccelerator, Vec3::new(0.0, 2.0, 21.0)));
     info!("Particle accelerator task done");
 }
 
