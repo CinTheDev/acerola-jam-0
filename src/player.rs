@@ -27,7 +27,7 @@ pub fn instance_player(commands: &mut Commands) {
             enabled: true,
         },
         camera: Camera3dBundle {
-            transform: Transform::from_xyz(3.0, 1.5, 0.0),
+            transform: Transform::from_xyz(0.0, 1.5, 9.0),
             ..default()
         },
         audio_listener: SpatialListener::new(2.0),
