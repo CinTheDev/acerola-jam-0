@@ -55,3 +55,21 @@ pub fn show_controls(
         }
     }
 }
+
+pub fn change_controls_text(
+    mut q_ctrls: Query<&mut Text, With<ControlsText>>,
+) {
+    let text = q_ctrls.single_mut();
+}
+
+fn get_regular_text() -> String {
+    "F - Interact / Grab".to_owned()
+}
+
+fn get_item_text() -> String {
+    "F - Drop\nX - Return".to_owned()
+}
+
+fn get_slides_text() -> String {
+    "Space - Continue".to_owned()
+}
