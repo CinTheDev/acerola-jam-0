@@ -75,7 +75,7 @@ pub fn load_sounds(
 // For handling sound/music fadeout and restart on replay
 pub fn handle_sound_restart(
     q_sound: Query<&AudioSink>,
-    fade_timer: Res<SoundFadeout>,
+    mut fade_timer: ResMut<SoundFadeout>,
 ) {
     if fade_timer.fade_timer.paused() { return }
 
@@ -84,6 +84,16 @@ pub fn handle_sound_restart(
     for sound in q_sound.iter() {
         sound.set_volume(vol);
     }
+
+    if ! fade_timer.fade_timer.finished() { return }
+
+    // Despawn all sounds immeadiatly if fadeout has finished
+    for sound in q_sound.iter() {
+        sound.stop();
+    }
+
+    fade_timer.fade_timer.reset();
+    fade_timer.fade_timer.pause();
 }
 
 pub fn stop_music(
