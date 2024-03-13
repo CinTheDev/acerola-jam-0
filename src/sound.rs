@@ -75,7 +75,10 @@ pub fn load_sounds(
 pub fn handle_sound_restart(
     q_sound: Query<&AudioSink>,
     mut fade_timer: ResMut<SoundFadeout>,
+    time: Res<Time>,
 ) {
+    fade_timer.fade_timer.tick(time.delta());
+
     if fade_timer.fade_timer.paused() { return }
 
     let vol = fade_timer.fade_timer.percent_left();
