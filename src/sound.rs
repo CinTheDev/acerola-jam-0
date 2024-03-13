@@ -36,7 +36,16 @@ pub struct SoundHandles {
     item_grab: [Handle<AudioSource>; 5],
 }
 
-pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_sound: EventWriter<PlaySoundEvent>) {
+#[derive(Resource)]
+pub struct SoundFadeout {
+    fade_timer: Timer,
+}
+
+pub fn load_sounds(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    mut ev_sound: EventWriter<PlaySoundEvent>
+) {
     commands.insert_resource(SoundHandles {
         music: asset_server.load("sound/Vacuum_Decay.ogg"),
         task_complete: asset_server.load("sound/Task_Complete.ogg"),
@@ -53,14 +62,25 @@ pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>, mut e
         }),
     });
 
+    commands.insert_resource(SoundFadeout {
+        fade_timer: Timer::from_seconds(3.0, TimerMode::Once),
+    });
+
     ev_sound.send(PlaySoundEvent(SoundID::Music));
 }
 
 // For handling sound/music fadeout and restart on replay
 pub fn handle_sound_restart(
     q_sound: Query<&AudioSink>,
+    fade_timer: Res<SoundFadeout>,
 ) {
+    if fade_timer.fade_timer.paused() { return }
 
+    let vol = fade_timer.fade_timer.percent_left();
+
+    for sound in q_sound.iter() {
+        sound.set_volume(vol);
+    }
 }
 
 pub fn play_sound(
