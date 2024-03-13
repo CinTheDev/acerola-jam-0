@@ -35,9 +35,9 @@ pub fn slide_input(
 
         if ! input.just_pressed(KeyCode::Space) { return }
 
-        if slide.position < 0 { continue }
-
         slide.position -= 1;
+        
+        if slide.position < 0 { continue }
 
         slides_done = false;
     }
