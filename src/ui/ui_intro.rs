@@ -8,7 +8,7 @@ const LERP_FACTOR: f32 = 0.1;
 pub struct IntroSlide {
     position: i8,
     dist_to_top: f32,
-    all_slides_done: bool,
+    pub all_slides_done: bool,
 }
 
 #[derive(Event)]

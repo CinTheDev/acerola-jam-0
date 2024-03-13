@@ -1,5 +1,9 @@
 use bevy::prelude::*;
 
+use crate::player::{items::ItemId, Player};
+
+use super::ui_intro::IntroSlide;
+
 #[derive(Event)]
 pub struct ShowControls(pub bool);
 
@@ -57,13 +61,25 @@ pub fn show_controls(
 
 pub fn change_controls_text(
     mut q_ctrls: Query<&mut Text, With<ControlsText>>,
+    q_player: Query<&Player>,
+    q_slides: Query<&IntroSlide>,
 ) {
     let mut text = q_ctrls.single_mut();
+    let player = q_player.single();
+    let slides = q_slides.iter();
 
-    // Determine state
+    let mut ctrl_text = get_regular_text();
+
+    if player.item_id != ItemId::None {
+        ctrl_text = get_item_text();
+    }
+
+    if ! slides.last().unwrap().all_slides_done {
+        ctrl_text = get_slides_text();
+    }
 
     // Set text according to state
-    text.sections.first_mut().unwrap().value = get_item_text();
+    text.sections.first_mut().unwrap().value = ctrl_text;
 }
 
 fn get_regular_text() -> String {
