@@ -17,7 +17,6 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
             position_type: PositionType::Absolute,
             ..default()
         },
-        background_color: Color::BLACK.into(),
         ..default()
     }).with_children(|bg| {
         spawn_slide(bg, 0, "Hi what's up");
@@ -49,6 +48,7 @@ pub fn slide_input(
         info!("Slides are done");
 
         for mut slide in q_slides.iter_mut() {
+            slide.position = -2; // Move them far away from the screen
             slide.all_slides_done = true;
         }
     }
@@ -75,6 +75,7 @@ fn spawn_slide(parent: &mut ChildBuilder, id: i8, text: &str) {
                 padding: UiRect::all(Val::Percent(10.0)),
                 ..default()
             },
+            background_color: Color::BLACK.into(),
             ..default()
         },
         IntroSlide {
