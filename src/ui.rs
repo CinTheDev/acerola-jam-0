@@ -29,5 +29,6 @@ pub fn instance_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) {
         ui_tasks::spawn_ui(parent);
         ui_ending::spawn_ui(parent);
         ui_computer::spawn_ui(parent);
+        ui_intro::spawn_ui(parent);
     });
 }
