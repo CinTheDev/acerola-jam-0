@@ -47,7 +47,6 @@ pub fn instance_music(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 pub fn load_sounds(mut commands: Commands, asset_server: Res<AssetServer>) {
-    //commands.spawn(get_sound(&asset_server, "sound/AlloyMachine.ogg".to_owned(), SoundID::AlloyMachine));
     commands.insert_resource(SoundHandles {
         alloy_machine: asset_server.load("sound/AlloyMachine.ogg")
     });
@@ -91,25 +90,3 @@ fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioS
         SoundID::ParticleAccelerator => todo!(),
     }
 }
-
-/*
-fn get_sound(
-    asset_server: &Res<AssetServer>,
-    source: String,
-    id: SoundID,
-) -> PlayableSoundBundle {
-    PlayableSoundBundle {
-        source: AudioBundle {
-            source: asset_server.load(source),
-            settings: PlaybackSettings {
-                paused: true,
-                mode: PlaybackMode::Once,
-                ..default()
-            }
-        },
-        properties: PlayableSound {
-            id,
-        }
-    }
-}
-*/
