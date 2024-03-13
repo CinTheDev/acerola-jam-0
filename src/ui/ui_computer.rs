@@ -76,8 +76,21 @@ pub fn computer_screen_text(
 
 pub fn lerp_computer_screen(
     q_computer_task: Query<&ComputerTask>,
-    mut q_screen: Query<(&mut Style, &ComputerScreenUI)>
+    mut q_screen: Query<(&mut Style, &mut ComputerScreenUI)>
 ) {
     let computer_task = q_computer_task.single();
-    let (mut screen, lerp_prop) = q_screen.single_mut();
+    let (mut screen, mut lerp_prop) = q_screen.single_mut();
+
+    let mut desired_top = 200.0;
+
+    if computer_task.is_active {
+        desired_top = 0.0;
+    }
+
+    lerp_prop.value = lerp(lerp_prop.value, desired_top, lerp_prop.lerp_factor);
+    screen.top = Val::Percent(lerp_prop.value);
+}
+
+fn lerp(a: f32, b: f32, factor: f32) -> f32 {
+    a * (1.0 - factor) + b * factor
 }
