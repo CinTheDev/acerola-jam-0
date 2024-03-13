@@ -20,7 +20,7 @@ pub fn instance_player(commands: &mut Commands) {
             sensitivity: 0.001,
             rotation: Vec2::ZERO,
             item_id: ItemId::None,
-            locked: false,
+            locked: true,
         },
         collider: SphereCollider {
             radius: 1.0,

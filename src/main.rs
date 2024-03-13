@@ -121,7 +121,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_startmus
     player::items::spawn_items::spawn_all_items(&mut commands, &asset_server);
     player::instance_player(&mut commands);
 
-    ev_startmusic.send(sound::StartMusicEvent);
+    //ev_startmusic.send(sound::StartMusicEvent);
 }
 
 fn cursor_grab(mut query: Query<&mut Window, With<PrimaryWindow>>) {
