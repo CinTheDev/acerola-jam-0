@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy::audio::PlaybackMode;
+use rand;
 
 #[derive(Bundle)]
 pub struct MusicBundle {
@@ -143,5 +144,5 @@ fn get_handle_from_id(id: SoundID, handles: &Res<SoundHandles>) -> Handle<AudioS
 }
 
 fn get_random_index(upper_bound: usize) -> usize {
-    todo!();
+    rand::random::<usize>() % upper_bound
 }
