@@ -5,9 +5,6 @@ use rand;
 use crate::ui::ui_ending::buttons::RestartEvent;
 
 #[derive(Event)]
-pub struct StartMusicEvent;
-
-#[derive(Event)]
 pub struct PlaySoundEvent(pub SoundID);
 
 #[derive(Event)]
@@ -43,7 +40,6 @@ pub struct SoundFadeout {
 pub fn load_sounds(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut ev_sound: EventWriter<PlaySoundEvent>
 ) {
     commands.insert_resource(SoundHandles {
         music: asset_server.load("sound/Vacuum_Decay.ogg"),
@@ -67,9 +63,6 @@ pub fn load_sounds(
     commands.insert_resource(SoundFadeout {
         fade_timer,
     });
-
-    ev_sound.send(PlaySoundEvent(SoundID::Music));
-    // TODO: Start music from UI
 }
 
 // For handling sound/music fadeout and restart on replay

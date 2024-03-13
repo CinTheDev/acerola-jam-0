@@ -19,7 +19,7 @@ fn main() {
         .add_systems(Startup, (
             setup,
             cursor_grab,
-            maximize_window,
+            //maximize_window,
             generate_colliders::generate_colliders,
             player::tasks::setup,
             timer::setup_losetimer,
@@ -80,6 +80,11 @@ fn main() {
             ui::ui_computer::check_err,
         ))
         .add_systems(Update, (
+            ui::ui_intro::slide_slide,
+            ui::ui_intro::slide_input,
+            ui::ui_intro::finish_slides,
+        ))
+        .add_systems(Update, (
             sound::play_sound,
             sound::play_spatial_sound,
             sound::handle_sound_restart,
@@ -99,13 +104,13 @@ fn main() {
         .add_event::<timer::TimerStop>()
         .add_event::<timer::ResetTimer>()
         .add_event::<ui::ui_ending::buttons::RestartEvent>()
-        .add_event::<sound::StartMusicEvent>()
+        .add_event::<ui::ui_intro::SlidesFinishedEvent>()
         .add_event::<sound::PlaySoundEvent>()
         .add_event::<sound::PlaySpatialSoundEvent>()
         .run();
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_startmusic: EventWriter<sound::StartMusicEvent>) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(SceneBundle {
         scene: asset_server.load("lab.glb#Scene0"),
         transform: Transform::from_xyz(0.0, 0.0, 0.0),
@@ -114,8 +119,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut ev_startmus
 
     player::items::spawn_items::spawn_all_items(&mut commands, &asset_server);
     player::instance_player(&mut commands);
-
-    ev_startmusic.send(sound::StartMusicEvent);
 }
 
 fn cursor_grab(mut query: Query<&mut Window, With<PrimaryWindow>>) {
