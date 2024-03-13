@@ -19,6 +19,9 @@ pub struct StopMusicEvent;
 #[derive(Event)]
 pub struct PlaySoundEvent(pub SoundID);
 
+#[derive(Event)]
+pub struct PlaySpatialSoundEvent(pub SoundID, pub Vec3);
+
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum SoundID {
     TaskComplete,
@@ -89,6 +92,29 @@ pub fn play_sound(
         });
 
         info!("Playing sound: {:?}", ev.0);
+    }
+}
+
+pub fn play_spatial_sound(
+    mut commands: Commands,
+    mut ev_sound: EventReader<PlaySpatialSoundEvent>,
+    sound_handles: Res<SoundHandles>,
+) {
+    for ev in ev_sound.read() {
+        let handle = get_handle_from_id(ev.0, &sound_handles);
+        let position = ev.1;
+
+        commands.spawn((
+            AudioBundle {
+                source: handle,
+                settings: PlaybackSettings {
+                    mode: PlaybackMode::Despawn,
+                    spatial: true,
+                    ..default()
+                }
+            },
+            Transform::from_translation(position),
+        ));
     }
 }
 
