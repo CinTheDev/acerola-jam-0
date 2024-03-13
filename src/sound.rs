@@ -9,7 +9,8 @@ pub struct MusicBundle {
 
 #[derive(Bundle)]
 pub struct PlayableSoundBundle {
-    sound: PlayableSound,
+    source: AudioBundle,
+    properties: PlayableSound,
 }
 
 #[derive(Component)]
@@ -17,7 +18,6 @@ pub struct Music;
 
 #[derive(Component)]
 pub struct PlayableSound {
-    sound: AudioBundle,
     id: SoundID,
 }
 
@@ -69,16 +69,16 @@ pub fn start_music(
 
 pub fn play_sound(
     mut ev_sound: EventReader<PlaySoundEvent>,
-    mut q_soundplayer: Query<&mut PlayableSound>,
+    mut q_soundplayer: Query<(&mut PlaybackSettings, &PlayableSound)>,
 ) {
     for ev in ev_sound.read() {
         let id = ev.0;
         
-        for mut sound in q_soundplayer.iter_mut() {
-            if sound.id != id { continue }
+        for (mut sound, properties) in q_soundplayer.iter_mut() {
+            if properties.id != id { continue }
             
             // Play sound
-            sound.sound.settings.paused = false;
+            sound.paused = false;
             info!("Playing sound: {:?}", id);
         }
     }
@@ -90,15 +90,15 @@ fn get_sound(
     id: SoundID,
 ) -> PlayableSoundBundle {
     PlayableSoundBundle {
-        sound: PlayableSound {
-            sound: AudioBundle {
-                source: asset_server.load(source),
-                settings: PlaybackSettings {
-                    paused: true,
-                    mode: PlaybackMode::Once,
-                    ..default()
-                }
-            },
+        source: AudioBundle {
+            source: asset_server.load(source),
+            settings: PlaybackSettings {
+                paused: true,
+                mode: PlaybackMode::Once,
+                ..default()
+            }
+        },
+        properties: PlayableSound {
             id,
         }
     }
