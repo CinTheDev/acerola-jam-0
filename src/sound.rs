@@ -60,6 +60,7 @@ pub fn start_music(
     mut q_music: Query<&mut PlaybackSettings, With<Music>>,
 ) {
     for _ in ev_startmusic.read() {
+        return; // Disable music because it keeps distracting me :(
         let mut music = q_music.single_mut();
 
         music.paused = false;
