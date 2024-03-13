@@ -24,9 +24,17 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
         },
         ..default()
     }).with_children(|bg| {
-        spawn_slide(bg, 0, "Hi what's up");
-        spawn_slide(bg, 1, "What's going on");
-        spawn_slide(bg, 2, "Goodbye world");
+        spawn_slide(bg, 0, "Your science experiment has failed. (Or succeeded?)");
+        spawn_slide(bg, 1, "There's a bubble-shaped false Vacuum expanding at light speed now.");
+        spawn_slide(bg, 2, "Inside the false Vacuum, Gravity doesn't decrease with distance, meaning far away planets will pull objects with similar strength as earth's pull.");
+        spawn_slide(bg, 3, "If the false Vacuum reaches Venus, its gravitational pull will certainly destroy earth.");
+        spawn_slide(bg, 4, "To prevent this, you must redo the science experiment.");
+        spawn_slide(bg, 5, "There are tasks listed in the corner, do all of them.");
+        spawn_slide(bg, 6, "There are 3 machines:");
+        spawn_slide(bg, 7, "The Quantum Tunnel Device is in the middle of the room on a table.");
+        spawn_slide(bg, 8, "The Alloy Machine is the tall machine with a single display.");
+        spawn_slide(bg, 9, "The Particle accelerator is in the adjacent room.");
+        spawn_slide(bg, 10, "Good luck.");
     });
 }
 
