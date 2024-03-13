@@ -33,6 +33,7 @@ pub fn spawn_ui(parent: &mut ChildBuilder) {
 pub fn slide_input(
     mut q_slides: Query<&mut IntroSlide>,
     input: Res<Input<KeyCode>>,
+    mut ev_finished: EventWriter<SlidesFinishedEvent>,
 ) {
     let mut slides_done = true;
 
@@ -49,7 +50,7 @@ pub fn slide_input(
     }
 
     if slides_done {
-        // TODO: Enable gameplay
+        ev_finished.send(SlidesFinishedEvent);
         info!("Slides are done");
 
         for mut slide in q_slides.iter_mut() {
