@@ -185,7 +185,7 @@ pub fn instance_master() -> MasterTaskBundle {
 }
 
 pub fn instance_alloy() -> AlloyTaskBundle {
-    let mut timer = Timer::from_seconds(5.0, TimerMode::Once);
+    let mut timer = Timer::from_seconds(7.25, TimerMode::Once);
     timer.pause();
 
     AlloyTaskBundle {
