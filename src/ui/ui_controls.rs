@@ -59,7 +59,12 @@ pub fn show_controls(
 pub fn change_controls_text(
     mut q_ctrls: Query<&mut Text, With<ControlsText>>,
 ) {
-    let text = q_ctrls.single_mut();
+    let mut text = q_ctrls.single_mut();
+
+    // Determine state
+
+    // Set text according to state
+    text.sections.first_mut().unwrap().value = get_item_text();
 }
 
 fn get_regular_text() -> String {

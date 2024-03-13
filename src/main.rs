@@ -85,6 +85,7 @@ fn main() {
             ui::ui_intro::slide_input,
             ui::ui_intro::finish_slides,
             ui::ui_controls::show_controls,
+            ui::ui_controls::change_controls_text,
         ))
         .add_systems(Update, (
             sound::play_sound,
